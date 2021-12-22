@@ -1,0 +1,14 @@
+{
+    "mainActionAbout": "About",
+    "mainActionTryAgain": "Try Again",
+    "aboutTitle": "About",
+    "aboutAuthorTitle": "Author",
+    "aboutVersion": "Version",
+    "outageMaintenance": "Scheduled maintenance",
+    "outageBlackout": "Blackout",
+    "outageCause": "Cause",
+    "outageExpectedRestore": "Expected restore",
+    "outageLastUpdate": "Last update",
+    "outageOfflineCustomers": "Offline customers",
+    "outageStartOutage": "Start outage"
+}

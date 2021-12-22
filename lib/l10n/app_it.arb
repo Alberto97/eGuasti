@@ -1,0 +1,14 @@
+{
+    "mainActionAbout": "Info",
+    "mainActionTryAgain": "Riprova",
+    "aboutTitle": "Info",
+    "aboutAuthorTitle": "Autore",
+    "aboutVersion": "Versione",
+    "outageMaintenance": "Lavori programmati",
+    "outageBlackout": "Guasto",
+    "outageCause": "Causa",
+    "outageExpectedRestore": "Previsione rispristino",
+    "outageLastUpdate": "Ultimo aggiornamento",
+    "outageOfflineCustomers": "Clienti disalimentati",
+    "outageStartOutage": "Inizio interruzioni"
+}
