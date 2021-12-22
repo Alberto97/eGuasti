@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 
 typedef MapClickCallback = void Function(LatLng point);
@@ -41,10 +42,13 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
             widget.onMapTap?.call(tapPosition, point),
         onPositionChanged: (position, hasGesture) =>
             widget.onPositionChanged?.call(position, hasGesture),
+        plugins: [
+          MarkerClusterPlugin(),
+        ],
       ),
       layers: [
         buildOsmTileLayer(),
-        buildMarkerLayer(widget.markers),
+        buildMarkerClusterLayer(widget.markers),
       ],
     );
   }
@@ -79,6 +83,28 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
   MarkerLayerOptions buildMarkerLayer(List<Marker> markers) {
     return MarkerLayerOptions(
       markers: markers,
+    );
+  }
+
+  MarkerClusterLayerOptions buildMarkerClusterLayer(List<Marker> markers) {
+    return MarkerClusterLayerOptions(
+      maxClusterRadius: 120,
+      size: const Size(40, 40),
+      fitBoundsOptions: const FitBoundsOptions(
+        padding: EdgeInsets.all(50),
+      ),
+      markers: markers,
+      polygonOptions: const PolygonOptions(
+        borderColor: Colors.blueAccent,
+        color: Colors.transparent,
+        borderStrokeWidth: 3,
+      ),
+      builder: (context, markers) {
+        return FloatingActionButton(
+          child: Text(markers.length.toString()),
+          onPressed: null,
+        );
+      },
     );
   }
 }
