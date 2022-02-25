@@ -10,17 +10,23 @@ import 'package:tuple/tuple.dart';
 class HomeBloc {
   final _outageRepository = OutageRepository();
   final _mapStateRepository = MapStateRepository();
+  DateTime? _lastFetch;
 
   HomeBloc() {
     fetchOutages();
   }
 
   final _outageController = StreamController<List<Outage>>();
-  get outages => _outageController.stream;
+  Stream<List<Outage>> get outages => _outageController.stream;
 
   fetchOutages() async {
+    if (_lastFetch != null) {
+      final duration = DateTime.now().difference(_lastFetch!);
+      if (duration < const Duration(minutes: 5)) return;
+    }
     final outages = await _outageRepository.getOutages();
     if (outages.isSuccessful) {
+      _lastFetch = DateTime.now();
       _outageController.sink.add(outages.data!);
     } else {
       _outageController.sink.addError(outages.message!);
