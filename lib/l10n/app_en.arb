@@ -3,6 +3,8 @@
     "mainActionTryAgain": "Try Again",
     "aboutTitle": "About",
     "aboutAuthorTitle": "Author",
+    "aboutRepositoryTitle": "Check out the source code!",
+    "aboutRepositorySubtitle": "Github",
     "aboutVersion": "Version",
     "outageMaintenance": "Scheduled maintenance",
     "outageBlackout": "Blackout",

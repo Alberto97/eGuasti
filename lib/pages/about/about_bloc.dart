@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutBloc {
   late PackageInfo packageInfo;
@@ -23,6 +24,10 @@ class AboutBloc {
 
   final _appVersionController = StreamController<String>();
   Stream<String> get appVersion => _appVersionController.stream;
+
+  void openRepository() {
+    launch("https://github.com/Alberto97/eGuasti");
+  }
 
   void dispose() {
     _appVersionController.close();

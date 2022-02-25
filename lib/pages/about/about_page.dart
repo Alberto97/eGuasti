@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_e_guasti/pages/about/about_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({Key? key}) : super(key: key);
@@ -32,6 +33,8 @@ class _AboutPageState extends State<AboutPage> {
       ),
       body: ListView(
         children: [
+          buildUrl(),
+          const Divider(),
           buildAppVersion(),
           buildAuthor(),
         ],
@@ -42,6 +45,20 @@ class _AboutPageState extends State<AboutPage> {
   Widget buildTitle() {
     var title = AppLocalizations.of(context)!.aboutTitle;
     return Text(title);
+  }
+
+  Widget buildUrl() {
+    return ListTile(
+      leading: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset('assets/github.svg', width: 30.0, height: 30.0),
+        ],
+      ),
+      title: Text(AppLocalizations.of(context)!.aboutRepositoryTitle),
+      subtitle: Text(AppLocalizations.of(context)!.aboutRepositorySubtitle),
+      onTap: () => bloc.openRepository(),
+    );
   }
 
   Widget buildAppVersion() {
