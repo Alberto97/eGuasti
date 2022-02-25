@@ -86,6 +86,11 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
     );
   }
 
+  String getHeroTag(List<Marker> markers) {
+    final ids = markers.map((e) => "${e.point.latitude}-${e.point.longitude}");
+    return ids.join();
+  }
+
   MarkerClusterLayerOptions buildMarkerClusterLayer(List<Marker> markers) {
     return MarkerClusterLayerOptions(
       maxClusterRadius: 120,
@@ -101,6 +106,7 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
       ),
       builder: (context, markers) {
         return FloatingActionButton(
+          heroTag: getHeroTag(markers),
           child: Text(markers.length.toString()),
           onPressed: null,
         );
