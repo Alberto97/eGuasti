@@ -22,7 +22,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   late HomeBloc bloc;
   late MapController mapController;
   late AnimationController bottomSheetController;
@@ -32,6 +33,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance?.addObserver(this);
     bloc = HomeBloc();
     mapController = MapController();
     bottomSheetController = BottomSheet.createAnimationController(this);
@@ -39,8 +41,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
     bloc.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      clearSelectedOutage();
+      bloc.fetchOutages();
+    }
   }
 
   Future<bool> shouldPop() async {
