@@ -21,6 +21,12 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def secureProperties = new Properties()
+def securePropertiesFile = rootProject.file("privateConfig/secure.properties")
+if (securePropertiesFile.exists()) {
+    secureProperties.load(new FileInputStream(securePropertiesFile))
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -49,11 +55,22 @@ android {
         versionName flutterVersionName
     }
 
+    signingConfigs {
+        release {
+            if (secureProperties.getProperty('KEYSTORE_FILE') != null) {
+                keyAlias secureProperties['KEY_ALIAS']
+                keyPassword secureProperties['KEY_PASSWORD']
+                storeFile file("$rootDir/privateConfig/${secureProperties['KEYSTORE_FILE']}")
+                storePassword secureProperties['KEYSTORE_PASSWORD']
+            }
+       }
+   }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            if (secureProperties.getProperty('KEYSTORE_FILE') != null) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }
