@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:chopper/chopper.dart';
-import 'package:flutter_e_guasti/models/app_result.dart';
-import 'package:flutter_e_guasti/models/outage.dart';
-import 'package:flutter_e_guasti/models/response.dart';
-import 'package:flutter_e_guasti/network/api_service.dart';
-import 'package:flutter_e_guasti/tools/settings.dart';
+import 'package:eguasti/models/app_result.dart';
+import 'package:eguasti/models/outage.dart';
+import 'package:eguasti/models/response.dart';
+import 'package:eguasti/network/api_service.dart';
+import 'package:eguasti/tools/settings.dart';
 
 class OutageRepository {
   late ApiService apiService;

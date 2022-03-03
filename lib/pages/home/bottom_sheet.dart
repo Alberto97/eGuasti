@@ -1,5 +1,5 @@
+import 'package:eguasti/models/outage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_e_guasti/models/outage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeBottomSheet extends StatefulWidget {

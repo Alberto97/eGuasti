@@ -1,5 +1,5 @@
 import 'package:chopper/chopper.dart';
-import 'package:flutter_e_guasti/models/response.dart';
+import 'package:eguasti/models/response.dart';
 
 part 'api_service.chopper.dart';
 

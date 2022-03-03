@@ -1,9 +1,9 @@
+import 'package:eguasti/models/outage.dart';
+import 'package:eguasti/pages/home/bottom_sheet.dart';
+import 'package:eguasti/pages/home/home_bloc.dart';
+import 'package:eguasti/pages/home/map.dart';
+import 'package:eguasti/tools/flutter_map_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_e_guasti/models/outage.dart';
-import 'package:flutter_e_guasti/pages/home/bottom_sheet.dart';
-import 'package:flutter_e_guasti/pages/home/home_bloc.dart';
-import 'package:flutter_e_guasti/pages/home/map.dart';
-import 'package:flutter_e_guasti/tools/flutter_map_extensions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_svg/flutter_svg.dart';

@@ -1,7 +1,7 @@
+import 'package:eguasti/pages/about/about_page.dart';
+import 'package:eguasti/pages/home/home_screen.dart';
+import 'package:eguasti/ui/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_e_guasti/pages/about/about_page.dart';
-import 'package:flutter_e_guasti/pages/home/home_screen.dart';
-import 'package:flutter_e_guasti/ui/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {

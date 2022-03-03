@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter_e_guasti/models/app_map_state.dart';
-import 'package:flutter_e_guasti/models/outage.dart';
-import 'package:flutter_e_guasti/repository/map_state_repository.dart';
-import 'package:flutter_e_guasti/repository/outage_repository.dart';
+import 'package:eguasti/models/app_map_state.dart';
+import 'package:eguasti/models/outage.dart';
+import 'package:eguasti/repository/map_state_repository.dart';
+import 'package:eguasti/repository/outage_repository.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:tuple/tuple.dart';
 

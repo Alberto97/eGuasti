@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.alberto97.flutter_e_guasti">
+    package="org.alberto97.eguasti">
     
     <uses-permission android:name="android.permission.INTERNET"/>
 

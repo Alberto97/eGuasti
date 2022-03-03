@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_e_guasti/models/app_map_state.dart';
+import 'package:eguasti/models/app_map_state.dart';
 import 'package:path_provider/path_provider.dart';
 
 class MapStateRepository {

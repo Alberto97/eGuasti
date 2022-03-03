@@ -48,7 +48,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.alberto97.flutter_e_guasti"
+        applicationId "org.alberto97.eguasti"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
