@@ -5,4 +5,4 @@ Outages in Valle d'Aosta and Trentino Alto Adige are not reported due to differe
 
 ### Screenshots
 
-<img src="art/app.png" width="30%">
+<img src="art/app_1.png" width="30%"> <img src="art/app_2.png" width="30%">
