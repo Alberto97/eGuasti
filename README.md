@@ -1,7 +1,7 @@
 # eGuasti
 
-Check for outages on the Italian electric power distribution network whether they are scheduled maintenances or blackouts.\
-Outages in Valle d'Aosta and Trentino Alto Adige are not reported due to different distributors.
+Android app that shows blackouts and scheduled maintenances on the electric power distribution network managed by e-distribuzione.\
+This app does not report outages in Valle d'Aosta and Trentino Alto Adige as those rely on different distributors.
 
 ### Screenshots
 
