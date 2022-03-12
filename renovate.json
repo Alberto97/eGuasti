@@ -2,5 +2,9 @@
   "extends": [
     "config:base",
     ":disableDependencyDashboard"
+  ],
+  "ignorePaths": [
+    "android/**",
+    "ios/**"
   ]
 }
