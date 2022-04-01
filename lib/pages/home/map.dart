@@ -36,7 +36,7 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
       options: MapOptions(
         center: widget.center,
         zoom: widget.zoom ?? 13.0,
-        maxZoom: 19.0,
+        maxZoom: 18.0,
         interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
         onTap: (tapPosition, point) =>
             widget.onMapTap?.call(tapPosition, point),
@@ -57,9 +57,7 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
     return TileLayerOptions(
       urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       maxNativeZoom: 18.0,
-      maxZoom: 19,
       subdomains: ['a', 'b', 'c'],
-      retinaMode: true,
       attributionBuilder: (_) => buildMapAttribution(),
     );
   }
