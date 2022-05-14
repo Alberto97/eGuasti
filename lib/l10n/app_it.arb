@@ -9,7 +9,7 @@
     "outageMaintenance": "Lavori programmati",
     "outageBlackout": "Guasto",
     "outageCause": "Causa",
-    "outageExpectedRestore": "Previsione rispristino",
+    "outageExpectedRestore": "Previsione ripristino",
     "outageLastUpdate": "Ultimo aggiornamento",
     "outageOfflineCustomers": "Clienti disalimentati",
     "outageStartOutage": "Inizio interruzioni"
