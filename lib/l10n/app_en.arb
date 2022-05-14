@@ -12,5 +12,7 @@
     "outageExpectedRestore": "Expected restore",
     "outageLastUpdate": "Last update",
     "outageOfflineCustomers": "Offline customers",
-    "outageStartOutage": "Start outage"
+    "outageStartOutage": "Start outage",
+    "outageShowDetails": "Show details",
+    "outageHideDetails": "Hide details"
 }

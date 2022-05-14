@@ -1,5 +1,5 @@
 import 'package:eguasti/models/outage.dart';
-import 'package:eguasti/pages/home/bottom_sheet.dart';
+import 'package:eguasti/pages/home/outage_sheet.dart';
 import 'package:eguasti/pages/home/home_bloc.dart';
 import 'package:eguasti/pages/home/map.dart';
 import 'package:eguasti/tools/flutter_map_extensions.dart';
@@ -12,9 +12,6 @@ import 'package:tuple/tuple.dart';
 
 enum MenuItem { about }
 
-// 2021-12-19 I'm not using showBottomSheet() because there currently is no
-// way to intercept the back callback to clear the selected outage
-// when dismissing the bottom sheet with a swipe
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -26,7 +23,6 @@ class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   late HomeBloc bloc;
   late MapController mapController;
-  late AnimationController bottomSheetController;
 
   Outage? selectedOutage;
 
@@ -36,7 +32,6 @@ class _HomePageState extends State<HomePage>
     WidgetsBinding.instance?.addObserver(this);
     bloc = HomeBloc();
     mapController = MapController();
-    bottomSheetController = BottomSheet.createAnimationController(this);
   }
 
   @override
@@ -79,7 +74,6 @@ class _HomePageState extends State<HomePage>
           ],
         ),
         body: buildBody(),
-        bottomSheet: buildSheet(),
       ),
     );
   }
@@ -98,14 +92,38 @@ class _HomePageState extends State<HomePage>
       future: bloc.fetchMapState(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return buildMapWithMarkers(
-            snapshot.data!.item1,
-            snapshot.data!.item2,
-          );
+          return Stack(alignment: AlignmentDirectional.bottomCenter, children: [
+            buildMapWithMarkers(
+              snapshot.data!.item1,
+              snapshot.data!.item2,
+            ),
+            buildSheet()
+          ]);
         } else {
           return const SizedBox.shrink();
         }
       },
+    );
+  }
+
+  Widget buildSheet() {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 250),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        final offsetAnimation = Tween(
+          begin: const Offset(0.0, 1.0),
+          end: Offset.zero,
+        ).animate(animation);
+        return ClipRect(
+          child: SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          ),
+        );
+      },
+      child: selectedOutage == null
+          ? const SizedBox.shrink()
+          : OutageSheet(outage: selectedOutage!),
     );
   }
 
@@ -195,21 +213,5 @@ class _HomePageState extends State<HomePage>
   void onMapPositionChanged(MapPosition value) {
     if (value.center == null || value.zoom == null) return;
     bloc.saveMapState(value.center!, value.zoom!);
-  }
-
-  Widget? buildSheet() {
-    if (selectedOutage == null) return null;
-    return BottomSheet(
-      animationController: bottomSheetController,
-      onClosing: () => clearSelectedOutage(),
-      builder: (_) => HomeBottomSheet(
-        place: selectedOutage!.place,
-        cause: selectedOutage!.cause,
-        start: selectedOutage!.start,
-        expectedRestore: selectedOutage!.expectedRestore,
-        offlineCustomers: selectedOutage!.offlineCustomers,
-        lastUpdate: selectedOutage!.lastUpdate,
-      ),
-    );
   }
 }

@@ -12,5 +12,7 @@
     "outageExpectedRestore": "Previsione ripristino",
     "outageLastUpdate": "Ultimo aggiornamento",
     "outageOfflineCustomers": "Clienti disalimentati",
-    "outageStartOutage": "Inizio interruzioni"
+    "outageStartOutage": "Inizio interruzioni",
+    "outageShowDetails": "Mostra dettagli",
+    "outageHideDetails": "Nascondi dettagli"
 }
