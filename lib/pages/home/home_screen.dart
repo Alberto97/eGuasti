@@ -3,6 +3,7 @@ import 'package:eguasti/pages/home/outage_sheet.dart';
 import 'package:eguasti/pages/home/home_bloc.dart';
 import 'package:eguasti/pages/home/map.dart';
 import 'package:eguasti/tools/flutter_map_extensions.dart';
+import 'package:eguasti/widgets/app_animated_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -109,18 +110,7 @@ class _HomePageState extends State<HomePage>
   Widget buildSheet() {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 250),
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        final offsetAnimation = Tween(
-          begin: const Offset(0.0, 1.0),
-          end: Offset.zero,
-        ).animate(animation);
-        return ClipRect(
-          child: SlideTransition(
-            position: offsetAnimation,
-            child: child,
-          ),
-        );
-      },
+      transitionBuilder: AppAnimatedSwitcher.slideTransitionBuilder,
       child: selectedOutage == null
           ? const SizedBox.shrink()
           : OutageSheet(outage: selectedOutage!),
