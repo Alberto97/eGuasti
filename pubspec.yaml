@@ -42,7 +42,7 @@ dependencies:
   intl: ^0.17.0
   path_provider: ^2.0.8
   tuple: ^2.0.0
-  flutter_map_marker_cluster: ^0.4.4
+  flutter_map_marker_cluster: ^0.5.0
   url_launcher: ^6.0.20
 
 dev_dependencies:
