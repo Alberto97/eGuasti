@@ -50,6 +50,9 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
         buildOsmTileLayer(),
         buildMarkerClusterLayer(widget.markers),
       ],
+      nonRotatedChildren: [
+        buildMapAttribution()
+      ],
     );
   }
 
@@ -58,23 +61,25 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
       urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       maxNativeZoom: 18.0,
       subdomains: ['a', 'b', 'c'],
-      attributionBuilder: (_) => buildMapAttribution(),
     );
   }
 
   Widget buildMapAttribution() {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(5.0),
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.5),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(5.0),
+          ),
         ),
-      ),
-      child: const Padding(
-        padding: EdgeInsets.all(3.0),
-        child: Text(
-          "© OpenStreetMap contributors",
-          style: TextStyle(fontSize: 12.0),
+        child: const Padding(
+          padding: EdgeInsets.all(3.0),
+          child: Text(
+            "© OpenStreetMap contributors",
+            style: TextStyle(fontSize: 12.0),
+          ),
         ),
       ),
     );
