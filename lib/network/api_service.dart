@@ -8,7 +8,7 @@ abstract class ApiService extends ChopperService {
   static ApiService create([ChopperClient? client]) => _$ApiService(client);
 
   @Get(path: "query")
-  Future<Response<AppResponse>> query(
+  Future<Response<FeatureCollection>> query(
     @Query("where") String where, {
     @Query("f") String format = "json",
     @Query("returnGeometry") bool returnGeometry = false,

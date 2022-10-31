@@ -17,7 +17,7 @@ class _$ApiService extends ApiService {
   final definitionType = ApiService;
 
   @override
-  Future<Response<AppResponse>> query(String where,
+  Future<Response<FeatureCollection>> query(String where,
       {String format = "json",
       bool returnGeometry = false,
       String outFields = "*"}) {
@@ -29,6 +29,6 @@ class _$ApiService extends ApiService {
       'outFields': outFields
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send<AppResponse, AppResponse>($request);
+    return client.send<FeatureCollection, FeatureCollection>($request);
   }
 }

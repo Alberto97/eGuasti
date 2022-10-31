@@ -6,16 +6,15 @@ part of 'response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-AppResponse _$AppResponseFromJson(Map<String, dynamic> json) => AppResponse(
-      json['exceededTransferLimit'] as bool,
+FeatureCollection _$FeatureCollectionFromJson(Map<String, dynamic> json) =>
+    FeatureCollection(
       (json['features'] as List<dynamic>)
           .map((e) => Feature.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$AppResponseToJson(AppResponse instance) =>
+Map<String, dynamic> _$FeatureCollectionToJson(FeatureCollection instance) =>
     <String, dynamic>{
-      'exceededTransferLimit': instance.exceededTransferLimit,
       'features': instance.features,
     };
 

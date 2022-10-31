@@ -16,7 +16,7 @@ class OutageRepository {
 
   void _initializeClient() {
     const converter = JsonSerializableConverter({
-      AppResponse: AppResponse.fromJson,
+      FeatureCollection: FeatureCollection.fromJson,
     });
 
     final chopper = ChopperClient(

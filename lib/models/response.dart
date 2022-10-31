@@ -3,15 +3,14 @@ import 'package:json_annotation/json_annotation.dart';
 part 'response.g.dart';
 
 @JsonSerializable()
-class AppResponse {
-  bool exceededTransferLimit;
+class FeatureCollection {
   List<Feature> features;
 
-  AppResponse(this.exceededTransferLimit, this.features);
+  FeatureCollection(this.features);
 
-  factory AppResponse.fromJson(Map<String, dynamic> json) =>
-      _$AppResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$AppResponseToJson(this);
+  factory FeatureCollection.fromJson(Map<String, dynamic> json) =>
+      _$FeatureCollectionFromJson(json);
+  Map<String, dynamic> toJson() => _$FeatureCollectionToJson(this);
 }
 
 @JsonSerializable()
