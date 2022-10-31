@@ -53,7 +53,7 @@ class OutageRepository {
       final response = await apiService.query(where);
       if (response.isSuccessful) {
         final list = response.body!.features
-            .map((item) => _mapOutage(item.attributes, cause))
+            .map((item) => Outage.fromAttributes(item.attributes))
             .toList();
         return AppResult(data: list);
       } else {
@@ -62,19 +62,5 @@ class OutageRepository {
     } on IOException catch (_) {
       return AppResult(message: "Please check your connectivity and try again");
     }
-  }
-
-  Outage _mapOutage(Attributes data, Cause cause) {
-    return Outage(
-      id: data.idInterruzione,
-      start: data.dataInterruzione,
-      expectedRestore: data.dataPrevRipristino,
-      lastUpdate: data.dataUltimoAggiornamento,
-      place: data.descrizioneTerritoriale,
-      latitude: data.latitudine,
-      longitude: data.longitudine,
-      offlineCustomers: data.numCliDisalim,
-      cause: cause,
-    );
   }
 }
