@@ -26,7 +26,8 @@ class AboutBloc {
   Stream<String> get appVersion => _appVersionController.stream;
 
   void openRepository() {
-    launch("https://github.com/Alberto97/eGuasti");
+    final uri = Uri.parse("https://github.com/Alberto97/eGuasti");
+    launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
   void dispose() {
