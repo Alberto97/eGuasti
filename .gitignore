@@ -47,3 +47,6 @@ app.*.map.json
 
 # Secrets
 /android/privateConfig
+
+# FVM
+.fvm/flutter_sdk
