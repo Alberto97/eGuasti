@@ -23,8 +23,8 @@ class SecondaryButton extends StatelessWidget {
         width: 350,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: Colors.transparent,
-            onPrimary: Theme.of(context).primaryColor,
+            backgroundColor: Colors.transparent,
+            foregroundColor: Theme.of(context).primaryColor,
             side: BorderSide(
               color: Colors.grey.withOpacity(0.5),
             ),
