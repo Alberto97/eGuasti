@@ -42,25 +42,20 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
             widget.onMapTap?.call(tapPosition, point),
         onPositionChanged: (position, hasGesture) =>
             widget.onPositionChanged?.call(position, hasGesture),
-        plugins: [
-          MarkerClusterPlugin(),
-        ],
       ),
-      layers: [
+      children: [
         buildOsmTileLayer(),
         buildMarkerClusterLayer(widget.markers),
       ],
-      nonRotatedChildren: [
-        buildMapAttribution()
-      ],
+      nonRotatedChildren: [buildMapAttribution()],
     );
   }
 
-  TileLayerOptions buildOsmTileLayer() {
-    return TileLayerOptions(
+  TileLayer buildOsmTileLayer() {
+    return TileLayer(
       urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       maxNativeZoom: 18.0,
-      subdomains: ['a', 'b', 'c'],
+      subdomains: const ['a', 'b', 'c'],
     );
   }
 
@@ -85,8 +80,8 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
     );
   }
 
-  MarkerLayerOptions buildMarkerLayer(List<Marker> markers) {
-    return MarkerLayerOptions(
+  MarkerLayer buildMarkerLayer(List<Marker> markers) {
+    return MarkerLayer(
       markers: markers,
     );
   }
@@ -96,26 +91,28 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
     return ids.join();
   }
 
-  MarkerClusterLayerOptions buildMarkerClusterLayer(List<Marker> markers) {
-    return MarkerClusterLayerOptions(
-      maxClusterRadius: 120,
-      size: const Size(40, 40),
-      fitBoundsOptions: const FitBoundsOptions(
-        padding: EdgeInsets.all(50),
+  MarkerClusterLayerWidget buildMarkerClusterLayer(List<Marker> markers) {
+    return MarkerClusterLayerWidget(
+      options: MarkerClusterLayerOptions(
+        maxClusterRadius: 120,
+        size: const Size(40, 40),
+        fitBoundsOptions: const FitBoundsOptions(
+          padding: EdgeInsets.all(50),
+        ),
+        markers: markers,
+        polygonOptions: const PolygonOptions(
+          borderColor: Colors.blueAccent,
+          color: Colors.transparent,
+          borderStrokeWidth: 3,
+        ),
+        builder: (context, markers) {
+          return FloatingActionButton(
+            heroTag: getHeroTag(markers),
+            child: Text(markers.length.toString()),
+            onPressed: null,
+          );
+        },
       ),
-      markers: markers,
-      polygonOptions: const PolygonOptions(
-        borderColor: Colors.blueAccent,
-        color: Colors.transparent,
-        borderStrokeWidth: 3,
-      ),
-      builder: (context, markers) {
-        return FloatingActionButton(
-          heroTag: getHeroTag(markers),
-          child: Text(markers.length.toString()),
-          onPressed: null,
-        );
-      },
     );
   }
 }
