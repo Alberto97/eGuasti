@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chopper/chopper.dart';
 import 'package:eguasti/models/response.dart';
 
@@ -47,9 +49,9 @@ class JsonSerializableConverter extends JsonConverter {
   }
 
   @override
-  Response<ResultType> convertResponse<ResultType, Item>(Response response) {
+  FutureOr<Response<ResultType>> convertResponse<ResultType, Item>(Response response) async {
     // use [JsonConverter] to decode json
-    final jsonRes = super.convertResponse(response);
+    final jsonRes = await super.convertResponse(response);
 
     return jsonRes.copyWith<ResultType>(body: _decode<Item>(jsonRes.body));
   }
