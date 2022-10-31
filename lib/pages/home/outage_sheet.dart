@@ -17,64 +17,51 @@ class _OutageSheetState extends State<OutageSheet> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 25.0),
-            child: Stack(alignment: Alignment.topRight, children: [
-              Column(
-                children: [
-                  Container(
-                    height: 42.0,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 25.0),
+        child: Stack(alignment: Alignment.topRight, children: [
+          Material(
+            borderRadius: BorderRadius.circular(8),
+            elevation: 8.0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0, left: 20.0),
+                  child: Text(
+                    widget.outage.place,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
-                  Material(
-                    borderRadius: BorderRadius.circular(8),
-                    elevation: 8.0,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0, left: 20.0),
-                          child: Text(
-                            widget.outage.place,
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                        ),
-                        buildType(),
-                        buildItem(
-                          Icons.restore_rounded,
-                          AppLocalizations.of(context)!.outageExpectedRestore,
-                          widget.outage.expectedRestore,
-                        ),
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 250),
-                          child: showDetails
-                              ? buildItems()
-                              : const SizedBox.shrink(),
-                        ),
-                        buildDetailsButton(),
-                        const SizedBox(
-                          height: 16.0,
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.all(16.0),
-              //   child: FloatingActionButton(
-              //     onPressed: () {},
-              //     child: const Icon(Icons.notifications),
-              //     backgroundColor: Theme.of(context).primaryColor,
-              //     elevation: 0.0,
-              //   ),
-              // ),
-            ]),
+                ),
+                buildType(),
+                buildItem(
+                  Icons.restore_rounded,
+                  AppLocalizations.of(context)!.outageExpectedRestore,
+                  widget.outage.expectedRestore,
+                ),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  child: showDetails
+                      ? buildItems()
+                      : const SizedBox.shrink(),
+                ),
+                buildDetailsButton(),
+                const SizedBox(
+                  height: 16.0,
+                )
+              ],
+            ),
           ),
-        ],
+          // Padding(
+          //   padding: const EdgeInsets.all(16.0),
+          //   child: FloatingActionButton(
+          //     onPressed: () {},
+          //     child: const Icon(Icons.notifications),
+          //     backgroundColor: Theme.of(context).primaryColor,
+          //     elevation: 0.0,
+          //   ),
+          // ),
+        ]),
       ),
     );
   }
