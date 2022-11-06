@@ -1,4 +1,6 @@
 {
+    "ok": "Ok",
+    "cancel": "Cancel",
     "mainActionAbout": "About",
     "mainActionTryAgain": "Try Again",
     "aboutTitle": "About",
@@ -14,5 +16,8 @@
     "outageOfflineCustomers": "Offline customers",
     "outageStartOutage": "Start outage",
     "outageShowDetails": "Show details",
-    "outageHideDetails": "Hide details"
+    "outageHideDetails": "Hide details",
+    "notificationChannelCreationFailure": "Failed to create the notification channel",
+    "notificationPermissionDeniedTitle": "Permission denied",
+    "notificationPermissionDeniedText": "Allow the app to send you notifications in order to use ths feature"
 }

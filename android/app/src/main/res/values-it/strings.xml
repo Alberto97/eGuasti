@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="outage_updates_notif_channel_name">Aggiornamenti sui guasti</string>
+    <string name="outage_updates_notif_channel_description">Informazioni sullo stato dei guasti tracciati</string>
+</resources>

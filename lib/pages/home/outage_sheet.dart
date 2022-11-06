@@ -4,8 +4,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class OutageSheet extends StatefulWidget {
+  final bool tracking;
   final Outage outage;
-  const OutageSheet({Key? key, required this.outage}) : super(key: key);
+  final VoidCallback track;
+
+  const OutageSheet({
+    Key? key,
+    required this.outage,
+    required this.track,
+    required this.tracking,
+  }) : super(key: key);
 
   @override
   State<OutageSheet> createState() => _OutageSheetState();
@@ -52,17 +60,26 @@ class _OutageSheetState extends State<OutageSheet> {
               ],
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(16.0),
-          //   child: FloatingActionButton(
-          //     onPressed: () {},
-          //     child: const Icon(Icons.notifications),
-          //     backgroundColor: Theme.of(context).primaryColor,
-          //     elevation: 0.0,
-          //   ),
-          // ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: buildTrackButton(),
+          ),
         ]),
       ),
+    );
+  }
+
+  Widget buildTrackButton() {
+    return FloatingActionButton(
+      onPressed: () => widget.track(),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 500),
+        child: widget.tracking
+            ? const Icon(Icons.notifications_off, key: ValueKey("off"))
+            : const Icon(Icons.notifications, key: ValueKey("on")),
+      ),
+      backgroundColor: Theme.of(context).primaryColor,
+      elevation: 0.0,
     );
   }
 

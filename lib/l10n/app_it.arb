@@ -1,4 +1,6 @@
 {
+    "ok": "Ok",
+    "cancel": "Annulla",
     "mainActionAbout": "Info",
     "mainActionTryAgain": "Riprova",
     "aboutTitle": "Info",
@@ -14,5 +16,8 @@
     "outageOfflineCustomers": "Clienti disalimentati",
     "outageStartOutage": "Inizio interruzioni",
     "outageShowDetails": "Mostra dettagli",
-    "outageHideDetails": "Nascondi dettagli"
+    "outageHideDetails": "Nascondi dettagli",
+    "notificationChannelCreationFailure": "Impossibile creare il canale di notifica",
+    "notificationPermissionDeniedTitle": "Autorizzazione negata",
+    "notificationPermissionDeniedText": "Consenti all'app di inviarti notifiche per utilizzare questa funzionalità"
 }

@@ -2,6 +2,7 @@
     package="org.alberto97.eguasti">
     
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
    <application
         android:label="@string/app_name"
@@ -34,5 +35,11 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+       <receiver android:name=".NotificationReceiver" android:exported="false">
+           <intent-filter>
+               <action android:name="org.alberto97.eguasti.SEND_NOTIFICATION" />
+           </intent-filter>
+       </receiver>
     </application>
 </manifest>

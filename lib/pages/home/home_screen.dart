@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:eguasti/models/outage.dart';
+import 'package:eguasti/models/tracked_outage.dart';
 import 'package:eguasti/pages/home/outage_sheet.dart';
 import 'package:eguasti/pages/home/home_bloc.dart';
 import 'package:eguasti/pages/home/map.dart';
+import 'package:eguasti/pages/home/permission_denied_dialog.dart';
 import 'package:eguasti/tools/flutter_map_extensions.dart';
 import 'package:eguasti/widgets/app_animated_switcher.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +29,6 @@ class _HomePageState extends State<HomePage>
   late HomeBloc bloc;
   late MapController mapController;
 
-  Outage? selectedOutage;
-
   @override
   void initState() {
     super.initState();
@@ -45,14 +47,14 @@ class _HomePageState extends State<HomePage>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      clearSelectedOutage();
+      bloc.clearSelectedOutage();
       bloc.fetchOutages();
     }
   }
 
   Future<bool> shouldPop() async {
-    if (selectedOutage != null) {
-      clearSelectedOutage();
+    if (bloc.isOutageSelected()) {
+      bloc.clearSelectedOutage();
       return false;
     }
     return true;
@@ -74,7 +76,13 @@ class _HomePageState extends State<HomePage>
             )
           ],
         ),
-        body: buildBody(),
+        body: Stack(
+          children: [
+            buildSnackBar(),
+            buildPermDialog(),
+            buildBody(),
+          ],
+        ),
       ),
     );
   }
@@ -86,6 +94,52 @@ class _HomePageState extends State<HomePage>
   PopupMenuItem<MenuItem> buildAboutItem() {
     var text = AppLocalizations.of(context)!.mainActionAbout;
     return PopupMenuItem<MenuItem>(value: MenuItem.about, child: Text(text));
+  }
+
+  Widget buildSnackBar() {
+    return StreamBuilder<bool>(
+      stream: bloc.showNotificationChannelSnackBar,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          showPermErrSnackBar();
+        }
+        return const SizedBox.shrink();
+      },
+    );
+  }
+
+  void showPermErrSnackBar() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        final message =
+            AppLocalizations.of(context)!.notificationChannelCreationFailure;
+        final snackBar = SnackBar(
+          content: Text(message),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      },
+    );
+  }
+
+  Widget buildPermDialog() {
+    return StreamBuilder<bool>(
+      stream: bloc.showPermissionDenied,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return PermissionDeniedDialog(
+                  onOkPressed: () => bloc.openSettings(),
+                );
+              },
+            );
+          });
+        }
+        return const SizedBox.shrink();
+      },
+    );
   }
 
   Widget buildBody() {
@@ -108,12 +162,22 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget buildSheet() {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 250),
-      transitionBuilder: AppAnimatedSwitcher.slideTransitionBuilder,
-      child: selectedOutage == null
-          ? const SizedBox.shrink()
-          : OutageSheet(outage: selectedOutage!),
+    return StreamBuilder<TrackedOutage?>(
+      stream: bloc.selectedOutageStream,
+      builder: (context, snapshot) {
+        final outage = snapshot.data;
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          transitionBuilder: AppAnimatedSwitcher.slideTransitionBuilder,
+          child: outage == null
+              ? const SizedBox.shrink()
+              : OutageSheet(
+                  tracking: outage.tracked,
+                  outage: outage.data,
+                  track: () => bloc.toggleOutageTracking(),
+                ),
+        );
+      },
     );
   }
 
@@ -170,9 +234,7 @@ class _HomePageState extends State<HomePage>
   }
 
   void onMarkerTap(Outage value) {
-    setState(() {
-      selectedOutage = value;
-    });
+    bloc.setSelectedOutage(value);
     centerToOutage(value);
   }
 
@@ -189,15 +251,9 @@ class _HomePageState extends State<HomePage>
       zoom: zoom,
       mapController: mapController,
       markers: markers,
-      onMapTap: (_, __) => clearSelectedOutage(),
+      onMapTap: (_, __) => bloc.clearSelectedOutage(),
       onPositionChanged: (position, _) => onMapPositionChanged(position),
     );
-  }
-
-  void clearSelectedOutage() {
-    setState(() {
-      selectedOutage = null;
-    });
   }
 
   void onMapPositionChanged(MapPosition value) {
