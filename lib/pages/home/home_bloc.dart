@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:eguasti/data/preference_manager.dart';
 import 'package:eguasti/models/app_map_state.dart';
 import 'package:eguasti/models/outage.dart';
 import 'package:eguasti/models/tracked_outage.dart';
@@ -19,11 +20,22 @@ class HomeBloc {
   final _tracker = OutageTracker();
   final _scheduler = WorkScheduler();
   final _notificationChannel = NotificationChannel();
+  late PreferenceManager _preferenceManager;
   DateTime? _lastFetch;
 
   HomeBloc() {
     fetchOutages();
+    _init();
   }
+
+  _init() async {
+    _preferenceManager = await PreferenceManager.init();
+    updateTrackingEnabledFeature();
+  }
+
+  final _outageTrackingEnabledController = StreamController<bool>();
+  Stream<bool> get outageTrackingEnabled =>
+      _outageTrackingEnabledController.stream;
 
   final _notificationChannelSnackBarController =
       StreamController<bool>.broadcast();
@@ -134,6 +146,11 @@ class HomeBloc {
     if (trackedList.isEmpty) {
       _scheduler.unschedule();
     }
+  }
+
+  void updateTrackingEnabledFeature() async {
+    final trackingEnabled = await _preferenceManager.isOutageTrackingEnabled();
+    _outageTrackingEnabledController.sink.add(trackingEnabled);
   }
 
   void dispose() {

@@ -19,5 +19,9 @@
     "outageHideDetails": "Nascondi dettagli",
     "notificationChannelCreationFailure": "Impossibile creare il canale di notifica",
     "notificationPermissionDeniedTitle": "Autorizzazione negata",
-    "notificationPermissionDeniedText": "Consenti all'app di inviarti notifiche per utilizzare questa funzionalità"
+    "notificationPermissionDeniedText": "Consenti all'app di inviarti notifiche per utilizzare questa funzionalità",
+    "settingsTrackOutagesTitle": "Aggiornamenti sui guasti",
+    "settingsTrackOutagesSubtitle": "Abilita un tasto nel dettaglio del guasto per tracciarne lo stato",
+    "settingsTrackOutagesDialogTitle": "Aggiornamenti sui guasti",
+    "settingsTrackOutagesDialogMessage": "Dopo aver abilitato il tracciamento dal dettaglio del guasto riceverai una notifica con data e ora stimati del suo ripristino ogni 15 minuti.\n\nAttenzione! A causa delle limitazioni imposte dal sistema operativo potrebbe non funzionare correttamente."
 }

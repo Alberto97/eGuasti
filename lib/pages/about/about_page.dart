@@ -1,4 +1,6 @@
 import 'package:eguasti/pages/about/about_bloc.dart';
+import 'package:eguasti/pages/about/switch_preference.dart';
+import 'package:eguasti/pages/about/track_outages_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,6 +37,8 @@ class _AboutPageState extends State<AboutPage> {
         children: [
           buildUrl(),
           const Divider(),
+          buildTrackOutageToggle(),
+          const Divider(),
           buildAppVersion(),
           buildAuthor(),
         ],
@@ -45,6 +49,37 @@ class _AboutPageState extends State<AboutPage> {
   Widget buildTitle() {
     var title = AppLocalizations.of(context)!.aboutTitle;
     return Text(title);
+  }
+
+  Widget buildTrackOutageToggle() {
+    return StreamBuilder<bool>(
+      stream: bloc.trackOutagesEnabled,
+      builder: (context, snapshot) {
+        final value = snapshot.data ?? false;
+        return SwitchPreference(
+          leading: const Text(""),
+          value: value,
+          onChanged: onTrackOutagesChanged,
+          title: AppLocalizations.of(context)!.settingsTrackOutagesTitle,
+          subtitle: AppLocalizations.of(context)!.settingsTrackOutagesSubtitle,
+        );
+      }
+    );
+  }
+
+  void onTrackOutagesChanged(bool value) {
+    if (value) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return TrackOutagesDialog(
+            onOkPressed: () => bloc.setTrackOutagesEnabled(value),
+          );
+        },
+      );
+    } else {
+      bloc.setTrackOutagesEnabled(value);
+    }
   }
 
   Widget buildUrl() {

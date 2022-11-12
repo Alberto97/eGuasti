@@ -87,8 +87,11 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  void handleMenuItemSelection(MenuItem item) {
-    if (item == MenuItem.about) Navigator.of(context).pushNamed("/about");
+  void handleMenuItemSelection(MenuItem item) async {
+    if (item == MenuItem.about) {
+      await Navigator.of(context).pushNamed("/about");
+      bloc.updateTrackingEnabledFeature();
+    }
   }
 
   PopupMenuItem<MenuItem> buildAboutItem() {
@@ -152,7 +155,7 @@ class _HomePageState extends State<HomePage>
               snapshot.data!.item1,
               snapshot.data!.item2,
             ),
-            buildSheet()
+            buildSheetWithTracking()
           ]);
         } else {
           return const SizedBox.shrink();
@@ -161,7 +164,17 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget buildSheet() {
+  Widget buildSheetWithTracking() {
+    return StreamBuilder<bool>(
+      stream: bloc.outageTrackingEnabled,
+      builder: (context, snapshot) {
+        final enabled = snapshot.data ?? false;
+        return buildSheet(enabled);
+      },
+    );
+  }
+
+  Widget buildSheet(bool trackingFeatureEnabled) {
     return StreamBuilder<TrackedOutage?>(
       stream: bloc.selectedOutageStream,
       builder: (context, snapshot) {
@@ -175,6 +188,7 @@ class _HomePageState extends State<HomePage>
                   tracking: outage.tracked,
                   outage: outage.data,
                   track: () => bloc.toggleOutageTracking(),
+                  trackingFeatureEnabled: trackingFeatureEnabled,
                 ),
         );
       },

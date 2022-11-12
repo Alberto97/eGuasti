@@ -7,12 +7,14 @@ class OutageSheet extends StatefulWidget {
   final bool tracking;
   final Outage outage;
   final VoidCallback track;
+  final bool trackingFeatureEnabled;
 
   const OutageSheet({
     Key? key,
     required this.outage,
     required this.track,
     required this.tracking,
+    required this.trackingFeatureEnabled,
   }) : super(key: key);
 
   @override
@@ -60,26 +62,34 @@ class _OutageSheetState extends State<OutageSheet> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: buildTrackButton(),
-          ),
+          maybeBuildTrackButton()
         ]),
       ),
     );
   }
 
+  Widget maybeBuildTrackButton() {
+    if (widget.trackingFeatureEnabled) {
+      return buildTrackButton();
+    } else {
+      return const SizedBox.shrink();
+    }
+  }
+
   Widget buildTrackButton() {
-    return FloatingActionButton(
-      onPressed: () => widget.track(),
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 500),
-        child: widget.tracking
-            ? const Icon(Icons.notifications_off, key: ValueKey("off"))
-            : const Icon(Icons.notifications, key: ValueKey("on")),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: FloatingActionButton(
+        onPressed: () => widget.track(),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 500),
+          child: widget.tracking
+              ? const Icon(Icons.notifications_off, key: ValueKey("off"))
+              : const Icon(Icons.notifications, key: ValueKey("on")),
+        ),
+        backgroundColor: Theme.of(context).primaryColor,
+        elevation: 0.0,
       ),
-      backgroundColor: Theme.of(context).primaryColor,
-      elevation: 0.0,
     );
   }
 
