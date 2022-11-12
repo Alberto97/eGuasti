@@ -1,14 +1,31 @@
-import 'dart:async';
-
 import 'package:eguasti/data/preference_manager.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AboutBloc {
+class AboutState extends Equatable {
+  final String appVersion;
+  final bool trackOutagesEnabled;
+
+  const AboutState({this.appVersion = "", this.trackOutagesEnabled = false});
+
+  @override
+  List<Object?> get props => [appVersion, trackOutagesEnabled];
+
+  AboutState copyWith({String? appVersion, bool? trackOutagesEnabled}) {
+    return AboutState(
+      appVersion: appVersion ?? this.appVersion,
+      trackOutagesEnabled: trackOutagesEnabled ?? this.trackOutagesEnabled,
+    );
+  }
+}
+
+class AboutCubit extends Cubit<AboutState> {
   late PackageInfo _packageInfo;
   late PreferenceManager _preferenceManager;
 
-  AboutBloc() {
+  AboutCubit() : super(const AboutState()) {
     _init();
   }
 
@@ -19,35 +36,25 @@ class AboutBloc {
     _initAppVersion();
   }
 
-  final _appVersionController = StreamController<String>();
-  Stream<String> get appVersion => _appVersionController.stream;
-
-  final _trackOutagesEnabled = StreamController<bool>();
-  Stream<bool> get trackOutagesEnabled => _trackOutagesEnabled.stream;
-
   void _initTrackOutagesEnabled() async {
     final enabled = await _preferenceManager.isOutageTrackingEnabled();
-    _trackOutagesEnabled.sink.add(enabled);
+    emit(state.copyWith(trackOutagesEnabled: enabled));
   }
 
   void setTrackOutagesEnabled(bool value) async {
     await _preferenceManager.setOutageTrackingEnabled(value);
-    _trackOutagesEnabled.sink.add(value);
+    emit(state.copyWith(trackOutagesEnabled: value));
   }
 
   void _initAppVersion() {
     String version = _packageInfo.version;
     String buildNumber = _packageInfo.buildNumber;
     var versionString = "$version ($buildNumber)";
-    _appVersionController.sink.add(versionString);
+    emit(state.copyWith(appVersion: versionString));
   }
 
   void openRepository() {
     final uri = Uri.parse("https://github.com/Alberto97/eGuasti");
     launchUrl(uri, mode: LaunchMode.externalApplication);
-  }
-
-  void dispose() {
-    _appVersionController.close();
   }
 }

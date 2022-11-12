@@ -1,88 +1,83 @@
-import 'package:eguasti/pages/about/about_bloc.dart';
+import 'package:eguasti/pages/about/about_cubit.dart';
 import 'package:eguasti/pages/about/switch_preference.dart';
 import 'package:eguasti/pages/about/track_outages_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class AboutPage extends StatefulWidget {
+class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);
 
   @override
-  State<AboutPage> createState() => _AboutPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => AboutCubit(),
+      child: const _AboutPage(),
+    );
+  }
 }
 
-class _AboutPageState extends State<AboutPage> {
-  late AboutBloc bloc;
-
-  @override
-  void initState() {
-    super.initState();
-    bloc = AboutBloc();
-  }
-
-  @override
-  void dispose() {
-    bloc.dispose();
-    super.dispose();
-  }
+class _AboutPage extends StatelessWidget {
+  const _AboutPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: buildTitle(),
+        title: buildTitle(context),
       ),
       body: ListView(
         children: [
-          buildUrl(),
+          buildUrl(context),
           const Divider(),
           buildTrackOutageToggle(),
           const Divider(),
-          buildAppVersion(),
-          buildAuthor(),
+          buildAppVersion(context),
+          buildAuthor(context),
         ],
       ),
     );
   }
 
-  Widget buildTitle() {
+  Widget buildTitle(BuildContext context) {
     var title = AppLocalizations.of(context)!.aboutTitle;
     return Text(title);
   }
 
   Widget buildTrackOutageToggle() {
-    return StreamBuilder<bool>(
-      stream: bloc.trackOutagesEnabled,
-      builder: (context, snapshot) {
-        final value = snapshot.data ?? false;
+    return BlocBuilder<AboutCubit, AboutState>(
+      buildWhen: (previous, current) =>
+          previous.trackOutagesEnabled != current.trackOutagesEnabled,
+      builder: (context, state) {
         return SwitchPreference(
           leading: const Text(""),
-          value: value,
-          onChanged: onTrackOutagesChanged,
+          value: state.trackOutagesEnabled,
+          onChanged: (value) => onTrackOutagesChanged(context, value),
           title: AppLocalizations.of(context)!.settingsTrackOutagesTitle,
           subtitle: AppLocalizations.of(context)!.settingsTrackOutagesSubtitle,
         );
-      }
+      },
     );
   }
 
-  void onTrackOutagesChanged(bool value) {
+  void onTrackOutagesChanged(BuildContext context, bool value) {
+    final cubit = context.read<AboutCubit>();
     if (value) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return TrackOutagesDialog(
-            onOkPressed: () => bloc.setTrackOutagesEnabled(value),
+            onOkPressed: () => cubit.setTrackOutagesEnabled(value),
           );
         },
       );
     } else {
-      bloc.setTrackOutagesEnabled(value);
+      cubit.setTrackOutagesEnabled(value);
     }
   }
 
-  Widget buildUrl() {
+  Widget buildUrl(BuildContext context) {
     return ListTile(
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -92,29 +87,25 @@ class _AboutPageState extends State<AboutPage> {
       ),
       title: Text(AppLocalizations.of(context)!.aboutRepositoryTitle),
       subtitle: Text(AppLocalizations.of(context)!.aboutRepositorySubtitle),
-      onTap: () => bloc.openRepository(),
+      onTap: () => context.read<AboutCubit>().openRepository(),
     );
   }
 
-  Widget buildAppVersion() {
+  Widget buildAppVersion(BuildContext context) {
     return ListTile(
       leading: const Text(""),
       title: Text(AppLocalizations.of(context)!.aboutVersion),
-      subtitle: StreamBuilder<String>(
-        initialData: "Unknown",
-        stream: bloc.appVersion,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Text(snapshot.data!);
-          } else {
-            return const Text("Unknown");
-          }
+      subtitle: BlocBuilder<AboutCubit, AboutState>(
+        buildWhen: (previous, current) =>
+            previous.appVersion != current.appVersion,
+        builder: (context, state) {
+          return Text(state.appVersion);
         },
       ),
     );
   }
 
-  Widget buildAuthor() {
+  Widget buildAuthor(BuildContext context) {
     return ListTile(
       leading: const Text(""),
       title: Text(AppLocalizations.of(context)!.aboutAuthorTitle),
