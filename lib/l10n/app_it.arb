@@ -23,5 +23,6 @@
     "settingsTrackOutagesTitle": "Aggiornamenti sui guasti",
     "settingsTrackOutagesSubtitle": "Abilita un tasto nel dettaglio del guasto per tracciarne lo stato",
     "settingsTrackOutagesDialogTitle": "Aggiornamenti sui guasti",
-    "settingsTrackOutagesDialogMessage": "Dopo aver abilitato il tracciamento dal dettaglio del guasto riceverai una notifica con data e ora stimati del suo ripristino ogni 15 minuti.\n\nAttenzione! A causa delle limitazioni imposte dal sistema operativo potrebbe non funzionare correttamente."
+    "settingsTrackOutagesDialogMessage": "Dopo aver abilitato il tracciamento dal dettaglio del guasto riceverai una notifica con data e ora stimati del suo ripristino ogni 15 minuti.\n\nAttenzione! A causa delle limitazioni imposte dal sistema operativo potrebbe non funzionare correttamente.",
+    "trackOutageNotificationMessage": "Previsione ripristino: {expectedRestore}"
 }

@@ -23,5 +23,13 @@
     "settingsTrackOutagesTitle": "Outage updates",
     "settingsTrackOutagesSubtitle": "Enables a button in the outage's details to track its status",
     "settingsTrackOutagesDialogTitle": "Outage updates",
-    "settingsTrackOutagesDialogMessage": "Once enabled the tracking from the outage's details you'll receive a notification with time and date of the estimated restore every 15 minutes.\n\nWarning! Due to limitations of the operating system this feature might not work properly."
+    "settingsTrackOutagesDialogMessage": "Once enabled the tracking from the outage's details you'll receive a notification with time and date of the estimated restore every 15 minutes.\n\nWarning! Due to limitations of the operating system this feature might not work properly.",
+    "trackOutageNotificationMessage": "Expected restore: {expectedRestore}",
+    "@trackOutageNotificationMessage": {
+        "placeholders": {
+            "expectedRestore": {
+                "type": "String"
+            }
+        }
+    }
 }

@@ -1,17 +1,16 @@
 import 'dart:io';
 
 import 'package:android_intent_plus/android_intent.dart';
-import 'package:eguasti/models/outage.dart';
 
 class AndroidIntentHelper {
   
-  Future<void> notifyOutage(Outage outage) async {
+  Future<void> notifyOutage(int id, String title, String text) async {
     if (!Platform.isAndroid) return;
 
     final data = {
-      'title': outage.place,
-      'text': outage.expectedRestore,
-      'id': outage.id,
+      'title': title,
+      'text': text,
+      'id': id,
     };
     final intent = AndroidIntent(
       action: 'org.alberto97.eguasti.SEND_NOTIFICATION',
