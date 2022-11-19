@@ -17,6 +17,7 @@
     "outageStartOutage": "Inizio interruzioni",
     "outageShowDetails": "Mostra dettagli",
     "outageHideDetails": "Nascondi dettagli",
+    "outageFetchFailure": "Si è verificato un errore nel recupero delle interruzioni",
     "notificationChannelCreationFailure": "Impossibile creare il canale di notifica",
     "notificationPermissionDeniedTitle": "Autorizzazione negata",
     "notificationPermissionDeniedText": "Consenti all'app di inviarti notifiche per utilizzare questa funzionalità",

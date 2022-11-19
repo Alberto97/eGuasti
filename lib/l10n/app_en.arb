@@ -17,6 +17,7 @@
     "outageStartOutage": "Start outage",
     "outageShowDetails": "Show details",
     "outageHideDetails": "Hide details",
+    "outageFetchFailure": "An error occurred while retrieving outages",
     "notificationChannelCreationFailure": "Failed to create the notification channel",
     "notificationPermissionDeniedTitle": "Permission denied",
     "notificationPermissionDeniedText": "Allow the app to send you notifications in order to use ths feature",

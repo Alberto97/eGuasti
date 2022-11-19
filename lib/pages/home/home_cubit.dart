@@ -9,12 +9,71 @@ import 'package:eguasti/repository/outage_repository.dart';
 import 'package:eguasti/repository/outage_tracker.dart';
 import 'package:eguasti/tools/notification_channel.dart';
 import 'package:eguasti/tools/work_scheduler.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:tuple/tuple.dart';
 
-class HomeBloc {
+enum HomeSnackBarMessage {
+  none,
+  notificationChannelFailure,
+  fetchDataFailure,
+}
+
+class HomeState extends Equatable {
+  final bool outageTrackingEnabled;
+  final bool showPermissionDenied;
+  final HomeSnackBarMessage snackBarMessage;
+  final List<Outage> outages;
+  final TrackedOutage? selectedOutage;
+
+  const HomeState({
+    this.outageTrackingEnabled = false,
+    this.showPermissionDenied = false,
+    this.snackBarMessage = HomeSnackBarMessage.none,
+    this.outages = const [],
+    this.selectedOutage,
+  });
+
+  @override
+  List<Object?> get props => [
+        outageTrackingEnabled,
+        showPermissionDenied,
+        snackBarMessage,
+        outages,
+        selectedOutage,
+      ];
+
+  HomeState copyWith({
+    bool? outageTrackingEnabled,
+    bool? showPermissionDenied,
+    HomeSnackBarMessage? snackBarMessage,
+    List<Outage>? outages,
+    TrackedOutage? selectedOutage,
+  }) {
+    return HomeState(
+      outageTrackingEnabled:
+          outageTrackingEnabled ?? this.outageTrackingEnabled,
+      showPermissionDenied: showPermissionDenied ?? this.showPermissionDenied,
+      snackBarMessage: snackBarMessage ?? this.snackBarMessage,
+      outages: outages ?? this.outages,
+      selectedOutage: selectedOutage ?? this.selectedOutage,
+    );
+  }
+
+  HomeState copyWithUnselectedOutage() {
+    return HomeState(
+      outageTrackingEnabled: outageTrackingEnabled,
+      showPermissionDenied: showPermissionDenied,
+      snackBarMessage: snackBarMessage,
+      outages: outages,
+      selectedOutage: null,
+    );
+  }
+}
+
+class HomeCubit extends Cubit<HomeState> {
   final _outageRepository = OutageRepository();
   final _mapStateRepository = MapStateRepository();
   final _tracker = OutageTracker();
@@ -23,7 +82,7 @@ class HomeBloc {
   late PreferenceManager _preferenceManager;
   DateTime? _lastFetch;
 
-  HomeBloc() {
+  HomeCubit() : super(const HomeState()) {
     fetchOutages();
     _init();
   }
@@ -33,25 +92,6 @@ class HomeBloc {
     updateTrackingEnabledFeature();
   }
 
-  final _outageTrackingEnabledController = StreamController<bool>();
-  Stream<bool> get outageTrackingEnabled =>
-      _outageTrackingEnabledController.stream;
-
-  final _notificationChannelSnackBarController =
-      StreamController<bool>.broadcast();
-  Stream<bool> get showNotificationChannelSnackBar =>
-      _notificationChannelSnackBarController.stream;
-
-  final _permissionDeniedController = StreamController<bool>.broadcast();
-  Stream<bool> get showPermissionDenied => _permissionDeniedController.stream;
-
-  final _outageController = StreamController<List<Outage>>();
-  Stream<List<Outage>> get outages => _outageController.stream;
-
-  final _selectedOutageController = BehaviorSubject<TrackedOutage?>();
-  Stream<TrackedOutage?> get selectedOutageStream =>
-      _selectedOutageController.stream;
-
   fetchOutages() async {
     if (_lastFetch != null) {
       final duration = DateTime.now().difference(_lastFetch!);
@@ -60,9 +100,9 @@ class HomeBloc {
     final outages = await _outageRepository.getOutages();
     if (outages.isSuccessful) {
       _lastFetch = DateTime.now();
-      _outageController.sink.add(outages.data!);
+      emit(state.copyWith(outages: outages.data!));
     } else {
-      _outageController.sink.addError(outages.message!);
+      emit(state.copyWith(snackBarMessage: HomeSnackBarMessage.fetchDataFailure));
     }
   }
 
@@ -89,21 +129,21 @@ class HomeBloc {
   void setSelectedOutage(Outage outage) async {
     final tracked = _tracker.isTracking(outage.id);
     final value = TrackedOutage(outage, tracked);
-    _selectedOutageController.sink.add(value);
+    emit(state.copyWith(selectedOutage: value));
   }
 
   void clearSelectedOutage() {
-    _selectedOutageController.sink.add(null);
+    emit(state.copyWithUnselectedOutage());
   }
 
   bool isOutageSelected() {
-    return _selectedOutageController.value != null;
+    return state.selectedOutage != null;
   }
 
   void toggleOutageTracking() async {
     if (!await _hasNotificationPerms()) return;
 
-    final outage = _selectedOutageController.value;
+    final outage = state.selectedOutage;
     final id = outage!.data.id;
     if (outage.tracked) {
       _tracker.untrack(id);
@@ -114,7 +154,7 @@ class HomeBloc {
     }
     final tracked = _tracker.isTracking(id);
     final newValue = outage.withTracking(tracked);
-    _selectedOutageController.sink.add(newValue);
+    emit(state.copyWith(selectedOutage: newValue));
   }
 
   Future<bool> _hasNotificationPerms() async {
@@ -123,7 +163,7 @@ class HomeBloc {
       return await _createNotificationChannel();
     } else {
       clearSelectedOutage();
-      _permissionDeniedController.sink.add(true);
+      emit(state.copyWith(showPermissionDenied: true));
     }
     return false;
   }
@@ -132,13 +172,21 @@ class HomeBloc {
     final result = await _notificationChannel.createNotificationChannel();
     if (!result.isSuccessful) {
       clearSelectedOutage();
-      _notificationChannelSnackBarController.add(true);
+      emit(state.copyWith(snackBarMessage: HomeSnackBarMessage.notificationChannelFailure));
     }
     return result.isSuccessful;
   }
 
   void openSettings() async {
     await openAppSettings();
+  }
+
+  void hideSnackBar() {
+    emit(state.copyWith(snackBarMessage: HomeSnackBarMessage.none));
+  }
+
+  void hidePermissionDenied() {
+    emit(state.copyWith(showPermissionDenied: false));
   }
 
   void _unscheduleIfEmpty() {
@@ -150,11 +198,6 @@ class HomeBloc {
 
   void updateTrackingEnabledFeature() async {
     final trackingEnabled = await _preferenceManager.isOutageTrackingEnabled();
-    _outageTrackingEnabledController.sink.add(trackingEnabled);
-  }
-
-  void dispose() {
-    _outageController.close();
-    _selectedOutageController.close();
+    emit(state.copyWith(outageTrackingEnabled: trackingEnabled));
   }
 }
