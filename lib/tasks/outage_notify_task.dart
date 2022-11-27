@@ -36,7 +36,7 @@ class OutageNotifyTask {
     final _intentHelper = intentHelper ?? AndroidIntentHelper();
 
     final currentLocaleStr = Intl.getCurrentLocale();
-    final currentLocale = Locale(currentLocaleStr);
+    final currentLocale = Locale(currentLocaleStr.split("_")[0]);
     final localizations = await AppLocalizations.delegate.load(currentLocale);
 
     return OutageNotifyTask._(
