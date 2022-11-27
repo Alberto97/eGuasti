@@ -30,8 +30,8 @@ class _AboutPage extends StatelessWidget {
       body: ListView(
         children: [
           buildUrl(context),
-          const Divider(),
-          buildTrackOutageToggle(),
+          // const Divider(),
+          // buildTrackOutageToggle(),
           const Divider(),
           buildAppVersion(context),
           buildAuthor(context),
