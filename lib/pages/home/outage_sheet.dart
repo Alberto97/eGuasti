@@ -81,14 +81,14 @@ class _OutageSheetState extends State<OutageSheet> {
       padding: const EdgeInsets.all(16.0),
       child: FloatingActionButton(
         onPressed: () => widget.track(),
+        backgroundColor: Theme.of(context).primaryColor,
+        elevation: 0.0,
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 500),
           child: widget.tracking
               ? const Icon(Icons.notifications_off, key: ValueKey("off"))
               : const Icon(Icons.notifications, key: ValueKey("on")),
         ),
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 0.0,
       ),
     );
   }

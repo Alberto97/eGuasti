@@ -43,11 +43,11 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
         onPositionChanged: (position, hasGesture) =>
             widget.onPositionChanged?.call(position, hasGesture),
       ),
+      nonRotatedChildren: [buildMapAttribution()],
       children: [
         buildOsmTileLayer(),
         buildMarkerClusterLayer(widget.markers),
       ],
-      nonRotatedChildren: [buildMapAttribution()],
     );
   }
 
@@ -108,8 +108,8 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
         builder: (context, markers) {
           return FloatingActionButton(
             heroTag: getHeroTag(markers),
-            child: Text(markers.length.toString()),
             onPressed: null,
+            child: Text(markers.length.toString()),
           );
         },
       ),
