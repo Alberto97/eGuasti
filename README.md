@@ -8,4 +8,4 @@ This app does not report outages in Valle d'Aosta and Trentino Alto Adige as tho
 
 ### Screenshots
 
-<img src="art/app_1.png" width="30%"> <img src="art/app_2.png" width="30%">
+<img src="art/app_1.png" width="30%"> <img src="art/app_2.png" width="30%"> <img src="art/app_3.png" width="30%">
