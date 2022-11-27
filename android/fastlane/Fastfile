@@ -17,7 +17,12 @@ default_platform(:android)
 
 platform :android do
   desc "Deploy a new production version to the Google Play"
-  lane :uploadProd do
-    upload_to_play_store(aab: "../build/app/outputs/bundle/release/app-release.aab")
+  lane :deploy do
+    upload_to_play_store(
+      aab: "../build/app/outputs/bundle/release/app-release.aab",
+      rollout: "0.2",
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
   end
 end
