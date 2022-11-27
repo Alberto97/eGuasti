@@ -71,6 +71,7 @@ class _HomePageState extends State<_HomePage>
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<HomeCubit>();
     return WillPopScope(
       onWillPop: () => shouldPop(),
       child: Scaffold(
@@ -78,7 +79,8 @@ class _HomePageState extends State<_HomePage>
           title: const Text("eGuasti"),
           actions: [
             PopupMenuButton(
-              onSelected: (MenuItem item) => handleMenuItemSelection(item),
+              onSelected: (MenuItem item) =>
+                  handleMenuItemSelection(cubit, item),
               itemBuilder: (BuildContext context) => [
                 buildAboutItem(),
               ],
@@ -104,10 +106,10 @@ class _HomePageState extends State<_HomePage>
     );
   }
 
-  void handleMenuItemSelection(MenuItem item) async {
+  void handleMenuItemSelection(HomeCubit cubit, MenuItem item) async {
     if (item == MenuItem.about) {
       await Navigator.of(context).pushNamed("/about");
-      context.read<HomeCubit>().updateTrackingEnabledFeature();
+      cubit.updateTrackingEnabledFeature();
     }
   }
 
