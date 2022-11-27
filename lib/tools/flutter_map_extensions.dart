@@ -8,11 +8,11 @@ extension AnimatedMapMove on MapController {
       TickerProvider tickerProvider, LatLng destLocation, double destZoom) {
     // Create some tweens. These serve to split up the transition from one location to another.
     // In our case, we want to split the transition be<tween> our current map center and the destination.
-    final _latTween =
+    final latTween =
         Tween<double>(begin: center.latitude, end: destLocation.latitude);
-    final _lngTween =
+    final lngTween =
         Tween<double>(begin: center.longitude, end: destLocation.longitude);
-    final _zoomTween = Tween<double>(begin: zoom, end: destZoom);
+    final zoomTween = Tween<double>(begin: zoom, end: destZoom);
 
     // Create a animation controller that has a duration and a TickerProvider.
     var controller = AnimationController(
@@ -26,8 +26,8 @@ extension AnimatedMapMove on MapController {
         CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
 
     controller.addListener(() {
-      move(LatLng(_latTween.evaluate(animation), _lngTween.evaluate(animation)),
-          _zoomTween.evaluate(animation));
+      move(LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
+          zoomTween.evaluate(animation));
     });
 
     animation.addStatusListener((status) {
