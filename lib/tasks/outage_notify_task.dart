@@ -25,25 +25,25 @@ class OutageNotifyTask {
   );
 
   static Future<OutageNotifyTask> init({
-    OutageRepository? repository,
-    OutageTracker? tracker,
-    WorkScheduler? scheduler,
-    AndroidIntentHelper? intentHelper,
+    OutageRepository? outageRepository,
+    OutageTracker? outageTracker,
+    WorkScheduler? workScheduler,
+    AndroidIntentHelper? androidIntentHelper,
   }) async {
-    final _repository = repository ?? OutageRepository();
-    final _tracker = tracker ?? OutageTracker();
-    final _scheduler = scheduler ?? WorkScheduler();
-    final _intentHelper = intentHelper ?? AndroidIntentHelper();
+    final repository = outageRepository ?? OutageRepository();
+    final tracker = outageTracker ?? OutageTracker();
+    final scheduler = workScheduler ?? WorkScheduler();
+    final intentHelper = androidIntentHelper ?? AndroidIntentHelper();
 
     final currentLocaleStr = Intl.getCurrentLocale();
     final currentLocale = Locale(currentLocaleStr.split("_")[0]);
     final localizations = await AppLocalizations.delegate.load(currentLocale);
 
     return OutageNotifyTask._(
-      _repository,
-      _tracker,
-      _scheduler,
-      _intentHelper,
+      repository,
+      tracker,
+      scheduler,
+      intentHelper,
       localizations,
     );
   }
