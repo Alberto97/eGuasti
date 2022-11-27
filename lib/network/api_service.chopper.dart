@@ -6,7 +6,7 @@ part of 'api_service.dart';
 // ChopperGenerator
 // **************************************************************************
 
-// ignore_for_file: always_put_control_body_on_new_line, always_specify_types, prefer_const_declarations
+// ignore_for_file: always_put_control_body_on_new_line, always_specify_types, prefer_const_declarations, unnecessary_brace_in_string_interps
 class _$ApiService extends ApiService {
   _$ApiService([ChopperClient? client]) {
     if (client == null) return;
@@ -17,18 +17,25 @@ class _$ApiService extends ApiService {
   final definitionType = ApiService;
 
   @override
-  Future<Response<FeatureCollection>> query(String where,
-      {String format = "json",
-      bool returnGeometry = false,
-      String outFields = "*"}) {
-    final $url = 'query';
-    final $params = <String, dynamic>{
+  Future<Response<FeatureCollection>> query(
+    String where, {
+    String format = "json",
+    bool returnGeometry = false,
+    String outFields = "*",
+  }) {
+    final String $url = 'query';
+    final Map<String, dynamic> $params = <String, dynamic>{
       'where': where,
       'f': format,
       'returnGeometry': returnGeometry,
-      'outFields': outFields
+      'outFields': outFields,
     };
-    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
     return client.send<FeatureCollection, FeatureCollection>($request);
   }
 }
