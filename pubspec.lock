@@ -140,14 +140,14 @@ packages:
       name: chopper
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.2.0"
+    version: "6.0.0"
   chopper_generator:
     dependency: "direct dev"
     description:
       name: chopper_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.2.0"
+    version: "6.0.0"
   clock:
     dependency: transitive
     description:
