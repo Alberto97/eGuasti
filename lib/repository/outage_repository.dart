@@ -21,7 +21,7 @@ class OutageRepository {
 
     final chopper = ChopperClient(
       converter: converter,
-      baseUrl: Settings.endpointUrl,
+      baseUrl: Uri.parse(Settings.endpointUrl),
       services: [ApiService.create()],
     );
     apiService = ApiService.create(chopper);
