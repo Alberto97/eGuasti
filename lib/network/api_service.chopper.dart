@@ -23,7 +23,7 @@ class _$ApiService extends ApiService {
     bool returnGeometry = false,
     String outFields = "*",
   }) {
-    final String $url = 'query';
+    final Uri $url = Uri.parse('query');
     final Map<String, dynamic> $params = <String, dynamic>{
       'where': where,
       'f': format,
