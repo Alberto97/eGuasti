@@ -45,7 +45,7 @@ dependencies:
   hive_flutter: ^1.1.0
   intl: ^0.17.0
   json_annotation: ^4.7.0
-  json_serializable: ^6.5.4
+  json_serializable: ^6.6.0
   latlong2: ^0.8.1
   package_info_plus: ^3.0.2
   path_provider: ^2.0.11
