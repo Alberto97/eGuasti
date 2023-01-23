@@ -50,7 +50,7 @@ dependencies:
   package_info_plus: ^3.0.2
   path_provider: ^2.0.11
   permission_handler: ^10.2.0
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.0.17
   tuple: ^2.0.1
   url_launcher: ^6.1.7
   workmanager: ^0.5.1
