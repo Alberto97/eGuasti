@@ -40,7 +40,7 @@ class _OutageSheetState extends State<OutageSheet> {
                   padding: const EdgeInsets.only(top: 20.0, left: 20.0),
                   child: Text(
                     widget.outage.place,
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
                 buildType(),
