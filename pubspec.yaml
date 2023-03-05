@@ -48,7 +48,7 @@ dependencies:
   json_serializable: ^6.6.1
   latlong2: ^0.8.1
   package_info_plus: ^3.0.3
-  path_provider: ^2.0.12
+  path_provider: ^2.0.13
   permission_handler: ^10.2.0
   shared_preferences: ^2.0.18
   tuple: ^2.0.1
