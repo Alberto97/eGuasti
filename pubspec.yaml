@@ -52,7 +52,7 @@ dependencies:
   permission_handler: ^10.2.0
   shared_preferences: ^2.0.17
   tuple: ^2.0.1
-  url_launcher: ^6.1.8
+  url_launcher: ^6.1.10
   workmanager: ^0.5.1
 
 dev_dependencies:
