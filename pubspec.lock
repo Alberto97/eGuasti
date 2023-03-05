@@ -295,10 +295,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_map_marker_cluster
-      sha256: a272a9f79ec4964272646a5ecad26108040ac2f489e58f1a28d67069b341c3f0
+      sha256: "793e68ccdb323f0e5059eecf3f8777892a9365186ab57c07ebe82e10ad7737ef"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.2"
   flutter_map_marker_popup:
     dependency: transitive
     description:
