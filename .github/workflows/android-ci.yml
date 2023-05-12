@@ -10,7 +10,7 @@ jobs:
   ci:
     name: Continuous Integration
     runs-on: ubuntu-latest
-    container: cirrusci/flutter:3.7.6
+    container: ghcr.io/cirruslabs/flutter:3.10.0
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v3
