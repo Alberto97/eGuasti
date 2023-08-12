@@ -12,15 +12,15 @@ class PermissionDeniedDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(AppLocalizations.of(context)!.notificationPermissionDeniedTitle),
-      content: Text(AppLocalizations.of(context)!.notificationPermissionDeniedText),
+      title: Text(AppLocalizations.of(context).notificationPermissionDeniedTitle),
+      content: Text(AppLocalizations.of(context).notificationPermissionDeniedText),
       actions: [
         TextButton(
-          child: Text(AppLocalizations.of(context)!.cancel),
+          child: Text(AppLocalizations.of(context).cancel),
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          child: Text(AppLocalizations.of(context)!.ok),
+          child: Text(AppLocalizations.of(context).ok),
           onPressed: () {
             onOkPressed();
             Navigator.of(context).pop();

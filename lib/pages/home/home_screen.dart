@@ -114,7 +114,7 @@ class _HomePageState extends State<_HomePage>
   }
 
   PopupMenuItem<MenuItem> buildAboutItem() {
-    var text = AppLocalizations.of(context)!.mainActionAbout;
+    var text = AppLocalizations.of(context).mainActionAbout;
     return PopupMenuItem<MenuItem>(value: MenuItem.about, child: Text(text));
   }
 
@@ -135,7 +135,7 @@ class _HomePageState extends State<_HomePage>
 
   void showNotificationChannelFailureSnackBar() {
     final localizations = AppLocalizations.of(context);
-    final message = localizations!.notificationChannelCreationFailure;
+    final message = localizations.notificationChannelCreationFailure;
     final snackBar = SnackBar(
       content: Text(message),
     );
@@ -147,10 +147,10 @@ class _HomePageState extends State<_HomePage>
   void showFetchFailureSnackBar() {
     final localizations = AppLocalizations.of(context);
     final snackBar = SnackBar(
-      content: Text(localizations!.outageFetchFailure),
+      content: Text(localizations.outageFetchFailure),
       duration: const Duration(days: 1),
       action: SnackBarAction(
-        label: AppLocalizations.of(context)!.mainActionTryAgain,
+        label: AppLocalizations.of(context).mainActionTryAgain,
         onPressed: () {
           context.read<HomeCubit>().fetchOutages();
           ScaffoldMessenger.of(context).removeCurrentSnackBar();

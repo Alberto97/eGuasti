@@ -41,7 +41,7 @@ class _AboutPage extends StatelessWidget {
   }
 
   Widget buildTitle(BuildContext context) {
-    var title = AppLocalizations.of(context)!.aboutTitle;
+    var title = AppLocalizations.of(context).aboutTitle;
     return Text(title);
   }
 
@@ -54,8 +54,8 @@ class _AboutPage extends StatelessWidget {
           leading: const Text(""),
           value: state.trackOutagesEnabled,
           onChanged: (value) => onTrackOutagesChanged(context, value),
-          title: AppLocalizations.of(context)!.settingsTrackOutagesTitle,
-          subtitle: AppLocalizations.of(context)!.settingsTrackOutagesSubtitle,
+          title: AppLocalizations.of(context).settingsTrackOutagesTitle,
+          subtitle: AppLocalizations.of(context).settingsTrackOutagesSubtitle,
         );
       },
     );
@@ -85,8 +85,8 @@ class _AboutPage extends StatelessWidget {
           SvgPicture.asset('assets/github.svg', width: 30.0, height: 30.0),
         ],
       ),
-      title: Text(AppLocalizations.of(context)!.aboutRepositoryTitle),
-      subtitle: Text(AppLocalizations.of(context)!.aboutRepositorySubtitle),
+      title: Text(AppLocalizations.of(context).aboutRepositoryTitle),
+      subtitle: Text(AppLocalizations.of(context).aboutRepositorySubtitle),
       onTap: () => context.read<AboutCubit>().openRepository(),
     );
   }
@@ -94,7 +94,7 @@ class _AboutPage extends StatelessWidget {
   Widget buildAppVersion(BuildContext context) {
     return ListTile(
       leading: const Text(""),
-      title: Text(AppLocalizations.of(context)!.aboutVersion),
+      title: Text(AppLocalizations.of(context).aboutVersion),
       subtitle: BlocBuilder<AboutCubit, AboutState>(
         buildWhen: (previous, current) =>
             previous.appVersion != current.appVersion,
@@ -108,7 +108,7 @@ class _AboutPage extends StatelessWidget {
   Widget buildAuthor(BuildContext context) {
     return ListTile(
       leading: const Text(""),
-      title: Text(AppLocalizations.of(context)!.aboutAuthorTitle),
+      title: Text(AppLocalizations.of(context).aboutAuthorTitle),
       subtitle: const Text("Alberto Pedron"),
     );
   }

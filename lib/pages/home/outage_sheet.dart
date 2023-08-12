@@ -46,7 +46,7 @@ class _OutageSheetState extends State<OutageSheet> {
                 buildType(),
                 buildItem(
                   Icons.restore_rounded,
-                  AppLocalizations.of(context)!.outageExpectedRestore,
+                  AppLocalizations.of(context).outageExpectedRestore,
                   widget.outage.expectedRestore,
                 ),
                 AnimatedSwitcher(
@@ -104,19 +104,19 @@ class _OutageSheetState extends State<OutageSheet> {
         },
         child: Text(
           showDetails
-              ? AppLocalizations.of(context)!.outageHideDetails
-              : AppLocalizations.of(context)!.outageShowDetails,
+              ? AppLocalizations.of(context).outageHideDetails
+              : AppLocalizations.of(context).outageShowDetails,
         ),
       ),
     );
   }
 
   Widget buildType() {
-    final title = AppLocalizations.of(context)!.outageCause;
-    var reason = AppLocalizations.of(context)!.outageMaintenance;
+    final title = AppLocalizations.of(context).outageCause;
+    var reason = AppLocalizations.of(context).outageMaintenance;
     var icon = Icons.build_rounded;
     if (widget.outage.cause == Cause.failure) {
-      reason = AppLocalizations.of(context)!.outageBlackout;
+      reason = AppLocalizations.of(context).outageBlackout;
       icon = Icons.bolt_rounded;
     }
     return buildItem(icon, title, reason);
@@ -127,17 +127,17 @@ class _OutageSheetState extends State<OutageSheet> {
       children: [
         buildItem(
           Icons.error_outline_rounded,
-          AppLocalizations.of(context)!.outageStartOutage,
+          AppLocalizations.of(context).outageStartOutage,
           widget.outage.start,
         ),
         buildItem(
           Icons.supervised_user_circle_rounded,
-          AppLocalizations.of(context)!.outageOfflineCustomers,
+          AppLocalizations.of(context).outageOfflineCustomers,
           widget.outage.offlineCustomers.toString(),
         ),
         buildItem(
           Icons.access_time_rounded,
-          AppLocalizations.of(context)!.outageLastUpdate,
+          AppLocalizations.of(context).outageLastUpdate,
           widget.outage.lastUpdate,
         ),
       ],
