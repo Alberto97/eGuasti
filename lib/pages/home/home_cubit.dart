@@ -13,7 +13,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:tuple/tuple.dart';
 
 enum HomeSnackBarMessage {
   none,
@@ -106,7 +105,7 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<Tuple2<LatLng, double>> fetchMapState() async {
+  Future<(LatLng, double)> fetchMapState() async {
     final state = await _mapStateRepository.readState();
 
     // Default values - center on Italy
@@ -118,7 +117,7 @@ class HomeCubit extends Cubit<HomeState> {
       zoom = state.zoom;
     }
 
-    return Tuple2(position, zoom);
+    return (position, zoom);
   }
 
   Future<void> saveMapState(LatLng position, double zoom) async {

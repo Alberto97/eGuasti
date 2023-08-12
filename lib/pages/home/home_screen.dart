@@ -13,7 +13,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:tuple/tuple.dart';
 
 enum MenuItem { about }
 
@@ -173,14 +172,14 @@ class _HomePageState extends State<_HomePage>
   }
 
   Widget buildBody() {
-    return FutureBuilder<Tuple2<LatLng, double>>(
+    return FutureBuilder<(LatLng, double)>(
       future: context.read<HomeCubit>().fetchMapState(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Stack(alignment: AlignmentDirectional.bottomCenter, children: [
             buildMapWithMarkers(
-              snapshot.data!.item1,
-              snapshot.data!.item2,
+              snapshot.data!.$1,
+              snapshot.data!.$2,
             ),
             buildSheet()
           ]);
