@@ -54,7 +54,7 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
   TileLayer buildOsmTileLayer() {
     return TileLayer(
       urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      maxNativeZoom: 18.0,
+      maxNativeZoom: 18,
       subdomains: const ['a', 'b', 'c'],
     );
   }
