@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AboutPage extends StatelessWidget {
-  const AboutPage({Key? key}) : super(key: key);
+  const AboutPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class AboutPage extends StatelessWidget {
 }
 
 class _AboutPage extends StatelessWidget {
-  const _AboutPage({Key? key}) : super(key: key);
+  const _AboutPage();
 
   @override
   Widget build(BuildContext context) {

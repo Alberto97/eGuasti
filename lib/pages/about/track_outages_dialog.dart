@@ -3,9 +3,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TrackOutagesDialog extends StatelessWidget {
   const TrackOutagesDialog({
-    Key? key,
+    super.key,
     required this.onOkPressed,
-  }) : super(key: key);
+  });
 
   final VoidCallback onOkPressed;
 

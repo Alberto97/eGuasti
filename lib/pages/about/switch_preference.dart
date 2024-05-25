@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class SwitchPreference extends StatelessWidget {
   const SwitchPreference({
-    Key? key,
+    super.key,
     required this.value,
     required this.onChanged,
     required this.title,
     required this.subtitle,
     this.leading,
-  }) : super(key: key);
+  });
 
   final Widget? leading;
 

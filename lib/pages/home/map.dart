@@ -7,14 +7,13 @@ typedef MapClickCallback = void Function(LatLng point);
 
 class OpenStreetMap extends StatefulWidget {
   const OpenStreetMap(
-      {Key? key,
+      {super.key,
       this.center,
       this.zoom,
       this.mapController,
       this.markers = const [],
       this.onMapTap,
-      this.onPositionChanged})
-      : super(key: key);
+      this.onPositionChanged});
 
   final LatLng? center;
   final double? zoom;

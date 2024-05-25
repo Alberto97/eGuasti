@@ -13,8 +13,7 @@ class SecondaryButton extends StatelessWidget {
   /// Typically the button's label.
   final Widget? child;
 
-  const SecondaryButton({Key? key, this.onPressed, this.child})
-      : super(key: key);
+  const SecondaryButton({super.key, this.onPressed, this.child});
 
   @override
   Widget build(BuildContext context) {

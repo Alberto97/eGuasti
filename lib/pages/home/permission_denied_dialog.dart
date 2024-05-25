@@ -3,9 +3,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PermissionDeniedDialog extends StatelessWidget {
   const PermissionDeniedDialog({
-    Key? key,
+    super.key,
     required this.onOkPressed,
-  }) : super(key: key);
+  });
 
   final VoidCallback onOkPressed;
 

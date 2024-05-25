@@ -10,12 +10,12 @@ class OutageSheet extends StatefulWidget {
   final bool trackingFeatureEnabled;
 
   const OutageSheet({
-    Key? key,
+    super.key,
     required this.outage,
     required this.track,
     required this.tracking,
     required this.trackingFeatureEnabled,
-  }) : super(key: key);
+  });
 
   @override
   State<OutageSheet> createState() => _OutageSheetState();

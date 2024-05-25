@@ -17,7 +17,7 @@ import 'package:latlong2/latlong.dart';
 enum MenuItem { about }
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
 }
 
 class _HomePage extends StatefulWidget {
-  const _HomePage({Key? key}) : super(key: key);
+  const _HomePage();
 
   @override
   State<_HomePage> createState() => _HomePageState();
