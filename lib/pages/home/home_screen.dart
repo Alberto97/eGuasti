@@ -10,7 +10,7 @@ import 'package:eguasti/widgets/app_animated_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -243,8 +243,8 @@ class _HomePageState extends State<_HomePage>
       width: 40.0,
       height: 40.0,
       point: LatLng(value.latitude, value.longitude),
-      anchorPos: AnchorPos.align(AnchorAlign.top),
-      builder: (ctx) => GestureDetector(
+      alignment: Alignment.topCenter,
+      child: GestureDetector(
         onTap: () => onMarkerTap(value),
         child: SvgPicture.asset(markerPath),
       ),
@@ -257,7 +257,7 @@ class _HomePageState extends State<_HomePage>
   }
 
   void centerToOutage(Outage value) {
-    final zoom = mapController.zoom;
+    final zoom = mapController.camera.zoom;
     final center = LatLng(value.latitude, value.longitude);
     mapController.animatedMove(this, center, zoom);
   }

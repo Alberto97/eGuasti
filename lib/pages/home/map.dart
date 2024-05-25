@@ -34,26 +34,28 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
       key: widget.key,
       mapController: widget.mapController,
       options: MapOptions(
-        center: widget.center,
-        zoom: widget.zoom ?? 13.0,
+        initialCenter: widget.center ?? const LatLng(0.0, 0.0),
+        initialZoom: widget.zoom ?? 13.0,
         maxZoom: 18.0,
-        interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+        interactionOptions: const InteractionOptions(
+          flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+        ),
         onTap: (tapPosition, point) =>
             widget.onMapTap?.call(tapPosition, point),
         onPositionChanged: (position, hasGesture) =>
             widget.onPositionChanged?.call(position, hasGesture),
       ),
-      nonRotatedChildren: [buildMapAttribution()],
       children: [
         buildOsmTileLayer(),
         buildMarkerClusterLayer(widget.markers),
+        buildMapAttribution()
       ],
     );
   }
 
   TileLayer buildOsmTileLayer() {
     return TileLayer(
-      urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
       maxNativeZoom: 18,
       subdomains: const ['a', 'b', 'c'],
     );
@@ -71,9 +73,9 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
         ),
         child: const Padding(
           padding: EdgeInsets.all(3.0),
-          child: Text(
-            "© OpenStreetMap contributors",
-            style: TextStyle(fontSize: 12.0),
+          child: TextSourceAttribution(
+            "OpenStreetMap contributors",
+            textStyle: TextStyle(fontSize: 12.0),
           ),
         ),
       ),
@@ -96,9 +98,6 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
       options: MarkerClusterLayerOptions(
         maxClusterRadius: 120,
         size: const Size(40, 40),
-        fitBoundsOptions: const FitBoundsOptions(
-          padding: EdgeInsets.all(50),
-        ),
         markers: markers,
         polygonOptions: const PolygonOptions(
           borderColor: Colors.blueAccent,
