@@ -60,48 +60,53 @@ class _HomePageState extends State<_HomePage>
     }
   }
 
-  Future<bool> shouldPop() async {
-    if (context.read<HomeCubit>().isOutageSelected()) {
-      context.read<HomeCubit>().clearSelectedOutage();
-      return false;
+  Future<void> shouldPop(bool didPop) async {
+    if (didPop) {
+      return;
     }
-    return true;
+
+    context.read<HomeCubit>().clearSelectedOutage();
   }
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<HomeCubit>();
-    return WillPopScope(
-      onWillPop: () => shouldPop(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("eGuasti"),
-          actions: [
-            PopupMenuButton(
-              onSelected: (MenuItem item) =>
-                  handleMenuItemSelection(cubit, item),
-              itemBuilder: (BuildContext context) => [
-                buildAboutItem(),
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        return PopScope(
+          canPop: state.selectedOutage == null,
+          onPopInvoked: shouldPop,
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text("eGuasti"),
+              actions: [
+                PopupMenuButton(
+                  onSelected: (MenuItem item) =>
+                      handleMenuItemSelection(cubit, item),
+                  itemBuilder: (BuildContext context) => [
+                    buildAboutItem(),
+                  ],
+                )
               ],
-            )
-          ],
-        ),
-        body: MultiBlocListener(
-          listeners: [
-            BlocListener<HomeCubit, HomeState>(
-              listenWhen: (previous, current) =>
-                  current.snackBarMessage != HomeSnackBarMessage.none,
-              listener: (context, state) => showSnackBar(state.snackBarMessage),
             ),
-            BlocListener<HomeCubit, HomeState>(
-              listenWhen: (previous, current) =>
-                  current.showPermissionDenied == true,
-              listener: (context, state) => showPermissionDeniedDialog(),
-            )
-          ],
-          child: buildBody(),
-        ),
-      ),
+            body: MultiBlocListener(
+              listeners: [
+                BlocListener<HomeCubit, HomeState>(
+                  listenWhen: (previous, current) =>
+                      current.snackBarMessage != HomeSnackBarMessage.none,
+                  listener: (context, state) => showSnackBar(state.snackBarMessage),
+                ),
+                BlocListener<HomeCubit, HomeState>(
+                  listenWhen: (previous, current) =>
+                      current.showPermissionDenied == true,
+                  listener: (context, state) => showPermissionDeniedDialog(),
+                )
+              ],
+              child: buildBody(),
+            ),
+          ),
+        );
+      }
     );
   }
 
