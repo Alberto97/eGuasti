@@ -29,7 +29,7 @@ class SecondaryButton extends StatelessWidget {
               color: Colors.grey.withOpacity(0.5),
             ),
           ).copyWith(
-            elevation: MaterialStateProperty.all(0.0),
+            elevation: WidgetStateProperty.all(0.0),
           ),
           onPressed: onPressed,
           child: child,
