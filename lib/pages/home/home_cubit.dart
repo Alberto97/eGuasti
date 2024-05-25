@@ -109,7 +109,7 @@ class HomeCubit extends Cubit<HomeState> {
     final state = await _mapStateRepository.readState();
 
     // Default values - center on Italy
-    var position = LatLng(42.610, 12.041);
+    var position = const LatLng(42.610, 12.041);
     var zoom = 5.0;
 
     if (state != null) {
