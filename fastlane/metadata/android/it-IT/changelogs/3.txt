@@ -1,0 +1,2 @@
+* Aggiunto il supporto per Android 14
+* Aggiornamento delle dipendenze
