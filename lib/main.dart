@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
         primarySwatch: AppColors.darkBlue,
+        useMaterial3: false
       ),
       initialRoute: '/',
       routes: {
