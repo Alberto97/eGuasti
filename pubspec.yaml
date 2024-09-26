@@ -41,7 +41,7 @@ dev_dependencies:
 
   build_runner: ^2.4.11
   chopper_generator: ^8.0.1
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
   json_serializable: ^6.8.0
 
 flutter:
