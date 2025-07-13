@@ -1,12 +1,12 @@
 import 'dart:ui';
 
+import 'package:eguasti/l10n/app_localizations.dart';
 import 'package:eguasti/models/outage.dart';
 import 'package:eguasti/repository/outage_repository.dart';
 import 'package:eguasti/repository/outage_tracker.dart';
 import 'package:eguasti/tools/outage_list_helper.dart';
 import 'package:eguasti/tools/android_intent_helper.dart';
 import 'package:eguasti/tools/work_scheduler.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 class OutageNotifyTask {

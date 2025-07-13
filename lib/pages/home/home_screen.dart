@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:eguasti/l10n/app_localizations.dart';
 import 'package:eguasti/models/outage.dart';
 import 'package:eguasti/pages/home/outage_sheet.dart';
 import 'package:eguasti/pages/home/home_cubit.dart';
@@ -9,7 +10,6 @@ import 'package:eguasti/tools/flutter_map_extensions.dart';
 import 'package:eguasti/widgets/app_animated_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:latlong2/latlong.dart';

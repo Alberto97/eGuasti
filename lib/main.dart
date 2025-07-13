@@ -1,10 +1,10 @@
+import 'package:eguasti/l10n/app_localizations.dart';
 import 'package:eguasti/pages/about/about_page.dart';
 import 'package:eguasti/pages/home/home_screen.dart';
 import 'package:eguasti/tools/background_tasks.dart';
 import 'package:eguasti/ui/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:workmanager/workmanager.dart';
 

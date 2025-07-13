@@ -1,9 +1,9 @@
+import 'package:eguasti/l10n/app_localizations.dart';
 import 'package:eguasti/pages/about/about_cubit.dart';
 import 'package:eguasti/pages/about/switch_preference.dart';
 import 'package:eguasti/pages/about/track_outages_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AboutPage extends StatelessWidget {

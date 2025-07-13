@@ -1,6 +1,6 @@
+import 'package:eguasti/l10n/app_localizations.dart';
 import 'package:eguasti/models/outage.dart';
 import 'package:eguasti/pages/home/secondary_button.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class OutageSheet extends StatefulWidget {
