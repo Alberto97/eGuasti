@@ -29,6 +29,7 @@ if (securePropertiesFile.exists()) {
 }
 
 android {
+    namespace 'org.alberto97.eguasti'
     compileSdkVersion flutter.compileSdkVersion
 
     compileOptions {
