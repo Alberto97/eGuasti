@@ -86,12 +86,12 @@ class HomeCubit extends Cubit<HomeState> {
     _init();
   }
 
-  _init() async {
+  void _init() async {
     _preferenceManager = await PreferenceManager.init();
     updateTrackingEnabledFeature();
   }
 
-  fetchOutages() async {
+  void fetchOutages() async {
     if (_lastFetch != null) {
       final duration = DateTime.now().difference(_lastFetch!);
       if (duration < const Duration(minutes: 5)) return;

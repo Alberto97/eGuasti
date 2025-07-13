@@ -29,7 +29,7 @@ class AboutCubit extends Cubit<AboutState> {
     _init();
   }
 
-  _init() async {
+  void _init() async {
     _preferenceManager = await PreferenceManager.init();
     _packageInfo = await PackageInfo.fromPlatform();
     _initTrackOutagesEnabled();
