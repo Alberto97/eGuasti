@@ -66,7 +66,7 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
       alignment: Alignment.bottomRight,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.5),
+          color: Colors.white.withAlpha(128),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(5.0),
           ),

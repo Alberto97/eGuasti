@@ -25,7 +25,7 @@ class SecondaryButton extends StatelessWidget {
             backgroundColor: Colors.transparent,
             foregroundColor: Theme.of(context).primaryColor,
             side: BorderSide(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withAlpha(128),
             ),
           ).copyWith(
             elevation: WidgetStateProperty.all(0.0),
