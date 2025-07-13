@@ -57,6 +57,7 @@ class _OpenStreetMapState extends State<OpenStreetMap> {
       urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
       maxNativeZoom: 18,
       subdomains: const ['a', 'b', 'c'],
+      userAgentPackageName: "org.alberto97.eguasti",
     );
   }
 
