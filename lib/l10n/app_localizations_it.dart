@@ -63,28 +63,33 @@ class AppLocalizationsIt extends AppLocalizations {
   String get outageHideDetails => 'Nascondi dettagli';
 
   @override
-  String get outageFetchFailure => 'Si è verificato un errore nel recupero delle interruzioni';
+  String get outageFetchFailure =>
+      'Si è verificato un errore nel recupero delle interruzioni';
 
   @override
-  String get notificationChannelCreationFailure => 'Impossibile creare il canale di notifica';
+  String get notificationChannelCreationFailure =>
+      'Impossibile creare il canale di notifica';
 
   @override
   String get notificationPermissionDeniedTitle => 'Autorizzazione negata';
 
   @override
-  String get notificationPermissionDeniedText => 'Consenti all\'app di inviarti notifiche per utilizzare questa funzionalità';
+  String get notificationPermissionDeniedText =>
+      'Consenti all\'app di inviarti notifiche per utilizzare questa funzionalità';
 
   @override
   String get settingsTrackOutagesTitle => 'Aggiornamenti sui guasti';
 
   @override
-  String get settingsTrackOutagesSubtitle => 'Abilita un tasto nel dettaglio del guasto per tracciarne lo stato';
+  String get settingsTrackOutagesSubtitle =>
+      'Abilita un tasto nel dettaglio del guasto per tracciarne lo stato';
 
   @override
   String get settingsTrackOutagesDialogTitle => 'Aggiornamenti sui guasti';
 
   @override
-  String get settingsTrackOutagesDialogMessage => 'Dopo aver abilitato il tracciamento dal dettaglio del guasto riceverai una notifica con data e ora stimati del suo ripristino ogni 15 minuti.\n\nAttenzione! A causa delle limitazioni imposte dal sistema operativo potrebbe non funzionare correttamente.';
+  String get settingsTrackOutagesDialogMessage =>
+      'Dopo aver abilitato il tracciamento dal dettaglio del guasto riceverai una notifica con data e ora stimati del suo ripristino ogni 15 minuti.\n\nAttenzione! A causa delle limitazioni imposte dal sistema operativo potrebbe non funzionare correttamente.';
 
   @override
   String trackOutageNotificationMessage(String expectedRestore) {
