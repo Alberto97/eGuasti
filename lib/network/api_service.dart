@@ -9,7 +9,7 @@ part 'api_service.chopper.dart';
 abstract class ApiService extends ChopperService {
   static ApiService create([ChopperClient? client]) => _$ApiService(client);
 
-  @Get(path: "query")
+  @GET(path: "query")
   Future<Response<FeatureCollection>> query(
     @Query("where") String where, {
     @Query("f") String format = "json",
