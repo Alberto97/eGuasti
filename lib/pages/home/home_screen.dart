@@ -262,8 +262,7 @@ class _HomePageState extends State<_HomePage>
     mapController.animatedMove(this, center, zoom);
   }
 
-  void onMapPositionChanged(MapPosition value) {
-    if (value.center == null || value.zoom == null) return;
-    context.read<HomeCubit>().saveMapState(value.center!, value.zoom!);
+  void onMapPositionChanged(MapCamera value) {
+    context.read<HomeCubit>().saveMapState(value.center, value.zoom);
   }
 }
