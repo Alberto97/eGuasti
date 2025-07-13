@@ -33,7 +33,7 @@ dependencies:
   permission_handler: ^11.4.0
   shared_preferences: ^2.5.3
   url_launcher: ^6.3.2
-  workmanager: ^0.5.2
+  workmanager: ^0.7.0
 
 dev_dependencies:
   flutter_test:
