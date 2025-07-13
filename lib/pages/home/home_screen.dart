@@ -75,7 +75,7 @@ class _HomePageState extends State<_HomePage>
       builder: (context, state) {
         return PopScope(
           canPop: state.selectedOutage == null,
-          onPopInvoked: shouldPop,
+          onPopInvokedWithResult: (didPop, _) => shouldPop(didPop),
           child: Scaffold(
             appBar: AppBar(
               title: const Text("eGuasti"),
