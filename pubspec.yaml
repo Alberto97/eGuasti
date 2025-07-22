@@ -20,7 +20,7 @@ dependencies:
 
 
   android_intent_plus: ^5.1.0
-  chopper: ^8.1.0
+  chopper: ^8.2.0
   dartx: ^1.2.0
   equatable: ^2.0.7
   flutter_bloc: ^9.1.1
