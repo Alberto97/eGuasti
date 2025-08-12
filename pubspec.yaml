@@ -19,7 +19,7 @@ dependencies:
       ref: f45d4aa97944fb8175894c747ee292a10fbd7369
 
 
-  android_intent_plus: ^5.1.0
+  android_intent_plus: ^5.3.1
   chopper: ^8.3.0
   dartx: ^1.2.0
   equatable: ^2.0.7
