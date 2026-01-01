@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">eGuasti</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="map_error_no_internet">You're offline. Some information may not be up to date.</string>
+
+    <!-- Outage -->
+    <string name="outage_maintenance">Scheduled maintenance</string>
+    <string name="outage_blackout">Blackout</string>
+    <string name="outage_cause">Cause</string>
+    <string name="outage_expected_restore">Expected restore</string>
+    <string name="outage_last_update">Last update</string>
+    <string name="outage_offline_customers">Offline customers</string>
+    <string name="outage_start_outage">Start outage</string>
+    <string name="outage_show_details">Show details</string>
+    <string name="outage_hide_details">Hide details</string>
+    <string name="outage_stop_tracking">Stop tracking</string>
+    <string name="outage_start_tracking">Start tracking</string>
+    <string name="outage_fetch_failure">An error occurred while retrieving outages</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_creation_failure">Failed to create the notification channel</string>
+    <string name="notification_permission_denied_title">Permission denied</string>
+    <string name="notification_permission_denied_text">Allow the app to send you notifications in order to use this feature</string>
+    <string name="update_notification_channel">Database updates</string>
+    <string name="update_notification_title">Updating database…</string>
+    <string name="track_outage_notification_message">Expected restore: %1$s</string>
+    <string name="outage_updates_notif_channel_name">Outage updates</string>
+    <string name="outage_updates_notif_channel_description">Informs about the tracked outage status</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_dynamic_theme_title">Use Material You theming</string>
+    <string name="settings_dynamic_theme_text">Follow your system theme</string>
+    <string name="settings_map_provider_title">Map Provider</string>
+    <string name="settings_map_provider_selection_title">Select Map Provider</string>
+    <string name="settings_experimental_title">Experimental settings</string>
+    <string name="settings_experimental_section_title">Experimental settings</string>
+    <string name="settings_track_outages_title">Outage updates</string>
+    <string name="settings_track_outages_subtitle">Enable a button in the outage's details to track its status</string>
+    <string name="settings_track_outages_dialog_title">Outage updates</string>
+    <string name="settings_track_outages_dialog_message">Once enabled the tracking from the outage's details you'll receive a notification with time and date of the estimated restore every 15 minutes.\n\nWarning! Due to limitations of the operating system this feature might not work properly.</string>
+
+    <!-- About -->
+    <string name="about_category_info">Info</string>
+    <string name="about_leave_feedback_title">Leave a feedback</string>
+    <string name="about_repository_title">Check out the source code!</string>
+    <string name="about_version">Version</string>
+    <string name="about_last_db_update">Last database update</string>
+
+</resources>

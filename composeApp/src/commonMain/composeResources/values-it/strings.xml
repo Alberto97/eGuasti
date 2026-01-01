@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ok">Ok</string>
+    <string name="cancel">Annulla</string>
+    <string name="map_error_no_internet">Sei offline. Alcune informazioni potrebbero non essere aggiornate.</string>
+
+    <!-- Outage -->
+    <string name="outage_maintenance">Lavori programmati</string>
+    <string name="outage_blackout">Guasto</string>
+    <string name="outage_cause">Causa</string>
+    <string name="outage_expected_restore">Previsione ripristino</string>
+    <string name="outage_last_update">Ultimo aggiornamento</string>
+    <string name="outage_offline_customers">Clienti disalimentati</string>
+    <string name="outage_start_outage">Inizio interruzioni</string>
+    <string name="outage_show_details">Mostra dettagli</string>
+    <string name="outage_hide_details">Nascondi dettagli</string>
+    <string name="outage_stop_tracking">Non ricevere più aggiornamenti</string>
+    <string name="outage_start_tracking">Ricevi aggiornamenti</string>
+    <string name="outage_fetch_failure">Si è verificato un errore nel recupero delle interruzioni</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_creation_failure">Impossibile creare il canale di notifica</string>
+    <string name="notification_permission_denied_title">Autorizzazione negata</string>
+    <string name="notification_permission_denied_text">Consenti all'app di inviarti notifiche per utilizzare questa funzionalità</string>
+    <string name="update_notification_channel">Aggiornamenti del database</string>
+    <string name="update_notification_title">Aggiornamento database in corso…</string>
+    <string name="track_outage_notification_message">Previsione ripristino: %1$s</string>
+    <string name="outage_updates_notif_channel_name">Aggiornamenti interruzioni</string>
+    <string name="outage_updates_notif_channel_description">Informa sullo stato dell'interruzione tracciata</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Impostazioni</string>
+    <string name="settings_dynamic_theme_title">Usa tema Material You</string>
+    <string name="settings_dynamic_theme_text">Segui il tema di sistema</string>
+    <string name="settings_map_provider_title">Provider Mappa</string>
+    <string name="settings_map_provider_selection_title">Seleziona Provider Mappa</string>
+    <string name="settings_experimental_title">Impostazioni sperimentali</string>
+    <string name="settings_experimental_section_title">Impostazioni sperimentali</string>
+    <string name="settings_track_outages_title">Aggiornamenti sui guasti</string>
+    <string name="settings_track_outages_subtitle">Abilita un tasto nel dettaglio del guasto per tracciarne lo stato</string>
+    <string name="settings_track_outages_dialog_title">Aggiornamenti sui guasti</string>
+    <string name="settings_track_outages_dialog_message">Dopo aver autorizzato l'app riceverai una notifica con data e ora stimati del suo ripristino ogni 15 minuti.\n\nAttenzione! A causa delle limitazioni imposte dal sistema operativo potrebbe non funzionare correttamente.</string>
+
+    <!-- About -->
+    <string name="about_category_info">Informazioni</string>
+    <string name="about_leave_feedback_title">Lascia un feedback</string>
+    <string name="about_repository_title">Controlla il codice sorgente!</string>
+    <string name="about_version">Versione</string>
+    <string name="about_last_db_update">Ultimo aggiornamento database</string>
+
+</resources>
