@@ -1,5 +1,5 @@
+import io.github.frankois944.spmForKmp.swiftPackageConfig
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import java.net.URI
 import java.util.Properties
 
@@ -36,7 +36,15 @@ kotlin {
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
-        iosTarget.configureSpmMaplibre()
+        iosTarget.swiftPackageConfig(cinteropName ="spmMaplibre") {
+            dependency {
+                remotePackageVersion(
+                    url = URI("https://github.com/maplibre/maplibre-gl-native-distribution.git"),
+                    products = { add("MapLibre") },
+                    version = "6.19.1",
+                )
+            }
+        }
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
@@ -129,22 +137,6 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
-}
-
-swiftPackageConfig {
-    create("spmMaplibre") {
-        dependency {
-            remotePackageVersion(
-                url = URI("https://github.com/maplibre/maplibre-gl-native-distribution.git"),
-                products = { add("MapLibre") },
-                version = "6.19.1",
-            )
-        }
-    }
-}
-
-fun KotlinNativeTarget.configureSpmMaplibre() {
-    compilations.getByName("main") { cinterops { create("spmMaplibre") } }
 }
 
 kotlin.sourceSets.named("commonMain") {
