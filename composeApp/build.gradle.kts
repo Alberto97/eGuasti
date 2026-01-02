@@ -36,6 +36,7 @@ kotlin {
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
+        @Suppress("OPT_IN_USAGE")
         iosTarget.swiftPackageConfig(cinteropName ="spmMaplibre") {
             dependency {
                 remotePackageVersion(
