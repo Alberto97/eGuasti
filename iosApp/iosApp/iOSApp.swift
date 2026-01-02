@@ -12,7 +12,7 @@ struct iOSApp: App {
         WindowGroup {
             ContentView()
         }.backgroundTask(.appRefresh("outageNotify")) {
-            try? await OutageNotifyTask().start()
+            _ = try? await OutageNotifyTask().start()
         }
     }
 }

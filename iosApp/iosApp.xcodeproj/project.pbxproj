@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		272969D4DE87160D9F2F613E /* Eguasti.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eguasti.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		272969D4DE87160D9F2F613E /* eGuasti.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = eGuasti.app; path = "/Users/alberto/Library/Caches/Google/AndroidStudio2025.2.3/DerivedData/iosApp-ejakspdjocarsqbfiyoxvizjuvlb/Build/Products/Debug-iphonesimulator/eGuasti.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		CD095FDDE144226B736E4AD1 /* Exceptions for "iosApp" folder in "iosApp" target */ = {
+		CD095FDDE144226B736E4AD1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -29,7 +29,7 @@
 		E63532EB6B781B111D762569 /* iosApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				CD095FDDE144226B736E4AD1 /* Exceptions for "iosApp" folder in "iosApp" target */,
+				CD095FDDE144226B736E4AD1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -50,7 +50,7 @@
 		2B8E4434A28CED8C00E9AA46 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				272969D4DE87160D9F2F613E /* Eguasti.app */,
+				272969D4DE87160D9F2F613E /* eGuasti.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,7 +87,7 @@
 			packageProductDependencies = (
 			);
 			productName = iosApp;
-			productReference = 272969D4DE87160D9F2F613E /* Eguasti.app */;
+			productReference = 272969D4DE87160D9F2F613E /* eGuasti.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
