@@ -1,7 +1,7 @@
 package net.albertopedron.eguasti.data
 
-import config.Secrets.MAPTILER_API_KEY
-import config.Secrets.PROTOMAPS_API_KEY
+import net.albertopedron.eguasti.BuildKonfig.MAPTILER_API_KEY
+import net.albertopedron.eguasti.BuildKonfig.PROTOMAPS_API_KEY
 
 interface MapProvider {
     fun getValue(): MapProviders

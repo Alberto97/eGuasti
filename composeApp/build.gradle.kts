@@ -1,3 +1,4 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec
 import io.github.frankois944.spmForKmp.swiftPackageConfig
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.net.URI
@@ -13,6 +14,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktorfit)
     alias(libs.plugins.spmForKmp)
+    alias(libs.plugins.buildKonfig)
 }
 
 val secretsProperties = Properties()
@@ -125,47 +127,14 @@ dependencies {
     "androidRuntimeClasspath"(compose.uiTooling)
 }
 
-kotlin.sourceSets.named("commonMain") {
-    kotlin.srcDir(layout.buildDirectory.dir("generated/kotlin"))
-}
+buildkonfig {
+    packageName = "net.albertopedron.eguasti"
 
-abstract class GenerateApiConfigTask : DefaultTask() {
-    @get:Input
-    abstract val props: MapProperty<String, String>
+    defaultConfigs {
+        val mapTilerApiKey = secretsProperties.getProperty("MAPTILER_API_KEY") ?: ""
+        val protoMapsApiKey = secretsProperties.getProperty("PROTOMAPS_API_KEY") ?: ""
 
-    @get:OutputFile
-    abstract val outputFile: RegularFileProperty
-
-    @TaskAction
-    fun generate() {
-        val file = outputFile.get().asFile
-        file.parentFile.mkdirs()
-
-        val constants = props.get()
-            .toSortedMap()
-            .entries
-            .joinToString("\n") { (key, value) ->
-                val safeKey = key.toString()
-                    .replace(Regex("[^A-Za-z0-9_]"), "_")
-                    .uppercase()
-
-                "const val $safeKey = $value".prependIndent()
-            }
-
-        file.writeText(
-            """
-            |package config
-            |
-            |internal object Secrets {
-            |$constants
-            |}
-            """.trimMargin()
-        )
+        buildConfigField(FieldSpec.Type.STRING, "MAPTILER_API_KEY", mapTilerApiKey)
+        buildConfigField(FieldSpec.Type.STRING, "PROTOMAPS_API_KEY", protoMapsApiKey)
     }
 }
-
-val generateApiConfig by tasks.registering(GenerateApiConfigTask::class) {
-    props.putAll(secretsProperties.map { (key, value) -> key.toString() to value.toString() }.toMap())
-    outputFile.set(layout.buildDirectory.file("generated/kotlin/config/Secrets.kt"))
-}
-
