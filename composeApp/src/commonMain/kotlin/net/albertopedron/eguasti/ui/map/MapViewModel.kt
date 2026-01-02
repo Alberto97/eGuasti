@@ -49,8 +49,8 @@ class MapViewModel(
     val outages = outageRepository.getAll()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val mapStyleUri = deviceConfigurationChanges.darkTheme.flatMapLatest {
-        mapProviderRepository.getCurrentMapsUri(it)
+    val mapConfig = deviceConfigurationChanges.darkTheme.flatMapLatest {
+        mapProviderRepository.getCurrentMapConfig(it)
     }
 
     private val _mapState: MutableSharedFlow<AppMapState> = MutableSharedFlow()

@@ -37,6 +37,7 @@ import eguasti.composeapp.generated.resources.notification_permission_denied_tit
 import eguasti.composeapp.generated.resources.ok
 import eguasti.composeapp.generated.resources.settings_title
 import eguasti.composeapp.generated.resources.zilla_slab_bold
+import net.albertopedron.eguasti.data.MapConfig
 import net.albertopedron.eguasti.data.MapProviders
 import net.albertopedron.eguasti.data.model.AppMapState
 import net.albertopedron.eguasti.data.model.Cause
@@ -57,7 +58,7 @@ fun MapScreen(
     navigateToSettings: () -> Unit,
 ) {
     val mapProvider by viewModel.mapProvider.collectAsState(null)
-    val mapStyleUri by viewModel.mapStyleUri.collectAsState("")
+    val mapConfig by viewModel.mapConfig.collectAsState(null)
     val outages by viewModel.outages.collectAsState(emptyList())
     val selectedOutage by viewModel.selectedOutage.collectAsState()
     val tracking by viewModel.tracking.collectAsState()
@@ -86,7 +87,7 @@ fun MapScreen(
         navigateToSettings = navigateToSettings,
         snackbarHostState = snackbarHostState,
         mapProvider = mapProvider,
-        mapStyleUri = mapStyleUri,
+        mapConfig = mapConfig,
         mapState = mapState,
         outages = outages,
         selectedOutage = selectedOutage,
@@ -110,7 +111,7 @@ fun MapScreen(
 private fun MapScreen(
     snackbarHostState: SnackbarHostState,
     mapProvider: MapProviders?,
-    mapStyleUri: String,
+    mapConfig: MapConfig?,
     mapState: AppMapState?,
     saveMapPosition: (AppMapState) -> Unit,
     outages: List<Outage>,
@@ -127,7 +128,7 @@ private fun MapScreen(
         mapContent = {
             AppMap(
                 mapProvider = mapProvider,
-                styleUri = mapStyleUri,
+                mapConfig = mapConfig,
                 mapState = mapState,
                 saveMapPosition = saveMapPosition,
                 outages = outages,
@@ -226,32 +227,23 @@ private fun MapToolbar(navigateToSettings: () -> Unit) {
 @Composable
 private fun AppMap(
     mapProvider: MapProviders?,
-    styleUri: String,
+    mapConfig: MapConfig?,
     mapState: AppMapState?,
     saveMapPosition: (AppMapState) -> Unit,
     outages: List<Outage>,
     onOutageClicked: (Int) -> Unit,
     clearOutageSelection: () -> Unit,
 ) {
-//    if (mapProvider == MapProviders.MapBox) {
-//        MapboxMap(
-//            styleUri = styleUri,
-//            mapState = mapState,
-//            saveMapPosition = saveMapPosition,
-//            outages = outages,
-//            onOutageClicked = onOutageClicked,
-//            clearOutageSelection = clearOutageSelection,
-//        )
-//    } else {
-        MapLibreMap(
-            styleUri = styleUri,
-            mapState = mapState,
-            saveMapPosition = saveMapPosition,
-            outages = outages,
-            onOutageClicked = onOutageClicked,
-            clearOutageSelection = clearOutageSelection,
-        )
-//    }
+    if (mapConfig == null) return
+
+    MapLibreMap(
+        mapConfig = mapConfig,
+        mapState = mapState,
+        saveMapPosition = saveMapPosition,
+        outages = outages,
+        onOutageClicked = onOutageClicked,
+        clearOutageSelection = clearOutageSelection,
+    )
 }
 
 @Composable

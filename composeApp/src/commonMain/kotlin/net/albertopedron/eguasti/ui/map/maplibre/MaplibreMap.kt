@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import eguasti.composeapp.generated.resources.Res
 import eguasti.composeapp.generated.resources.marker_red
 import eguasti.composeapp.generated.resources.marker_yellow
+import net.albertopedron.eguasti.data.MapConfig
 import net.albertopedron.eguasti.data.model.AppMapState
 import net.albertopedron.eguasti.data.model.Cause
 import net.albertopedron.eguasti.data.model.Outage
@@ -36,13 +37,16 @@ import org.maplibre.compose.expressions.dsl.not
 import org.maplibre.compose.expressions.dsl.step
 import org.maplibre.compose.expressions.dsl.switch
 import org.maplibre.compose.layers.CircleLayer
+import org.maplibre.compose.layers.RasterLayer
 import org.maplibre.compose.layers.SymbolLayer
 import org.maplibre.compose.map.MapOptions
 import org.maplibre.compose.map.MaplibreMap
 import org.maplibre.compose.map.OrnamentOptions
 import org.maplibre.compose.sources.GeoJsonOptions
 import org.maplibre.compose.sources.GeoJsonSource
+import org.maplibre.compose.sources.TileSetOptions
 import org.maplibre.compose.sources.rememberGeoJsonSource
+import org.maplibre.compose.sources.rememberRasterSource
 import org.maplibre.compose.style.BaseStyle
 import org.maplibre.compose.util.ClickResult
 import org.maplibre.spatialk.geojson.Point
@@ -55,7 +59,7 @@ val defaultPosition = CameraPosition(
 
 @Composable
 fun MapLibreMap(
-    styleUri: String,
+    mapConfig: MapConfig,
     mapState: AppMapState?,
     saveMapPosition: (AppMapState) -> Unit,
     outages: List<Outage>,
@@ -77,7 +81,7 @@ fun MapLibreMap(
     }
 
     MapLibreMap(
-        styleUri = styleUri,
+        mapConfig = mapConfig,
         outages = outages,
         cameraState = cameraState,
         onOutageClicked = {
@@ -102,7 +106,7 @@ fun MapLibreMap(
 
 @Composable
 private fun MapLibreMap(
-    styleUri: String,
+    mapConfig: MapConfig,
     outages: List<Outage>,
     cameraState: CameraState,
     onOutageClicked: (Int) -> Unit,
@@ -110,9 +114,16 @@ private fun MapLibreMap(
     centerCameraTo: (point: Point, zoom: Double?) -> Unit,
     onMapLoadFinished: () -> Unit = {},
 ) {
+    // For some reason symbol layers (eg. cluster layers) are not rendered if a valid base
+    // style is not specified when using raster tiles
+    val baseStyle = when (mapConfig) {
+        is MapConfig.Raster -> BaseStyle.Demo // Does not work with BaseStyle.Empty
+        is MapConfig.Vector -> BaseStyle.Uri(mapConfig.uri)
+    }
+
     MaplibreMap(
         modifier = Modifier.fillMaxSize(),
-        baseStyle = BaseStyle.Uri(styleUri),
+        baseStyle = baseStyle,
         cameraState = cameraState,
         options = MapOptions(
             ornamentOptions = OrnamentOptions(
@@ -125,6 +136,9 @@ private fun MapLibreMap(
         },
         onMapLoadFinished = onMapLoadFinished
     ) {
+        if (mapConfig is MapConfig.Raster) {
+            RasterMapLayer(mapConfig)
+        }
 
         val outageSource = rememberGeoJsonSource(
             data = outages.toGeoJson(),
@@ -152,6 +166,21 @@ private fun MapLibreMap(
         )
 
     }
+}
+
+@Composable
+private fun RasterMapLayer(mapConfig: MapConfig.Raster) {
+    val tiles = rememberRasterSource(
+        tiles = mapConfig.tiles,
+        tileSize = mapConfig.tileSize,
+        options = TileSetOptions(
+            minZoom = mapConfig.minZoom,
+            maxZoom = mapConfig.maxZoom,
+            attributionHtml = mapConfig.attributionHtml
+        )
+    )
+
+    RasterLayer(id = "raster-maps", source = tiles)
 }
 
 @Composable

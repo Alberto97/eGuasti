@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 enum class MapProviders {
+    OpenStreetMap,
     MapTiler,
     OpenFreeMap
 }
@@ -15,6 +16,7 @@ class MapProviderRepository(
     private val persistence: Persistence = Persistence,
 ) {
     private val allProviders = listOf(
+        OpenStreetMapProvider(),
         MapTilerProvider(),
         OpenFreeMapProvider(),
     )
@@ -23,8 +25,8 @@ class MapProviderRepository(
         return allProviders.filter { provider -> provider.isAvailable() }
     }
 
-    fun getCurrentMapsUri(darkMode: Boolean): Flow<String> {
-        return getCurrent().map { provider -> provider.getUri(darkMode) }
+    fun getCurrentMapConfig(darkMode: Boolean): Flow<MapConfig> {
+        return getCurrent().map { provider -> provider.getConfig(darkMode) }
     }
 
     fun getCurrent(): Flow<MapProvider> {
