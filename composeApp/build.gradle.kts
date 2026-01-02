@@ -1,4 +1,3 @@
-import com.android.build.api.dsl.androidLibrary
 import io.github.frankois944.spmForKmp.swiftPackageConfig
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.net.URI
@@ -23,7 +22,6 @@ if (secretsPropertiesFile.exists()) {
 }
 
 kotlin {
-    @Suppress("UnstableApiUsage")
     androidLibrary {
         namespace = "net.albertopedron.eguasti.shared"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -121,6 +119,10 @@ dependencies {
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
     add("kspIosArm64", libs.androidx.room.compiler)
+}
+
+dependencies {
+    "androidRuntimeClasspath"(compose.uiTooling)
 }
 
 kotlin.sourceSets.named("commonMain") {
