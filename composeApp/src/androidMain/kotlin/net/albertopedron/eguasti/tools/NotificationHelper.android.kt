@@ -14,7 +14,7 @@ import eguasti.composeapp.generated.resources.outage_updates_notif_channel_descr
 import eguasti.composeapp.generated.resources.outage_updates_notif_channel_name
 import kotlinx.coroutines.suspendCancellableCoroutine
 import net.albertopedron.eguasti.EGuastiApplication
-import net.albertopedron.eguasti.R
+import net.albertopedron.eguasti.shared.R
 import org.jetbrains.compose.resources.getString
 import kotlin.coroutines.resume
 
