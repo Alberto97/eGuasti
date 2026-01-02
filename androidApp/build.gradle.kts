@@ -10,8 +10,8 @@ android {
         applicationId = "net.albertopedron.eguasti"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = libs.versions.eguasti.incremental.get().toInt()
+        versionName = libs.versions.eguasti.version.get()
     }
     packaging {
         resources {

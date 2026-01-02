@@ -138,3 +138,24 @@ buildkonfig {
         buildConfigField(FieldSpec.Type.STRING, "PROTOMAPS_API_KEY", protoMapsApiKey)
     }
 }
+
+tasks.register("bootstrapXcodeVersionConfig") {
+    // Point this to the directory where your Config.xccconfig file is
+    val configFile = file(project.rootDir.toString() + "/iosApp/Configuration/Versions.xcconfig")
+    outputs.file(configFile)
+    val content = """
+        BUNDLE_VERSION=${libs.versions.eguasti.incremental.get()}
+        BUNDLE_SHORT_VERSION_STRING=${libs.versions.eguasti.version.get()}
+    """.trimIndent()
+
+    outputs.upToDateWhen {
+        configFile.takeIf { it.exists() }?.readText() == content
+    }
+    doLast {
+        configFile.writeText(content)
+    }
+}
+
+tasks.matching { it.name.startsWith("compileKotlinIos") }.configureEach {
+    dependsOn("bootstrapXcodeVersionConfig")
+}
