@@ -1,6 +1,7 @@
 package net.albertopedron.eguasti.data
 
 import config.Secrets.MAPTILER_API_KEY
+import config.Secrets.PROTOMAPS_API_KEY
 
 interface MapProvider {
     fun getValue(): MapProviders
@@ -30,6 +31,17 @@ class OpenStreetMapProvider : MapProvider {
         minZoom = 0,
         maxZoom = 19,
         attributionHtml = "<a href=\"https://www.openstreetmap.org/copyright\">&copy; OpenStreetMap contributors</a>"
+    )
+}
+
+class ProtoMapsProvider : MapProvider {
+    override fun getValue() = MapProviders.ProtoMaps
+
+    override fun isAvailable(): Boolean = PROTOMAPS_API_KEY.isNotEmpty()
+
+    override fun getConfig(darkMode: Boolean) = MapConfig.Vector(
+        if (darkMode) "https://api.protomaps.com/styles/v5/dark/en.json?key=$PROTOMAPS_API_KEY"
+        else "https://api.protomaps.com/styles/v5/light/en.json?key=$PROTOMAPS_API_KEY"
     )
 }
 

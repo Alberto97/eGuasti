@@ -7,18 +7,20 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 enum class MapProviders {
+    ProtoMaps,
     OpenStreetMap,
-    MapTiler,
-    OpenFreeMap
+    OpenFreeMap,
+    MapTiler
 }
 
 class MapProviderRepository(
     private val persistence: Persistence = Persistence,
 ) {
     private val allProviders = listOf(
+        ProtoMapsProvider(),
         OpenStreetMapProvider(),
-        MapTilerProvider(),
         OpenFreeMapProvider(),
+        MapTilerProvider(),
     )
 
     fun getAvailable(): List<MapProvider> {
