@@ -41,7 +41,7 @@ kotlin {
                 remotePackageVersion(
                     url = URI("https://github.com/maplibre/maplibre-gl-native-distribution.git"),
                     products = { add("MapLibre") },
-                    version = "6.19.1",
+                    version = "6.20.0",
                 )
             }
         }
@@ -90,6 +90,8 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
 
             implementation(libs.maplibre.compose)
+            implementation(libs.maplibre.spatialk.geojson)
+
             implementation(libs.kermit)
         }
         commonTest.dependencies {

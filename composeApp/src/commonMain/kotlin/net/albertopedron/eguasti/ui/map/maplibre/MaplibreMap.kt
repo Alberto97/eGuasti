@@ -14,8 +14,6 @@ import androidx.compose.ui.unit.dp
 import eguasti.composeapp.generated.resources.Res
 import eguasti.composeapp.generated.resources.marker_red
 import eguasti.composeapp.generated.resources.marker_yellow
-import io.github.dellisd.spatialk.geojson.Point
-import io.github.dellisd.spatialk.geojson.Position
 import net.albertopedron.eguasti.data.model.AppMapState
 import net.albertopedron.eguasti.data.model.Cause
 import net.albertopedron.eguasti.data.model.Outage
@@ -47,6 +45,8 @@ import org.maplibre.compose.sources.GeoJsonSource
 import org.maplibre.compose.sources.rememberGeoJsonSource
 import org.maplibre.compose.style.BaseStyle
 import org.maplibre.compose.util.ClickResult
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 
 val defaultPosition = CameraPosition(
     target = Position(12.4964, 41.9028),
@@ -221,7 +221,7 @@ private fun UnclusteredLayer(
             val feature = features.firstOrNull() ?: return@SymbolLayer ClickResult.Pass
             centerCameraTo(feature.geometry as Point)
 
-            val id = feature.id?.toInt() ?: return@SymbolLayer ClickResult.Pass
+            val id = feature.id?.content?.toInt() ?: return@SymbolLayer ClickResult.Pass
             onOutageClicked(id)
 
             ClickResult.Consume
