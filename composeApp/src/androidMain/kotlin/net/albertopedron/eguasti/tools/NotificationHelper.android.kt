@@ -6,7 +6,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import eguasti.composeapp.generated.resources.Res
@@ -23,12 +22,10 @@ actual class NotificationHelper {
     private val app = EGuastiApplication.instance
     private val manager = ContextCompat.getSystemService(app, NotificationManager::class.java)
 
-    @RequiresApi(Build.VERSION_CODES.O)
     actual suspend fun initialize() {
         createNotificationChannel()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun createNotificationChannel() {
         val name = getString( Res.string.outage_updates_notif_channel_name)
         val descriptionText = getString(Res.string.outage_updates_notif_channel_description)
