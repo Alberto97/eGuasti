@@ -105,6 +105,10 @@ room {
     schemaDirectory("$projectDir/schemas/")
 }
 
+ktorfit {
+    compilerPluginVersion.set("2.3.3")
+}
+
 dependencies {
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
