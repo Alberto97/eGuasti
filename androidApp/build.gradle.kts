@@ -7,7 +7,7 @@ android {
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "net.albertopedron.eguasti"
+        applicationId = "org.alberto97.eguasti"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = libs.versions.eguasti.incremental.get().toInt()
