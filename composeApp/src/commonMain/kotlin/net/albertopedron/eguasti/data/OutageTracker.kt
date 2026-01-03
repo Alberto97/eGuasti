@@ -1,10 +1,10 @@
 package net.albertopedron.eguasti.data
 
-import io.ktor.utils.io.core.writeText
-import io.ktor.utils.io.readText
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
+import kotlinx.io.readString
+import kotlinx.io.writeString
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 import net.albertopedron.eguasti.tools.Files
@@ -16,7 +16,11 @@ data class TrackedOutage(
 )
 
 class OutageTracker() {
-    private val fileName = "tracked_outages.json"
+    companion object {
+        private const val FILE_NAME = "tracked_outages.json"
+    }
+
+    private val localFile = Path(Files.root, FILE_NAME)
     private val json = Json { prettyPrint = true }
 
     private var outages: MutableList<TrackedOutage> = mutableListOf()
@@ -25,19 +29,19 @@ class OutageTracker() {
         load()
     }
 
-    private val localFile = Path(Files.root, fileName)
-
     private fun load() {
-        return
         if (SystemFileSystem.exists(localFile)) {
-            val text = SystemFileSystem.source(localFile).buffered().readText()
+            val text = SystemFileSystem.source(localFile).buffered().use { it.readString() }
+            if (text.isEmpty()) return
             outages = json.decodeFromString(text)
         }
     }
 
     private fun save() {
-        val file = SystemFileSystem.sink(localFile).buffered()
-        file.writeText(json.encodeToString(outages))
+        val path = Path(Files.root, FILE_NAME)
+        SystemFileSystem.sink(path).buffered().use { file ->
+            file.writeString(json.encodeToString(outages))
+        }
     }
 
     fun track(outage: TrackedOutage) {
