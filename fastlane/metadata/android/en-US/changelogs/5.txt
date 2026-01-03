@@ -1,0 +1,3 @@
+* Added support for Android 16
+* Completely rewritten adopting Material 3
+* Added support for dark mode

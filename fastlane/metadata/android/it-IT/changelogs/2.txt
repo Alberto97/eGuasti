@@ -1,0 +1,4 @@
+* Aggiunto il supporto per Android 13
+* Aggiunta icona monocromatica per Android 13
+* Migliorata la UI per i dettagli dell'interruzione
+* Significativo refactoring e aggiornamento delle dipendenze

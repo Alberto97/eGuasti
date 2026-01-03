@@ -1,0 +1,2 @@
+Applicazione non ufficiale per visualizzare guasti e lavori programmati sulla rete elettrica gestita da e-distribuzione.
+L'app non mostra interruzioni per Valle d'Aosta e Trentino Alto Adige essendo gestite da altri distributori.
