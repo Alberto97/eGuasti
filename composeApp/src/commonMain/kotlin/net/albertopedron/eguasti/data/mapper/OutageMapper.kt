@@ -15,7 +15,7 @@ class OutageMapper {
 
     private fun fromAttributes(attributes: Attributes): Outage {
         return Outage(
-            id = attributes.interruptionId.toInt(),
+            id = attributes.objectId1,
             start = attributes.interruptionDate,
             expectedRestore = attributes.expectedRestore,
             lastUpdate = attributes.lastUpdate,
@@ -48,7 +48,7 @@ class OutageMapper {
         }.toMap()
 
         return Outage(
-            id = attrMap["id_interruzione"] as? Int ?: 0,
+            id = (attrMap["objectid1"] as? UInt)?.toInt() ?: 0,
             start = attrMap["data_interruzione"] as? String ?: "",
             expectedRestore = attrMap["data_prev_ripristino"] as? String ?: "",
             lastUpdate = attrMap["dataultimoaggiornamento"] as? String ?: "",
@@ -69,6 +69,7 @@ class OutageMapper {
             FeatureCollectionPBuffer.FieldType.esriFieldTypeInteger -> value.sintValue
             FeatureCollectionPBuffer.FieldType.esriFieldTypeDouble -> value.doubleValue
             FeatureCollectionPBuffer.FieldType.esriFieldTypeString -> value.stringValue
+            FeatureCollectionPBuffer.FieldType.esriFieldTypeOID -> value.uintValue
             else -> null
         }
     }
