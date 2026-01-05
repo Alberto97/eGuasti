@@ -61,5 +61,5 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
-spmForKmp = { id = "io.github.frankois944.spmForKmp", version = "1.4.0" }
+spmForKmp = { id = "io.github.frankois944.spmForKmp", version = "1.4.2" }
 buildKonfig = { id = "com.codingfeline.buildkonfig", version = "0.17.1" }
