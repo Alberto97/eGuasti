@@ -65,19 +65,17 @@ kotlin {
             implementation(libs.ktor.client.darwin)
         }
         androidMain.dependencies {
-            implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.work.runtime.ktx)
             implementation(libs.ktor.client.android)
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(compose.materialIconsExtended)
+            implementation(libs.compose.components.resources)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.ui.ui)
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.material.icons.extended)
 
             implementation(libs.androidx.datastore.preferences)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
@@ -124,7 +122,7 @@ dependencies {
 }
 
 dependencies {
-    "androidRuntimeClasspath"(compose.uiTooling)
+    "androidRuntimeClasspath"(libs.compose.ui.tooling)
 }
 
 buildkonfig {
