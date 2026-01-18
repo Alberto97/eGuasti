@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Favorite
@@ -143,6 +145,8 @@ fun SettingsScreen(
     fetchUsingProtocolBuffers: Boolean,
     onFetchUsingProtocolBuffersToggle: (Boolean) -> Unit
 ) {
+    val scrollState = rememberScrollState()
+
     Scaffold(topBar = {
         TopAppBar(
             title = { Text(stringResource(Res.string.settings_title)) },
@@ -153,7 +157,11 @@ fun SettingsScreen(
             },
         )
     }) { contentPadding ->
-        Column(Modifier.padding(contentPadding)) {
+        Column(
+            Modifier
+                .padding(contentPadding)
+                .verticalScroll(scrollState)
+        ) {
             ListItem(
                 leadingContent = { ListIcon { Icon(painterResource(Res.drawable.ic_github), null) } },
                 headlineContent = { Text(stringResource(Res.string.about_repository_title)) },
