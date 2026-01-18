@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.Http
 import androidx.compose.material.icons.rounded.Map
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Science
@@ -46,6 +47,8 @@ import eguasti.composeapp.generated.resources.ic_github
 import eguasti.composeapp.generated.resources.ok
 import eguasti.composeapp.generated.resources.settings_experimental_section_title
 import eguasti.composeapp.generated.resources.settings_experimental_title
+import eguasti.composeapp.generated.resources.settings_fetch_pbf_subtitle
+import eguasti.composeapp.generated.resources.settings_fetch_pbf_title
 import eguasti.composeapp.generated.resources.settings_map_provider_title
 import eguasti.composeapp.generated.resources.settings_title
 import eguasti.composeapp.generated.resources.settings_track_outages_dialog_message
@@ -67,6 +70,7 @@ fun SettingsScreen(
     val showMapProviderDialog by viewModel.showMapProviderDialog.collectAsState()
     val experimentalSettingsEnabled by viewModel.experimentalSettingsEnabled.collectAsState()
     val trackOutagesEnabled by viewModel.trackOutagesEnabled.collectAsState()
+    val fetchUsingProtocolBuffers by viewModel.fetchUsingProtocolBuffers.collectAsState()
     var showTrackOutagesDialog by remember { mutableStateOf(false) }
 
     if (showMapProviderDialog) {
@@ -100,7 +104,9 @@ fun SettingsScreen(
             if (isEnabled) {
                 showTrackOutagesDialog = true
             }
-        }
+        },
+        fetchUsingProtocolBuffers = fetchUsingProtocolBuffers,
+        onFetchUsingProtocolBuffersToggle = { viewModel.setFetchUsingProtocolBuffers(it) }
     )
 }
 
@@ -133,7 +139,9 @@ fun SettingsScreen(
     experimentalSettingsEnabled: Boolean,
     onExperimentalSettingsToggle: (Boolean) -> Unit,
     trackOutagesEnabled: Boolean,
-    onTrackOutagesToggle: (Boolean) -> Unit
+    onTrackOutagesToggle: (Boolean) -> Unit,
+    fetchUsingProtocolBuffers: Boolean,
+    onFetchUsingProtocolBuffersToggle: (Boolean) -> Unit
 ) {
     Scaffold(topBar = {
         TopAppBar(
@@ -167,7 +175,9 @@ fun SettingsScreen(
             if (experimentalSettingsEnabled) {
                 ExperimentalSettingsSection(
                     trackOutagesEnabled = trackOutagesEnabled,
-                    onTrackOutagesToggle = onTrackOutagesToggle
+                    onTrackOutagesToggle = onTrackOutagesToggle,
+                    fetchUsingProtocolBuffers = fetchUsingProtocolBuffers,
+                    onFetchUsingProtocolBuffersToggle = onFetchUsingProtocolBuffersToggle
                 )
             }
 
@@ -265,8 +275,10 @@ private fun ExperimentalSettingsToggleItem(
 
 @Composable
 private fun ExperimentalSettingsSection(
-    trackOutagesEnabled: Boolean, // Added
-    onTrackOutagesToggle: (Boolean) -> Unit // Added
+    trackOutagesEnabled: Boolean,
+    onTrackOutagesToggle: (Boolean) -> Unit,
+    fetchUsingProtocolBuffers: Boolean,
+    onFetchUsingProtocolBuffersToggle: (Boolean) -> Unit
 ) {
     Column {
         HorizontalDivider(color = Color.LightGray)
@@ -293,6 +305,18 @@ private fun ExperimentalSettingsSection(
                 )
             }
         )
+        ListItem(
+            modifier = Modifier.clickable { onFetchUsingProtocolBuffersToggle(!fetchUsingProtocolBuffers) },
+            leadingContent = { ListIcon { Icon(Icons.Rounded.Http, contentDescription = null) } },
+            headlineContent = { Text(stringResource(Res.string.settings_fetch_pbf_title)) },
+            supportingContent = { Text(stringResource(Res.string.settings_fetch_pbf_subtitle)) },
+            trailingContent = {
+                Switch(
+                    checked = fetchUsingProtocolBuffers,
+                    onCheckedChange = onFetchUsingProtocolBuffersToggle
+                )
+            }
+        )
     }
 }
 
@@ -311,8 +335,10 @@ private fun Preview() {
                 onMapProviderClick = {},
                 experimentalSettingsEnabled = true,
                 onExperimentalSettingsToggle = {},
-                trackOutagesEnabled = true, // Added
-                onTrackOutagesToggle = {} // Added
+                trackOutagesEnabled = true,
+                onTrackOutagesToggle = {},
+                fetchUsingProtocolBuffers = true,
+                onFetchUsingProtocolBuffersToggle = {}
             )
         }
     }
@@ -333,8 +359,10 @@ private fun PreviewExperimentalDisabled() {
                 onMapProviderClick = {},
                 experimentalSettingsEnabled = false,
                 onExperimentalSettingsToggle = {},
-                trackOutagesEnabled = false, // Added
-                onTrackOutagesToggle = {} // Added
+                trackOutagesEnabled = false,
+                onTrackOutagesToggle = {},
+                fetchUsingProtocolBuffers = true,
+                onFetchUsingProtocolBuffersToggle = {}
             )
         }
     }

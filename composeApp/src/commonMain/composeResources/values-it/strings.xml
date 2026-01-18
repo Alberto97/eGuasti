@@ -40,6 +40,8 @@
     <string name="settings_track_outages_subtitle">Abilita un tasto nel dettaglio del guasto per tracciarne lo stato</string>
     <string name="settings_track_outages_dialog_title">Aggiornamenti sui guasti</string>
     <string name="settings_track_outages_dialog_message">Dopo aver autorizzato l'app riceverai una notifica con data e ora stimati del suo ripristino ogni 15 minuti.\n\nAttenzione! A causa delle limitazioni imposte dal sistema operativo potrebbe non funzionare correttamente.</string>
+    <string name="settings_fetch_pbf_title">Usa Protocol Buffers</string>
+    <string name="settings_fetch_pbf_subtitle">Utilizza Protocol Buffers invece di JSON per il recupero dei dati</string>
 
     <!-- About -->
     <string name="about_category_info">Informazioni</string>

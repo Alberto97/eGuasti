@@ -41,6 +41,8 @@
     <string name="settings_track_outages_subtitle">Enable a button in the outage's details to track its status</string>
     <string name="settings_track_outages_dialog_title">Outage updates</string>
     <string name="settings_track_outages_dialog_message">Once enabled the tracking from the outage's details you'll receive a notification with time and date of the estimated restore every 15 minutes.\n\nWarning! Due to limitations of the operating system this feature might not work properly.</string>
+    <string name="settings_fetch_pbf_title">Use Protocol Buffers</string>
+    <string name="settings_fetch_pbf_subtitle">Use Protocol Buffers instead of JSON for data retrieval</string>
 
     <!-- About -->
     <string name="about_category_info">Info</string>
