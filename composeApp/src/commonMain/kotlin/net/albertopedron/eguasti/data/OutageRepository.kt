@@ -1,14 +1,10 @@
 package net.albertopedron.eguasti.data
 
-import co.touchlab.kermit.Logger
-import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.getOrNull
-import com.skydoves.sandwich.getOrThrow
-import com.skydoves.sandwich.isFailure
-import com.skydoves.sandwich.messageOrNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import net.albertopedron.eguasti.data.mapper.OutageMapper
@@ -24,10 +20,8 @@ class OutageRepository(
     private val client: EnelApi = ApiContainer.enelApi,
     private val mapper: OutageMapper = OutageMapper(),
     private val dao: OutageDao = DatabaseProvider.instance.outageDao(),
+    private val persistence: Persistence = Persistence,
 ) {
-    companion object {
-        private const val FETCH_USING_PROTOCOL_BUFFERS = true
-    }
 
     fun getAll(): Flow<List<Outage>> {
         return dao.getAll().map { entities -> entities.map { mapper.fromEntity(it) } }
@@ -53,7 +47,8 @@ class OutageRepository(
     }
 
     private suspend fun query(where: String): Result<List<Outage>> {
-        if (FETCH_USING_PROTOCOL_BUFFERS) {
+        val fetchUsingProtocolBuffers = persistence.getFetchUsingProtocolBuffers().firstOrNull() ?: true
+        if (fetchUsingProtocolBuffers) {
             val result = client.queryPbf(where).getOrNull() ?: return Result.failure(Exception("Query failed"))
             val featureResult = result.queryResult.featureResult ?: return Result.failure(Exception("Feature result is null"))
             val res = mapper.mapFeatures(featureResult)

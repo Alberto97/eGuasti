@@ -48,6 +48,9 @@ class SettingsViewModel(
     val trackOutagesEnabled: StateFlow<Boolean> = persistence.getTrackOutagesEnabled()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
+    val fetchUsingProtocolBuffers: StateFlow<Boolean> = persistence.getFetchUsingProtocolBuffers()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
+
     fun openMapProviderDialog() {
         _showMapProviderDialog.value = true
     }
@@ -72,6 +75,12 @@ class SettingsViewModel(
     fun setTrackOutagesEnabled(enabled: Boolean) {
         viewModelScope.launch {
             persistence.setTrackOutagesEnabled(enabled)
+        }
+    }
+
+    fun setFetchUsingProtocolBuffers(enabled: Boolean) {
+        viewModelScope.launch {
+            persistence.setFetchUsingProtocolBuffers(enabled)
         }
     }
 

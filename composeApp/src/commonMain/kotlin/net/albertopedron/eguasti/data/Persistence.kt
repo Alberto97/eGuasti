@@ -15,7 +15,8 @@ object Persistence {
     private val lastDbUpdateKey = longPreferencesKey("last_db_update")
     private val currentMapProviderKey = stringPreferencesKey("current_map_provider")
     private val experimentalSettingsEnabledKey = booleanPreferencesKey("experimental_settings_enabled")
-    private val trackOutagesEnabledKey = booleanPreferencesKey("track_outages_enabled") // Added new key
+    private val trackOutagesEnabledKey = booleanPreferencesKey("track_outages_enabled")
+    private val fetchUsingProtocolBuffersKey = booleanPreferencesKey("fetch_using_protocol_buffers")
 
     fun getLastDbUpdate(): Flow<Long> {
         return dataStore.data
@@ -49,7 +50,6 @@ object Persistence {
         }
     }
 
-    // Added getter and setter for the new preference
     fun getTrackOutagesEnabled(): Flow<Boolean> {
         return dataStore.data
             .map { settings -> settings[trackOutagesEnabledKey] ?: false }
@@ -58,6 +58,17 @@ object Persistence {
     suspend fun setTrackOutagesEnabled(enabled: Boolean) {
         dataStore.edit { settings ->
             settings[trackOutagesEnabledKey] = enabled
+        }
+    }
+
+    fun getFetchUsingProtocolBuffers(): Flow<Boolean> {
+        return dataStore.data
+            .map { settings -> settings[fetchUsingProtocolBuffersKey] ?: true }
+    }
+
+    suspend fun setFetchUsingProtocolBuffers(enabled: Boolean) {
+        dataStore.edit { settings ->
+            settings[fetchUsingProtocolBuffersKey] = enabled
         }
     }
 }
