@@ -62,10 +62,12 @@ kotlin {
     
     sourceSets {
         iosMain.dependencies {
+            implementation(libs.androidx.sqlite.bundled)
             implementation(libs.ktor.client.darwin)
         }
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.sqlite.framework)
             implementation(libs.androidx.work.runtime.ktx)
             implementation(libs.ktor.client.android)
         }
@@ -83,7 +85,6 @@ kotlin {
             implementation(libs.androidx.navigation.compose)
 
             implementation(libs.androidx.room.runtime)
-            implementation(libs.androidx.sqlite.bundled)
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
