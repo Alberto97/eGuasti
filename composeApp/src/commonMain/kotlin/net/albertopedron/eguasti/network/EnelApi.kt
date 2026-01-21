@@ -12,7 +12,8 @@ interface EnelApi {
         @Query("where") where: String,
         @Query("f") format: String = "pbf",
         @Query("returnGeometry") returnGeometry: Boolean = false,
-        @Query("outFields") outFields: String = "*"
+        @Query("outFields") outFields: String = "*",
+        @Query("maxRecordCountFactor") maxRecordCountFactor: Int = 10
     ): ApiResponse<FeatureCollectionPBuffer>
 
     @GET("query")
@@ -20,6 +21,7 @@ interface EnelApi {
         @Query("where") where: String,
         @Query("f") format: String = "json",
         @Query("returnGeometry") returnGeometry: Boolean = false,
-        @Query("outFields") outFields: String = "*"
+        @Query("outFields") outFields: String = "*",
+        @Query("maxRecordCountFactor") maxRecordCountFactor: Int = 10
     ): ApiResponse<FeatureCollection>
 }
