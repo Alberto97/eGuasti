@@ -54,7 +54,7 @@ ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx
 ktor-serialization-kotlinx-protobuf = { module = "io.ktor:ktor-serialization-kotlinx-protobuf", version.ref = "ktor" }
 
 ktorfit-lib = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
-sandwich-ktorfit = { module = "com.github.skydoves:sandwich-ktorfit", version = "2.2.0" }
+sandwich-ktorfit = { module = "com.github.skydoves:sandwich-ktorfit", version = "2.2.1" }
 
 maplibre-compose = { group = "org.maplibre.compose", name = "maplibre-compose", version = "0.12.1" }
 maplibre-spatialk-geojson = { group = "org.maplibre.spatialk", name = "geojson", version = "0.6.1" }
