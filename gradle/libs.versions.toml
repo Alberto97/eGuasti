@@ -59,7 +59,7 @@ sandwich-ktorfit = { module = "com.github.skydoves:sandwich-ktorfit", version = 
 maplibre-compose = { group = "org.maplibre.compose", name = "maplibre-compose", version = "0.12.1" }
 maplibre-spatialk-geojson = { group = "org.maplibre.spatialk", name = "geojson", version = "0.6.1" }
 
-kermit = { module = "co.touchlab:kermit", version = "2.0.8" }
+kermit = { module = "co.touchlab:kermit", version = "2.1.0" }
 
 
 [plugins]
