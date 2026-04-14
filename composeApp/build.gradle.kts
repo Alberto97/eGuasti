@@ -50,7 +50,7 @@ kotlin {
                 remotePackageVersion(
                     url = URI("https://github.com/maplibre/maplibre-gl-native-distribution.git"),
                     products = { add("MapLibre") },
-                    version = "6.20.0",
+                    version = "6.25.0",
                 )
             }
         }
