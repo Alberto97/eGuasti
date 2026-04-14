@@ -57,7 +57,7 @@ ktorfit-lib = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref =
 sandwich-ktorfit = { module = "com.github.skydoves:sandwich-ktorfit", version = "2.2.1" }
 
 maplibre-compose = { group = "org.maplibre.compose", name = "maplibre-compose", version = "0.12.1" }
-maplibre-spatialk-geojson = { group = "org.maplibre.spatialk", name = "geojson", version = "0.6.1" }
+maplibre-spatialk-geojson = { group = "org.maplibre.spatialk", name = "geojson", version = "0.7.0" }
 
 kermit = { module = "co.touchlab:kermit", version = "2.1.0" }
 
