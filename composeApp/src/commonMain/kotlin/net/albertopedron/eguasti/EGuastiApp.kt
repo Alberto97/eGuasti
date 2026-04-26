@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.update
 import net.albertopedron.eguasti.tools.DeviceConfigurationChanges
 import net.albertopedron.eguasti.ui.map.MapScreen
+//import net.albertopedron.eguasti.ui.search.SearchScreen
 import net.albertopedron.eguasti.ui.settings.SettingsScreen
 import net.albertopedron.eguasti.ui.theme.EGuastiTheme
 
@@ -23,6 +24,7 @@ fun EGuastiApp() {
 
 object Destinations {
     const val MAP_ROUTE = "map"
+    const val SEARCH_ROUTE = "search"
     const val SETTINGS_ROUTE = "settings"
 }
 
@@ -32,7 +34,24 @@ private fun NavGraph() {
 
     NavHost(navController, startDestination = Destinations.MAP_ROUTE) {
         composable(Destinations.MAP_ROUTE) {
-            MapScreen(navigateToSettings = { navController.navigate(Destinations.SETTINGS_ROUTE) })
+            MapScreen(
+                navigateToSettings = { navController.navigate(Destinations.SETTINGS_ROUTE) },
+                navigateToSearch = {
+                    navController.navigate(Destinations.SEARCH_ROUTE) {
+                        popUpTo(Destinations.MAP_ROUTE)
+                        launchSingleTop = true
+                    }
+                },
+            )
+        }
+        composable(Destinations.SEARCH_ROUTE) {
+//            SearchScreen(
+//                onNavigateToMap = {
+//                    navController.navigate(Destinations.MAP_ROUTE) {
+//                        popUpTo(Destinations.MAP_ROUTE) { inclusive = true }
+//                    }
+//                },
+//            )
         }
         composable(Destinations.SETTINGS_ROUTE) {
             SettingsScreen(navigateBack =  { navController.popBackStack() })
