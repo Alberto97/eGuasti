@@ -12,11 +12,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -57,10 +62,14 @@ import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 
+private enum class MapTab { Map, Search, Alerts }
+
 @Composable
 fun MapScreen(
     viewModel: MapViewModel = viewModel { MapViewModel() },
     navigateToSettings: () -> Unit,
+    navigateToSearch: () -> Unit = {},
+    navigateToAlerts: () -> Unit = {},
 ) {
     val mapProvider by viewModel.mapProvider.collectAsState(null)
     val mapConfig by viewModel.mapConfig.collectAsState(null)
@@ -90,6 +99,8 @@ fun MapScreen(
     MapScreen(
         saveMapPosition = { state -> viewModel.saveMapPosition(state) },
         navigateToSettings = navigateToSettings,
+        navigateToSearch = navigateToSearch,
+        navigateToAlerts = navigateToAlerts,
         snackbarHostState = snackbarHostState,
         mapProvider = mapProvider,
         mapConfig = mapConfig,
@@ -128,6 +139,8 @@ private fun MapScreen(
     trackOutagesEnabled: Boolean,
     tracking: Boolean,
     navigateToSettings: () -> Unit,
+    navigateToSearch: () -> Unit,
+    navigateToAlerts: () -> Unit,
 ) {
     MapScreen(
         mapContent = {
@@ -148,6 +161,8 @@ private fun MapScreen(
         trackOutagesEnabled = trackOutagesEnabled,
         tracking = tracking,
         navigateToSettings = navigateToSettings,
+        navigateToSearch = navigateToSearch,
+        navigateToAlerts = navigateToAlerts,
     )
 }
 
@@ -161,12 +176,25 @@ private fun MapScreen(
     trackOutagesEnabled: Boolean,
     tracking: Boolean,
     navigateToSettings: () -> Unit,
+    navigateToSearch: () -> Unit = {},
+    navigateToAlerts: () -> Unit = {},
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         contentWindowInsets = WindowInsets.statusBars,
         topBar = {
             MapToolbar(navigateToSettings = navigateToSettings)
+        },
+        bottomBar = {
+            MapBottomBar(
+                onTabSelected = { tab ->
+                    when (tab) {
+                        MapTab.Map -> Unit
+                        MapTab.Search -> navigateToSearch()
+                        MapTab.Alerts -> navigateToAlerts()
+                    }
+                },
+            )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
@@ -206,6 +234,32 @@ private fun PermissionDeniedDialog(
             }
         }
     )
+}
+
+@Composable
+private fun MapBottomBar(
+    onTabSelected: (MapTab) -> Unit,
+) {
+    NavigationBar {
+        NavigationBarItem(
+            selected = true,
+            onClick = { onTabSelected(MapTab.Map) },
+            icon = { Icon(imageVector = Icons.Filled.Map, contentDescription = null) },
+            label = { Text("Map") },
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = { onTabSelected(MapTab.Search) },
+            icon = { Icon(imageVector = Icons.Filled.Search, contentDescription = null) },
+            label = { Text("Search") },
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = { onTabSelected(MapTab.Alerts) },
+            icon = { Icon(imageVector = Icons.Filled.Notifications, contentDescription = null) },
+            label = { Text("Alerts") },
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
