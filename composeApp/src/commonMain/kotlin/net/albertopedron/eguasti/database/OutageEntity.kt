@@ -10,6 +10,7 @@ data class OutageEntity(
     val expectedRestore: String,
     val lastUpdate: String,
     val place: String,
+    val province: String,
     val latitude: Double,
     val longitude: Double,
     val offlineCustomers: Int,
