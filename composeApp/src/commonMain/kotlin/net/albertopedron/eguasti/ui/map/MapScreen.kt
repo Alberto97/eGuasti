@@ -262,6 +262,7 @@ private fun Preview() {
                 expectedRestore = "Domani",
                 lastUpdate = "aaaaa",
                 place = "PADOVA",
+                province = "Padova",
                 latitude = 0.0,
                 longitude = 0.9,
                 offlineCustomers = 2,
