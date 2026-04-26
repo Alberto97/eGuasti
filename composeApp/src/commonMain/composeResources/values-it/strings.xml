@@ -4,6 +4,15 @@
     <string name="cancel">Annulla</string>
     <string name="map_error_no_internet">Sei offline. Alcune informazioni potrebbero non essere aggiornate.</string>
 
+    <!-- Search -->
+    <string name="search_hint">Cerca per via o CAP…</string>
+    <string name="search_recent_title">Ricerche recenti</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_map">Mappa</string>
+    <string name="nav_search">Cerca</string>
+    <string name="nav_alerts">Avvisi</string>
+
     <!-- Outage -->
     <string name="outage_maintenance">Lavori programmati</string>
     <string name="outage_blackout">Guasto</string>
