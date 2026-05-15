@@ -34,7 +34,10 @@ private fun NavGraph() {
 
     NavHost(navController, startDestination = Destinations.MAP_ROUTE) {
         composable(Destinations.MAP_ROUTE) {
-            MapScreen(navigateToSettings = { navController.navigate(Destinations.SETTINGS_ROUTE) })
+            MapScreen(
+                navigateToSettings = { navController.navigate(Destinations.SETTINGS_ROUTE) },
+                navigateToSearch = { navController.navigate(Destinations.SEARCH_ROUTE) },
+            )
         }
         composable(Destinations.SEARCH_ROUTE) {
             SearchScreen(
