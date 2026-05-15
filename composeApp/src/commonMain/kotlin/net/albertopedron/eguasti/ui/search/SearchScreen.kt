@@ -20,17 +20,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
@@ -51,17 +46,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eguasti.composeapp.generated.resources.Res
 import eguasti.composeapp.generated.resources.app_name
-import eguasti.composeapp.generated.resources.nav_alerts
-import eguasti.composeapp.generated.resources.nav_map
-import eguasti.composeapp.generated.resources.nav_search
 import eguasti.composeapp.generated.resources.search_hint
 import eguasti.composeapp.generated.resources.search_recent_title
 import eguasti.composeapp.generated.resources.zilla_slab_bold
+import net.albertopedron.eguasti.ui.components.AppBottomBar
+import net.albertopedron.eguasti.ui.components.BottomBarTab
 import net.albertopedron.eguasti.ui.theme.EGuastiTheme
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.stringResource
-
-private enum class SearchTab { Map, Search, Alerts }
 
 @Composable
 fun SearchScreen(
@@ -71,21 +63,18 @@ fun SearchScreen(
     onNavigateToMap: () -> Unit = {},
     onNavigateToAlerts: () -> Unit = {},
 ) {
-    var selectedTab by rememberSaveable { mutableStateOf(SearchTab.Search) }
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         topBar = { SearchTopBar() },
         bottomBar = {
-            SearchBottomBar(
-                selected = selectedTab,
+            AppBottomBar(
+                selected = BottomBarTab.Search,
                 onTabSelected = { tab ->
-                    selectedTab = tab
                     when (tab) {
-                        SearchTab.Map -> onNavigateToMap()
-                        SearchTab.Search -> Unit
-                        SearchTab.Alerts -> onNavigateToAlerts()
+                        BottomBarTab.Map -> onNavigateToMap()
+                        BottomBarTab.Search -> Unit
+                        BottomBarTab.Alerts -> onNavigateToAlerts()
                     }
                 },
             )
@@ -273,33 +262,6 @@ private fun RecentSearchItem(
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-    }
-}
-
-@Composable
-private fun SearchBottomBar(
-    selected: SearchTab,
-    onTabSelected: (SearchTab) -> Unit,
-) {
-    NavigationBar {
-        NavigationBarItem(
-            selected = selected == SearchTab.Map,
-            onClick = { onTabSelected(SearchTab.Map) },
-            icon = { Icon(imageVector = Icons.Filled.Map, contentDescription = null) },
-            label = { Text(stringResource(Res.string.nav_map)) },
-        )
-        NavigationBarItem(
-            selected = selected == SearchTab.Search,
-            onClick = { onTabSelected(SearchTab.Search) },
-            icon = { Icon(imageVector = Icons.Filled.Search, contentDescription = null) },
-            label = { Text(stringResource(Res.string.nav_search)) },
-        )
-        NavigationBarItem(
-            selected = selected == SearchTab.Alerts,
-            onClick = { onTabSelected(SearchTab.Alerts) },
-            icon = { Icon(imageVector = Icons.Filled.Notifications, contentDescription = null) },
-            label = { Text(stringResource(Res.string.nav_alerts)) },
-        )
     }
 }
 

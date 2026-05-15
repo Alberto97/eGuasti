@@ -48,7 +48,9 @@ import net.albertopedron.eguasti.data.MapProviders
 import net.albertopedron.eguasti.data.model.AppMapState
 import net.albertopedron.eguasti.data.model.Cause
 import net.albertopedron.eguasti.data.model.Outage
+import net.albertopedron.eguasti.ui.components.AppBottomBar
 import net.albertopedron.eguasti.ui.components.AppToolbar
+import net.albertopedron.eguasti.ui.components.BottomBarTab
 import net.albertopedron.eguasti.ui.components.bottomSlideInVertically
 import net.albertopedron.eguasti.ui.components.bottomSlideOutVertically
 import net.albertopedron.eguasti.ui.map.maplibre.MapLibreMap
@@ -61,6 +63,7 @@ import org.jetbrains.compose.resources.stringResource
 fun MapScreen(
     viewModel: MapViewModel = viewModel { MapViewModel() },
     navigateToSettings: () -> Unit,
+    navigateToSearch: () -> Unit,
 ) {
     val mapProvider by viewModel.mapProvider.collectAsState(null)
     val mapConfig by viewModel.mapConfig.collectAsState(null)
@@ -90,6 +93,7 @@ fun MapScreen(
     MapScreen(
         saveMapPosition = { state -> viewModel.saveMapPosition(state) },
         navigateToSettings = navigateToSettings,
+        navigateToSearch = navigateToSearch,
         snackbarHostState = snackbarHostState,
         mapProvider = mapProvider,
         mapConfig = mapConfig,
@@ -128,6 +132,7 @@ private fun MapScreen(
     trackOutagesEnabled: Boolean,
     tracking: Boolean,
     navigateToSettings: () -> Unit,
+    navigateToSearch: () -> Unit,
 ) {
     MapScreen(
         mapContent = {
@@ -148,6 +153,7 @@ private fun MapScreen(
         trackOutagesEnabled = trackOutagesEnabled,
         tracking = tracking,
         navigateToSettings = navigateToSettings,
+        navigateToSearch = navigateToSearch,
     )
 }
 
@@ -161,6 +167,7 @@ private fun MapScreen(
     trackOutagesEnabled: Boolean,
     tracking: Boolean,
     navigateToSettings: () -> Unit,
+    navigateToSearch: () -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -168,13 +175,31 @@ private fun MapScreen(
         topBar = {
             MapToolbar(navigateToSettings = navigateToSettings)
         },
+        bottomBar = {
+            AnimatedVisibility(
+                visible = !sheetVisible,
+                enter = bottomSlideInVertically(),
+                exit = bottomSlideOutVertically(),
+            ) {
+                AppBottomBar(
+                    selected = BottomBarTab.Map,
+                    onTabSelected = { tab ->
+                        when (tab) {
+                            BottomBarTab.Map -> Unit
+                            BottomBarTab.Search -> navigateToSearch()
+                            BottomBarTab.Alerts -> Unit
+                        }
+                    },
+                )
+            }
+        },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
+        mapContent()
         Box(
             contentAlignment = Alignment.BottomStart,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.fillMaxSize().padding(innerPadding)
         ) {
-            mapContent()
 
             AnimatedVisibility(
                 visible = sheetVisible && selectedOutage != null,
@@ -265,6 +290,7 @@ private fun Preview() {
     EGuastiTheme {
         MapScreen(
             navigateToSettings = {},
+            navigateToSearch = {},
             snackbarHostState = remember { SnackbarHostState() },
             mapContent = {
                 Box(Modifier.fillMaxSize().background(Color.LightGray))
