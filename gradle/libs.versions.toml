@@ -12,7 +12,7 @@ jb-androidx-lifecycle = "2.10.0"
 kotlin = "2.3.21"
 ksp = "2.3.7"
 kotlinx-serialization = "1.11.0"
-ktor = "3.4.3"
+ktor = "3.5.0"
 ktorfit = "2.7.3"
 
 [libraries]
