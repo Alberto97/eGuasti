@@ -60,9 +60,22 @@ import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 
+private const val SEARCH_RESULT_ZOOM = 15.0
+
 @Composable
 fun MapScreen(
-    viewModel: MapViewModel = viewModel { MapViewModel() },
+    targetLatitude: Double? = null,
+    targetLongitude: Double? = null,
+    viewModel: MapViewModel = viewModel {
+        val initial = if (targetLatitude != null && targetLongitude != null) {
+            AppMapState(
+                zoomLevel = SEARCH_RESULT_ZOOM,
+                latitude = targetLatitude,
+                longitude = targetLongitude,
+            )
+        } else null
+        MapViewModel(initialLocation = initial)
+    },
     navigateToSettings: () -> Unit,
     navigateToSearch: () -> Unit,
 ) {
