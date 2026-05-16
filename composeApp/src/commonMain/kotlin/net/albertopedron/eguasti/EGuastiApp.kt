@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import androidx.savedstate.read
 import kotlinx.coroutines.flow.update
 import net.albertopedron.eguasti.tools.DeviceConfigurationChanges
+import net.albertopedron.eguasti.ui.alerts.AlertsScreen
 import net.albertopedron.eguasti.ui.map.MapScreen
 import net.albertopedron.eguasti.ui.search.SearchScreen
 import net.albertopedron.eguasti.ui.settings.SettingsScreen
@@ -31,6 +32,7 @@ object Destinations {
     private const val MAP_LNG_ARG = "lng"
     const val MAP_ROUTE = "$MAP_PATH?$MAP_LAT_ARG={$MAP_LAT_ARG}&$MAP_LNG_ARG={$MAP_LNG_ARG}"
     const val SEARCH_ROUTE = "search"
+    const val ALERTS_ROUTE = "alerts"
     const val SETTINGS_ROUTE = "settings"
 
     const val MAP_LAT_KEY = MAP_LAT_ARG
@@ -72,6 +74,7 @@ private fun NavGraph() {
                 targetLongitude = lng,
                 navigateToSettings = { navController.navigate(Destinations.SETTINGS_ROUTE) },
                 navigateToSearch = { navController.navigate(Destinations.SEARCH_ROUTE) },
+                navigateToAlerts = { navController.navigate(Destinations.ALERTS_ROUTE) },
             )
         }
         composable(Destinations.SEARCH_ROUTE) {
@@ -84,6 +87,27 @@ private fun NavGraph() {
                 onNavigateToMapAt = { latitude, longitude ->
                     navController.navigate(Destinations.mapRoute(latitude, longitude)) {
                         popUpTo(Destinations.MAP_ROUTE) { inclusive = true }
+                    }
+                },
+                onNavigateToAlerts = {
+                    navController.navigate(Destinations.ALERTS_ROUTE) {
+                        popUpTo(Destinations.MAP_ROUTE)
+                        launchSingleTop = true
+                    }
+                },
+            )
+        }
+        composable(Destinations.ALERTS_ROUTE) {
+            AlertsScreen(
+                onNavigateToMap = {
+                    navController.navigate(Destinations.mapRoute()) {
+                        popUpTo(Destinations.MAP_ROUTE) { inclusive = true }
+                    }
+                },
+                onNavigateToSearch = {
+                    navController.navigate(Destinations.SEARCH_ROUTE) {
+                        popUpTo(Destinations.MAP_ROUTE)
+                        launchSingleTop = true
                     }
                 },
             )
