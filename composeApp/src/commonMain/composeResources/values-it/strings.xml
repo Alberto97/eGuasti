@@ -5,6 +5,7 @@
     <string name="map_error_no_internet">Sei offline. Alcune informazioni potrebbero non essere aggiornate.</string>
 
     <!-- Search -->
+    <string name="search_title">Cerca</string>
     <string name="search_hint">Cerca per via o CAP…</string>
     <string name="search_recent_title">Ricerche recenti</string>
 

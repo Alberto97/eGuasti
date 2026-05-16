@@ -6,6 +6,7 @@
     <string name="map_error_no_internet">You're offline. Some information may not be up to date.</string>
 
     <!-- Search -->
+    <string name="search_title">Search</string>
     <string name="search_hint">Search by street or ZIP…</string>
     <string name="search_recent_title">Recent searches</string>
 

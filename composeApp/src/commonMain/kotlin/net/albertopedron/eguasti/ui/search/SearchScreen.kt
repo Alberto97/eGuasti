@@ -47,6 +47,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import eguasti.composeapp.generated.resources.Res
 import eguasti.composeapp.generated.resources.app_name
 import eguasti.composeapp.generated.resources.search_hint
+import eguasti.composeapp.generated.resources.search_title
 import eguasti.composeapp.generated.resources.zilla_slab_bold
 import net.albertopedron.eguasti.data.model.GeocodingSuggestion
 import net.albertopedron.eguasti.ui.components.AppBottomBar
@@ -157,6 +158,14 @@ private fun SearchContent(
             .padding(contentPadding)
             .padding(horizontal = 16.dp),
     ) {
+        Text(
+            text = stringResource(Res.string.search_title),
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(top = 24.dp, start = 24.dp),
+        )
+
         SearchBar(
             inputField = {
                 SearchBarDefaults.InputField(
