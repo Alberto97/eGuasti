@@ -78,6 +78,7 @@ fun MapScreen(
     },
     navigateToSettings: () -> Unit,
     navigateToSearch: () -> Unit,
+    navigateToAlerts: () -> Unit,
 ) {
     val mapProvider by viewModel.mapProvider.collectAsState(null)
     val mapConfig by viewModel.mapConfig.collectAsState(null)
@@ -108,6 +109,7 @@ fun MapScreen(
         saveMapPosition = { state -> viewModel.saveMapPosition(state) },
         navigateToSettings = navigateToSettings,
         navigateToSearch = navigateToSearch,
+        navigateToAlerts = navigateToAlerts,
         snackbarHostState = snackbarHostState,
         mapProvider = mapProvider,
         mapConfig = mapConfig,
@@ -147,6 +149,7 @@ private fun MapScreen(
     tracking: Boolean,
     navigateToSettings: () -> Unit,
     navigateToSearch: () -> Unit,
+    navigateToAlerts: () -> Unit,
 ) {
     MapScreen(
         mapContent = { contentPadding ->
@@ -169,6 +172,7 @@ private fun MapScreen(
         tracking = tracking,
         navigateToSettings = navigateToSettings,
         navigateToSearch = navigateToSearch,
+        navigateToAlerts = navigateToAlerts,
     )
 }
 
@@ -183,6 +187,7 @@ private fun MapScreen(
     tracking: Boolean,
     navigateToSettings: () -> Unit,
     navigateToSearch: () -> Unit,
+    navigateToAlerts: () -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -202,7 +207,7 @@ private fun MapScreen(
                         when (tab) {
                             BottomBarTab.Map -> Unit
                             BottomBarTab.Search -> navigateToSearch()
-                            BottomBarTab.Alerts -> Unit
+                            BottomBarTab.Alerts -> navigateToAlerts()
                         }
                     },
                 )
@@ -308,6 +313,7 @@ private fun Preview() {
         MapScreen(
             navigateToSettings = {},
             navigateToSearch = {},
+            navigateToAlerts = {},
             snackbarHostState = remember { SnackbarHostState() },
             mapContent = { _ ->
                 Box(Modifier.fillMaxSize().background(Color.LightGray))

@@ -15,6 +15,15 @@
     <string name="nav_search">Search</string>
     <string name="nav_alerts">Alerts</string>
 
+    <!-- Alerts -->
+    <string name="alerts_title">Alerts</string>
+    <string name="alerts_filter_all">All</string>
+    <string name="alerts_filter_failures">Failures</string>
+    <string name="alerts_filter_maintenances">Maintenances</string>
+    <string name="alerts_chip_failure">FAILURE</string>
+    <string name="alerts_chip_maintenance">MAINTENANCE</string>
+    <string name="alerts_dismiss">Dismiss alert</string>
+
     <!-- Outage -->
     <string name="outage_maintenance">Scheduled maintenance</string>
     <string name="outage_blackout">Blackout</string>
