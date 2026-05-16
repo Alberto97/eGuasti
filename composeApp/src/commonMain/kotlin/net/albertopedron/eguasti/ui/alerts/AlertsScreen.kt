@@ -32,11 +32,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -75,10 +77,26 @@ enum class AlertFilter { All, Failures, Maintenances }
 
 @Composable
 fun AlertsScreen(
-    alerts: List<Alert> = sampleAlerts,
-    onDismiss: (Alert) -> Unit = {},
+    viewModel: AlertsViewModel = viewModel { AlertsViewModel() },
     onNavigateToMap: () -> Unit = {},
     onNavigateToSearch: () -> Unit = {},
+) {
+    val alerts by viewModel.alerts.collectAsState()
+
+    AlertsScreen(
+        alerts = alerts,
+        onDismiss = viewModel::dismiss,
+        onNavigateToMap = onNavigateToMap,
+        onNavigateToSearch = onNavigateToSearch,
+    )
+}
+
+@Composable
+private fun AlertsScreen(
+    alerts: List<Alert>,
+    onDismiss: (Alert) -> Unit,
+    onNavigateToMap: () -> Unit,
+    onNavigateToSearch: () -> Unit,
 ) {
     var filter by rememberSaveable { mutableStateOf(AlertFilter.All) }
 
@@ -400,6 +418,11 @@ private val sampleAlerts = listOf(
 @Composable
 private fun AlertsScreenPreview() {
     EGuastiTheme {
-        AlertsScreen()
+        AlertsScreen(
+            alerts = sampleAlerts,
+            onDismiss = {},
+            onNavigateToMap = {},
+            onNavigateToSearch = {},
+        )
     }
 }
