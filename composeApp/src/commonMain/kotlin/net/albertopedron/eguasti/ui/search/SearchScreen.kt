@@ -33,10 +33,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
@@ -44,11 +43,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import eguasti.composeapp.generated.resources.Res
 import eguasti.composeapp.generated.resources.app_name
 import eguasti.composeapp.generated.resources.search_hint
-import eguasti.composeapp.generated.resources.search_recent_title
 import eguasti.composeapp.generated.resources.zilla_slab_bold
+import net.albertopedron.eguasti.data.model.GeocodingSuggestion
 import net.albertopedron.eguasti.ui.components.AppBottomBar
 import net.albertopedron.eguasti.ui.components.BottomBarTab
 import net.albertopedron.eguasti.ui.theme.EGuastiTheme
@@ -57,11 +57,38 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SearchScreen(
-    recentSearches: List<RecentSearch> = sampleRecentSearches,
-    onRecentSearchClick: (RecentSearch) -> Unit = {},
-    onSearch: (String) -> Unit = {},
+    viewModel: SearchViewModel = viewModel { SearchViewModel() },
     onNavigateToMap: () -> Unit = {},
+    onNavigateToMapAt: (latitude: Double, longitude: Double) -> Unit = { _, _ -> },
     onNavigateToAlerts: () -> Unit = {},
+) {
+    val query by viewModel.query.collectAsState()
+    val suggestions by viewModel.suggestions.collectAsState()
+
+    LaunchedEffect(viewModel) {
+        viewModel.location.collect { location ->
+            onNavigateToMapAt(location.latitude, location.longitude)
+        }
+    }
+
+    SearchScreen(
+        query = query,
+        onQueryChange = viewModel::onQueryChange,
+        suggestions = suggestions,
+        onSuggestionClick = viewModel::onSuggestionClick,
+        onNavigateToMap = onNavigateToMap,
+        onNavigateToAlerts = onNavigateToAlerts,
+    )
+}
+
+@Composable
+private fun SearchScreen(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    suggestions: List<GeocodingSuggestion>,
+    onSuggestionClick: (GeocodingSuggestion) -> Unit,
+    onNavigateToMap: () -> Unit,
+    onNavigateToAlerts: () -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -81,9 +108,10 @@ fun SearchScreen(
         },
     ) { innerPadding ->
         SearchContent(
-            recentSearches = recentSearches,
-            onRecentSearchClick = onRecentSearchClick,
-            onSearch = onSearch,
+            query = query,
+            onQueryChange = onQueryChange,
+            suggestions = suggestions,
+            onSuggestionClick = onSuggestionClick,
             contentPadding = innerPadding,
         )
     }
@@ -117,14 +145,12 @@ private fun SearchTopBar() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchContent(
-    recentSearches: List<RecentSearch>,
-    onRecentSearchClick: (RecentSearch) -> Unit,
-    onSearch: (String) -> Unit,
+    query: String,
+    onQueryChange: (String) -> Unit,
+    suggestions: List<GeocodingSuggestion>,
+    onSuggestionClick: (GeocodingSuggestion) -> Unit,
     contentPadding: PaddingValues,
 ) {
-    var query by rememberSaveable { mutableStateOf("") }
-    var expanded by rememberSaveable { mutableStateOf(false) }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -135,12 +161,11 @@ private fun SearchContent(
             inputField = {
                 SearchBarDefaults.InputField(
                     query = query,
-                    onQueryChange = { query = it },
+                    onQueryChange = onQueryChange,
                     onSearch = {},
                     expanded = false,
                     onExpandedChange = {},
                     placeholder = { Text(stringResource(Res.string.search_hint)) },
-                    //trailingIcon = { if (query.isNotEmpty()) ClearIcon(onClear) },
                 )
             },
             expanded = false,
@@ -152,16 +177,7 @@ private fun SearchContent(
             content = {},
         )
 
-        if (recentSearches.isNotEmpty()) {
-            Text(
-                text = stringResource(Res.string.search_recent_title).uppercase(),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = 1.sp,
-                modifier = Modifier.padding(16.dp),
-            )
-
+        if (suggestions.isNotEmpty()) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -169,14 +185,15 @@ private fun SearchContent(
                 contentPadding = PaddingValues(
                     start = 16.dp,
                     end = 16.dp,
+                    top = 8.dp,
                     bottom = 16.dp,
                 ),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                items(items = recentSearches, key = { it.id }) { search ->
-                    RecentSearchItem(
-                        search = search,
-                        onClick = { onRecentSearchClick(search) },
+                items(items = suggestions, key = { it.key }) { suggestion ->
+                    SuggestionItem(
+                        suggestion = suggestion,
+                        onClick = { onSuggestionClick(suggestion) },
                     )
                 }
             }
@@ -185,26 +202,8 @@ private fun SearchContent(
 }
 
 @Composable
-private fun RecentSearchList(
-    recentSearches: List<RecentSearch>,
-    onRecentSearchClick: (RecentSearch) -> Unit,
-) {
-    LazyColumn(
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        items(items = recentSearches, key = { it.id }) { search ->
-            RecentSearchItem(
-                search = search,
-                onClick = { onRecentSearchClick(search) },
-            )
-        }
-    }
-}
-
-@Composable
-private fun RecentSearchItem(
-    search: RecentSearch,
+private fun SuggestionItem(
+    suggestion: GeocodingSuggestion,
     onClick: () -> Unit,
 ) {
     Card(
@@ -242,19 +241,13 @@ private fun RecentSearchItem(
 
             Spacer(modifier = Modifier.size(12.dp))
 
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = search.primary,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-                Text(
-                    text = search.secondary,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+            Text(
+                text = suggestion.text,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.weight(1f),
+            )
 
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
@@ -265,28 +258,21 @@ private fun RecentSearchItem(
     }
 }
 
-private val sampleRecentSearches = listOf(
-    RecentSearch(
-        id = "1",
-        primary = "Via Roma, Comacchio",
-        secondary = "Ferrara, Emilia-Romagna",
-    ),
-    RecentSearch(
-        id = "2",
-        primary = "Piazza Duomo, Milano",
-        secondary = "Milano, Lombardia",
-    ),
-    RecentSearch(
-        id = "3",
-        primary = "Via dei Condotti, Roma",
-        secondary = "Roma, Lazio",
-    ),
-)
-
 @Preview
 @Composable
 private fun SearchScreenPreview() {
     EGuastiTheme {
-        SearchScreen()
+        SearchScreen(
+            query = "Roma",
+            onQueryChange = {},
+            suggestions = listOf(
+                GeocodingSuggestion(text = "Via Roma, Comacchio, Ferrara", key = "k1"),
+                GeocodingSuggestion(text = "Piazza Duomo, Milano", key = "k2"),
+                GeocodingSuggestion(text = "Via dei Condotti, Roma", key = "k3"),
+            ),
+            onSuggestionClick = {},
+            onNavigateToMap = {},
+            onNavigateToAlerts = {},
+        )
     }
 }
