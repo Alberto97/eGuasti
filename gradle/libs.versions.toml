@@ -13,7 +13,7 @@ kotlin = "2.3.21"
 ksp = "2.3.9"
 kotlinx-serialization = "1.11.0"
 ktor = "3.4.3"
-ktorfit = "2.7.3"
+ktorfit = "2.7.4"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.12.2" }
