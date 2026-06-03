@@ -113,7 +113,7 @@ room {
 }
 
 ktorfit {
-    compilerPluginVersion.set("2.3.3")
+    compilerPluginVersion.set("2.3.5")
 }
 
 dependencies {
