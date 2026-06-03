@@ -99,7 +99,6 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
 
             implementation(libs.maplibre.compose)
-            implementation(libs.maplibre.spatialk.geojson)
 
             implementation(libs.kermit)
         }
