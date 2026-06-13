@@ -1,5 +1,4 @@
 import com.codingfeline.buildkonfig.compiler.FieldSpec
-import io.github.frankois944.spmForKmp.swiftPackageConfig
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.net.URI
 import java.util.Properties
@@ -13,7 +12,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktorfit)
-    alias(libs.plugins.spmForKmp)
     alias(libs.plugins.buildKonfig)
 }
 
@@ -44,20 +42,21 @@ kotlin {
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
-        @Suppress("OPT_IN_USAGE")
-        iosTarget.swiftPackageConfig(cinteropName ="spmMaplibre") {
-            dependency {
-                remotePackageVersion(
-                    url = URI("https://github.com/maplibre/maplibre-gl-native-distribution.git"),
-                    products = { add("MapLibre") },
-                    version = "6.25.1",
-                )
-            }
-        }
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
         }
+    }
+
+    swiftPMDependencies {
+        @Suppress("OPT_IN_USAGE")
+        swiftPackage(
+            url = url("https://github.com/maplibre/maplibre-gl-native-distribution.git"),
+            version = from("6.25.1"),
+            products = listOf(
+                product("MapLibre")
+            )
+        )
     }
     
     sourceSets {

@@ -6,12 +6,16 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		46571C252D51101DC02AD50C /* KotlinMultiplatformLinkedPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 8C222A0E1646085D7D1399E5 /* KotlinMultiplatformLinkedPackage */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		272969D4DE87160D9F2F613E /* eGuasti.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = eGuasti.app; path = "/Users/alberto/Library/Caches/Google/AndroidStudio2025.2.3/DerivedData/iosApp-ejakspdjocarsqbfiyoxvizjuvlb/Build/Products/Debug-iphonesimulator/eGuasti.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		272969D4DE87160D9F2F613E /* eGuasti.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = eGuasti.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		CD095FDDE144226B736E4AD1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		CD095FDDE144226B736E4AD1 /* Exceptions for "iosApp" folder in "iosApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -29,7 +33,7 @@
 		E63532EB6B781B111D762569 /* iosApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				CD095FDDE144226B736E4AD1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+				CD095FDDE144226B736E4AD1 /* Exceptions for "iosApp" folder in "iosApp" target */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -41,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46571C252D51101DC02AD50C /* KotlinMultiplatformLinkedPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +90,7 @@
 			);
 			name = iosApp;
 			packageProductDependencies = (
+				8C222A0E1646085D7D1399E5 /* KotlinMultiplatformLinkedPackage */,
 			);
 			productName = iosApp;
 			productReference = 272969D4DE87160D9F2F613E /* eGuasti.app */;
@@ -114,6 +120,9 @@
 			);
 			mainGroup = 877225409EEF49820DF401A3;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				7FEE7AD3358C8CC86CDC1F5C /* XCLocalSwiftPackageReference "KotlinMultiplatformLinkedPackage" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2B8E4434A28CED8C00E9AA46 /* Products */;
 			projectDirPath = "";
@@ -370,6 +379,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		7FEE7AD3358C8CC86CDC1F5C /* XCLocalSwiftPackageReference "KotlinMultiplatformLinkedPackage" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = KotlinMultiplatformLinkedPackage;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8C222A0E1646085D7D1399E5 /* KotlinMultiplatformLinkedPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KotlinMultiplatformLinkedPackage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AB2BD7A04B1D2154158FA9EB /* Project object */;
 }
