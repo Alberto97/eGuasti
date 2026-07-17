@@ -5,7 +5,7 @@ import de.jensklingenberg.ktorfit.Ktorfit
 
 
 object ApiContainer {
-    private const val URL = "https://ineuportalgis.enel.com/server/rest/services/Hosted/ITA_power_cut_map_layer_View/FeatureServer/0/"
+    private const val URL = "https://dpa-portalgis.enel.com/server/rest/services/Hosted/ITA_power_cut_map_layer_View/FeatureServer/0/"
     private const val GEOCODING_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/"
 
     private val ktorfit = Ktorfit.Builder()
