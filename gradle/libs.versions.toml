@@ -1,6 +1,6 @@
 [versions]
-eguasti-version = "2.0.1"
-eguasti-incremental = "7"
+eguasti-version = "2.0.2"
+eguasti-incremental = "8"
 agp = "9.0.0"
 android-compileSdk = "36"
 android-minSdk = "28"
