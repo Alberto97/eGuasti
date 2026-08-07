@@ -3,6 +3,7 @@ package net.albertopedron.eguasti.ui.map
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -135,7 +136,7 @@ private fun MapScreen(
     navigateToSearch: () -> Unit,
 ) {
     MapScreen(
-        mapContent = {
+        mapContent = { contentPadding ->
             AppMap(
                 mapProvider = mapProvider,
                 mapConfig = mapConfig,
@@ -144,6 +145,7 @@ private fun MapScreen(
                 outages = outages,
                 onOutageClicked = onOutageClicked,
                 clearOutageSelection = clearOutageSelection,
+                contentPadding = contentPadding,
             )
         },
         snackbarHostState = snackbarHostState,
@@ -160,7 +162,7 @@ private fun MapScreen(
 @Composable
 private fun MapScreen(
     snackbarHostState: SnackbarHostState,
-    mapContent: @Composable () -> Unit = {},
+    mapContent: @Composable (PaddingValues) -> Unit = {},
     selectedOutage: Outage?,
     toggleTrackOutage: () -> Unit,
     sheetVisible: Boolean,
@@ -195,10 +197,10 @@ private fun MapScreen(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
-        mapContent()
+        mapContent(innerPadding)
         Box(
             contentAlignment = Alignment.BottomStart,
-            modifier = Modifier.fillMaxSize().padding(innerPadding)
+            modifier = Modifier.fillMaxSize()
         ) {
 
             AnimatedVisibility(
@@ -271,6 +273,7 @@ private fun AppMap(
     outages: List<Outage>,
     onOutageClicked: (Int) -> Unit,
     clearOutageSelection: () -> Unit,
+    contentPadding: PaddingValues,
 ) {
     if (mapConfig == null) return
 
@@ -281,6 +284,7 @@ private fun AppMap(
         outages = outages,
         onOutageClicked = onOutageClicked,
         clearOutageSelection = clearOutageSelection,
+        contentPadding = contentPadding,
     )
 }
 
@@ -292,7 +296,7 @@ private fun Preview() {
             navigateToSettings = {},
             navigateToSearch = {},
             snackbarHostState = remember { SnackbarHostState() },
-            mapContent = {
+            mapContent = { _ ->
                 Box(Modifier.fillMaxSize().background(Color.LightGray))
             },
             selectedOutage = Outage(

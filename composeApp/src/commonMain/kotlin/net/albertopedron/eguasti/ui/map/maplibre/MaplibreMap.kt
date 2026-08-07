@@ -1,5 +1,6 @@
 package net.albertopedron.eguasti.ui.map.maplibre
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -62,6 +63,7 @@ fun MapLibreMap(
     outages: List<Outage>,
     onOutageClicked: (Int) -> Unit,
     clearOutageSelection: () -> Unit,
+    contentPadding: PaddingValues,
 ) {
     val center = remember { mutableStateOf<CameraUpdate?>(null) }
     // Symbol layers need a base style with glyphs when raster tiles are used.
@@ -122,6 +124,7 @@ fun MapLibreMap(
     MaplibreMap(
         modifier = Modifier.fillMaxSize(),
         state = state,
+        viewportInsets = contentPadding,
         interactions = MapInteractions {
             callbacks {
                 click {
