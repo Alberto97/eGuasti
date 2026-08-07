@@ -1,9 +1,7 @@
 package net.albertopedron.eguasti.ui.map.maplibre
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -65,6 +63,7 @@ fun MapLibreMap(
     outages: List<Outage>,
     onOutageClicked: (Int) -> Unit,
     clearOutageSelection: () -> Unit,
+    contentPadding: PaddingValues,
 ) {
     val cameraState = rememberCameraState(firstPosition = defaultPosition)
     val mapLoaded = remember { mutableStateOf(false) }
@@ -84,6 +83,7 @@ fun MapLibreMap(
         mapConfig = mapConfig,
         outages = outages,
         cameraState = cameraState,
+        contentPadding = contentPadding,
         onOutageClicked = {
             onOutageClicked(it)
             saveMapPosition(cameraState.position.toMapState())
@@ -109,6 +109,7 @@ private fun MapLibreMap(
     mapConfig: MapConfig,
     outages: List<Outage>,
     cameraState: CameraState,
+    contentPadding: PaddingValues,
     onOutageClicked: (Int) -> Unit,
     clearOutageSelection: () -> Unit,
     centerCameraTo: (point: Point, zoom: Double?) -> Unit,
@@ -127,7 +128,7 @@ private fun MapLibreMap(
         cameraState = cameraState,
         options = MapOptions(
             ornamentOptions = OrnamentOptions(
-                padding = WindowInsets.navigationBars.asPaddingValues(),
+                padding = contentPadding,
             )
         ),
         onMapClick = { _, _ ->
