@@ -200,7 +200,7 @@ private fun MapScreen(
     ) { innerPadding ->
         Box(
             contentAlignment = Alignment.BottomStart,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(top = innerPadding.calculateTopPadding())
         ) {
             mapContent()
 
