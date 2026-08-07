@@ -1,7 +1,10 @@
 package net.albertopedron.eguasti.ui.map.maplibre
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.runtime.Composable
@@ -10,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import eguasti.composeapp.generated.resources.Res
 import eguasti.composeapp.generated.resources.marker_red
@@ -65,6 +69,7 @@ fun MapLibreMap(
     outages: List<Outage>,
     onOutageClicked: (Int) -> Unit,
     clearOutageSelection: () -> Unit,
+    contentPadding: PaddingValues,
 ) {
     val cameraState = rememberCameraState(firstPosition = defaultPosition)
     val mapLoaded = remember { mutableStateOf(false) }
@@ -84,6 +89,7 @@ fun MapLibreMap(
         mapConfig = mapConfig,
         outages = outages,
         cameraState = cameraState,
+        contentPadding = contentPadding,
         onOutageClicked = {
             onOutageClicked(it)
             saveMapPosition(cameraState.position.toMapState())
@@ -109,6 +115,7 @@ private fun MapLibreMap(
     mapConfig: MapConfig,
     outages: List<Outage>,
     cameraState: CameraState,
+    contentPadding: PaddingValues,
     onOutageClicked: (Int) -> Unit,
     clearOutageSelection: () -> Unit,
     centerCameraTo: (point: Point, zoom: Double?) -> Unit,
@@ -121,13 +128,31 @@ private fun MapLibreMap(
         is MapConfig.Vector -> BaseStyle.Uri(mapConfig.uri)
     }
 
+    val layoutDirection = LocalLayoutDirection.current
+    val navBars = WindowInsets.navigationBars.asPaddingValues()
+    val ornamentPadding = PaddingValues(
+        start = maxOf(
+            contentPadding.calculateStartPadding(layoutDirection),
+            navBars.calculateStartPadding(layoutDirection),
+        ),
+        end = maxOf(
+            contentPadding.calculateEndPadding(layoutDirection),
+            navBars.calculateEndPadding(layoutDirection),
+        ),
+        top = contentPadding.calculateTopPadding(),
+        bottom = maxOf(
+            contentPadding.calculateBottomPadding(),
+            navBars.calculateBottomPadding(),
+        ),
+    )
+
     MaplibreMap(
         modifier = Modifier.fillMaxSize(),
         baseStyle = baseStyle,
         cameraState = cameraState,
         options = MapOptions(
             ornamentOptions = OrnamentOptions(
-                padding = WindowInsets.navigationBars.asPaddingValues(),
+                padding = ornamentPadding,
             )
         ),
         onMapClick = { _, _ ->

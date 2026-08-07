@@ -6,6 +6,7 @@ import co.touchlab.kermit.Logger
 import eguasti.composeapp.generated.resources.Res
 import eguasti.composeapp.generated.resources.map_error_no_internet
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -33,6 +34,7 @@ import org.jetbrains.compose.resources.getString
 
 
 class MapViewModel(
+    private val initialLocation: AppMapState? = null,
     private val mapStateRepository: MapStateRepository = MapStateRepository(),
     private val outageRepository: OutageRepository = OutageRepository(),
     private val outageTracker: OutageTracker = OutageTracker(),
@@ -74,7 +76,12 @@ class MapViewModel(
     init {
         viewModelScope.launch {
             notificationHelper.initialize()
-            loadMapPosition()
+            if (initialLocation != null) {
+                delay(500)
+                _mapState.emit(initialLocation)
+            } else {
+                loadMapPosition()
+            }
             loadOutages()
         }
     }

@@ -5,6 +5,25 @@
     <string name="cancel">Cancel</string>
     <string name="map_error_no_internet">You're offline. Some information may not be up to date.</string>
 
+    <!-- Search -->
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search by street or ZIP…</string>
+    <string name="search_recent_title">Recent searches</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_map">Map</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_alerts">Alerts</string>
+
+    <!-- Alerts -->
+    <string name="alerts_title">Alerts</string>
+    <string name="alerts_filter_all">All</string>
+    <string name="alerts_filter_failures">Failures</string>
+    <string name="alerts_filter_maintenances">Maintenances</string>
+    <string name="alerts_chip_failure">FAILURE</string>
+    <string name="alerts_chip_maintenance">MAINTENANCE</string>
+    <string name="alerts_dismiss">Dismiss alert</string>
+
     <!-- Outage -->
     <string name="outage_maintenance">Scheduled maintenance</string>
     <string name="outage_blackout">Blackout</string>
