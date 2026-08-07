@@ -186,15 +186,21 @@ private fun MapScreen(
             MapToolbar(navigateToSettings = navigateToSettings)
         },
         bottomBar = {
-            MapBottomBar(
-                onTabSelected = { tab ->
-                    when (tab) {
-                        MapTab.Map -> Unit
-                        MapTab.Search -> navigateToSearch()
-                        MapTab.Alerts -> navigateToAlerts()
-                    }
-                },
-            )
+            AnimatedVisibility(
+                visible = !sheetVisible,
+                enter = bottomSlideInVertically(),
+                exit = bottomSlideOutVertically()
+            ) {
+                MapBottomBar(
+                    onTabSelected = { tab ->
+                        when (tab) {
+                            MapTab.Map -> Unit
+                            MapTab.Search -> navigateToSearch()
+                            MapTab.Alerts -> navigateToAlerts()
+                        }
+                    },
+                )
+            }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
