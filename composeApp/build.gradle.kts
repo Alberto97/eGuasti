@@ -24,7 +24,7 @@ if (secretsPropertiesFile.exists()) {
 }
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "net.albertopedron.eguasti.shared"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -34,6 +34,7 @@ kotlin {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
+        withHostTest {}
     }
 
     compilerOptions {
