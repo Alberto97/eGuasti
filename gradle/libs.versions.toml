@@ -58,7 +58,7 @@ sandwich-ktorfit = { module = "com.github.skydoves:sandwich-ktorfit", version = 
 
 maplibre-compose = { group = "org.maplibre.compose", name = "maplibre-compose", version = "0.13.1" }
 
-kermit = { module = "co.touchlab:kermit", version = "2.1.0" }
+kermit = { module = "co.touchlab:kermit", version = "2.2.0" }
 
 
 [plugins]
