@@ -71,6 +71,7 @@ kotlin {
             implementation(libs.androidx.sqlite.framework)
             implementation(libs.androidx.work.runtime.ktx)
             implementation(libs.ktor.client.android)
+            runtimeOnly(libs.maplibre.compose.runtime.vulkan.android)
         }
         commonMain.dependencies {
             implementation(libs.compose.components.resources)
