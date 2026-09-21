@@ -1,9 +1,6 @@
 package net.albertopedron.eguasti.ui.map.maplibre
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -39,9 +36,7 @@ import org.maplibre.compose.expressions.dsl.switch
 import org.maplibre.compose.layers.CircleLayer
 import org.maplibre.compose.layers.RasterLayer
 import org.maplibre.compose.layers.SymbolLayer
-import org.maplibre.compose.map.MapOptions
 import org.maplibre.compose.map.MaplibreMap
-import org.maplibre.compose.map.OrnamentOptions
 import org.maplibre.compose.sources.GeoJsonOptions
 import org.maplibre.compose.sources.GeoJsonSource
 import org.maplibre.compose.sources.TileSetOptions
@@ -125,11 +120,6 @@ private fun MapLibreMap(
         modifier = Modifier.fillMaxSize(),
         baseStyle = baseStyle,
         cameraState = cameraState,
-        options = MapOptions(
-            ornamentOptions = OrnamentOptions(
-                padding = WindowInsets.navigationBars.asPaddingValues(),
-            )
-        ),
         onMapClick = { _, _ ->
             clearOutageSelection()
             ClickResult.Pass

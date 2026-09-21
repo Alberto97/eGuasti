@@ -14,6 +14,7 @@ ksp = "2.3.12"
 kotlinx-serialization = "1.11.0"
 ktor = "3.5.2"
 ktorfit = "2.7.5"
+maplibre-compose = "0.15.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.13.0" }
@@ -56,7 +57,8 @@ ktor-serialization-kotlinx-protobuf = { module = "io.ktor:ktor-serialization-kot
 ktorfit-lib = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
 sandwich-ktorfit = { module = "com.github.skydoves:sandwich-ktorfit", version = "2.4.0" }
 
-maplibre-compose = { group = "org.maplibre.compose", name = "maplibre-compose", version = "0.13.1" }
+maplibre-compose-runtime-vulkan-android = { group = "org.maplibre.compose", name = "maplibre-compose-runtime-vulkan-android", version.ref = "maplibre-compose" }
+maplibre-compose = { group = "org.maplibre.compose", name = "maplibre-compose", version.ref = "maplibre-compose" }
 
 kermit = { module = "co.touchlab:kermit", version = "2.2.0" }
 
@@ -71,5 +73,4 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
-spmForKmp = { id = "io.github.frankois944.spmForKmp", version = "1.9.4" }
 buildKonfig = { id = "com.codingfeline.buildkonfig", version = "0.22.0" }
