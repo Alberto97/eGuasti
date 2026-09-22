@@ -1,6 +1,7 @@
 package net.albertopedron.eguasti.data
 
 import com.skydoves.sandwich.getOrNull
+import com.skydoves.sandwich.getOrThrow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -49,12 +50,12 @@ class OutageRepository(
     private suspend fun query(where: String): Result<List<Outage>> {
         val fetchUsingProtocolBuffers = persistence.getFetchUsingProtocolBuffers().firstOrNull() ?: true
         if (fetchUsingProtocolBuffers) {
-            val result = client.queryPbf(where).getOrNull() ?: return Result.failure(Exception("Query failed"))
+            val result = client.queryPbf(where).getOrThrow()
             val featureResult = result.queryResult.featureResult ?: return Result.failure(Exception("Feature result is null"))
             val res = mapper.mapFeatures(featureResult)
             return Result.success(res)
         } else {
-            val result = client.queryJson(where).getOrNull() ?: return Result.failure(Exception("Query failed"))
+            val result = client.queryJson(where).getOrThrow()
             val res = mapper.mapFeatures(result)
             return Result.success(res)
         }
