@@ -14,7 +14,7 @@ ksp = "2.3.12"
 kotlinx-serialization = "1.11.0"
 ktor = "3.5.2"
 ktorfit = "2.7.5"
-maplibre-compose = "0.15.0"
+maplibre-compose = "0.17.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.13.0" }
