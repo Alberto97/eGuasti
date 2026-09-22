@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<network-security-config>
+    <domain-config>
+        <domain includeSubdomains="true">dpa-portalgis.enel.com</domain>
+        <pin-set>
+            <pin digest="SHA-256">r6HLQrRsqPMFVXIy7k5yap2j0H7YjaVb4E6qdcu6Nfo=</pin>
+        </pin-set>
+    </domain-config>
+</network-security-config>
