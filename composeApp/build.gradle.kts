@@ -57,7 +57,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.sqlite.framework)
             implementation(libs.androidx.work.runtime.ktx)
-            implementation(libs.ktor.client.android)
+            implementation(libs.ktor.client.okhttp)
             runtimeOnly(libs.maplibre.compose.runtime.vulkan.android)
         }
         commonMain.dependencies {
