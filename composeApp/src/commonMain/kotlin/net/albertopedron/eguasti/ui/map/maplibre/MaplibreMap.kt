@@ -3,6 +3,7 @@ package net.albertopedron.eguasti.ui.map.maplibre
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -22,8 +23,6 @@ import net.albertopedron.eguasti.ui.map.maplibre.MapLibreExtensions.toMapState
 import net.albertopedron.eguasti.ui.theme.Blue
 import org.jetbrains.compose.resources.painterResource
 import org.maplibre.compose.camera.CameraPosition
-import org.maplibre.compose.camera.CameraState
-import org.maplibre.compose.camera.rememberCameraState
 import org.maplibre.compose.expressions.dsl.asNumber
 import org.maplibre.compose.expressions.dsl.asString
 import org.maplibre.compose.expressions.dsl.case
@@ -33,19 +32,23 @@ import org.maplibre.compose.expressions.dsl.image
 import org.maplibre.compose.expressions.dsl.not
 import org.maplibre.compose.expressions.dsl.step
 import org.maplibre.compose.expressions.dsl.switch
+import org.maplibre.compose.interaction.ClickResult
+import org.maplibre.compose.interaction.MapInteractions
 import org.maplibre.compose.layers.CircleLayer
 import org.maplibre.compose.layers.RasterLayer
 import org.maplibre.compose.layers.SymbolLayer
+import org.maplibre.compose.map.MapEvent
 import org.maplibre.compose.map.MaplibreMap
+import org.maplibre.compose.map.rememberMapState
 import org.maplibre.compose.sources.GeoJsonOptions
 import org.maplibre.compose.sources.GeoJsonSource
 import org.maplibre.compose.sources.TileSetOptions
 import org.maplibre.compose.sources.rememberGeoJsonSource
-import org.maplibre.compose.sources.rememberRasterSource
+import org.maplibre.compose.sources.rememberRasterTileSource
 import org.maplibre.compose.style.BaseStyle
-import org.maplibre.compose.util.ClickResult
 import org.maplibre.spatialk.geojson.Point
 import org.maplibre.spatialk.geojson.Position
+import kotlin.time.Clock
 
 val defaultPosition = CameraPosition(
     target = Position(12.4964, 41.9028),
@@ -61,53 +64,27 @@ fun MapLibreMap(
     onOutageClicked: (Int) -> Unit,
     clearOutageSelection: () -> Unit,
 ) {
-    val cameraState = rememberCameraState(firstPosition = defaultPosition)
-    val mapLoaded = remember { mutableStateOf(false) }
-    val center = remember { mutableStateOf<CameraPosition?>(null) }
-
-    LaunchedEffect(center.value) {
-        val position = center.value ?: return@LaunchedEffect
-        cameraState.animateTo(position)
-    }
-
-    LaunchedEffect(mapLoaded.value) {
-        val position = mapState ?: return@LaunchedEffect
-        cameraState.animateTo(position.toCameraPosition())
-    }
-
     MapLibreMap(
         mapConfig = mapConfig,
+        mapState = mapState,
         outages = outages,
-        cameraState = cameraState,
-        onOutageClicked = {
-            onOutageClicked(it)
-            saveMapPosition(cameraState.position.toMapState())
+        onOutageClicked = { id, position ->
+            onOutageClicked(id)
+            saveMapPosition(position.toMapState())
         },
         clearOutageSelection = {
             clearOutageSelection()
         },
-        centerCameraTo = { point, zoom ->
-            val position = cameraState.position.copy(
-                target = point.coordinates,
-                zoom = zoom ?: cameraState.position.zoom,
-            )
-            center.value = position
-        },
-        onMapLoadFinished = {
-            mapLoaded.value = true
-        }
     )
 }
 
 @Composable
 private fun MapLibreMap(
     mapConfig: MapConfig,
+    mapState: AppMapState?,
     outages: List<Outage>,
-    cameraState: CameraState,
-    onOutageClicked: (Int) -> Unit,
+    onOutageClicked: (Int, CameraPosition) -> Unit,
     clearOutageSelection: () -> Unit,
-    centerCameraTo: (point: Point, zoom: Double?) -> Unit,
-    onMapLoadFinished: () -> Unit = {},
 ) {
     // For some reason symbol layers (eg. cluster layers) are not rendered if a valid base
     // style is not specified when using raster tiles
@@ -116,15 +93,15 @@ private fun MapLibreMap(
         is MapConfig.Vector -> BaseStyle.Uri(mapConfig.uri)
     }
 
-    MaplibreMap(
-        modifier = Modifier.fillMaxSize(),
+    val mapLoaded = remember { mutableStateOf(false) }
+    val requestZoomTo = remember { mutableStateOf<Point?>(null) }
+    val requestCenterTo = remember { mutableStateOf<Point?>(null) }
+    val requestClickId = remember { mutableStateOf<Pair<Int, Long>?>(null) }
+    val center = remember { mutableStateOf<CameraPosition?>(null) }
+
+    val state = rememberMapState(
         baseStyle = baseStyle,
-        cameraState = cameraState,
-        onMapClick = { _, _ ->
-            clearOutageSelection()
-            ClickResult.Pass
-        },
-        onMapLoadFinished = onMapLoadFinished
+        initialCameraPosition = defaultPosition
     ) {
         if (mapConfig is MapConfig.Raster) {
             RasterMapLayer(mapConfig)
@@ -140,27 +117,78 @@ private fun MapLibreMap(
 
         ClusteredLayer(
             outageSource = outageSource,
-            zoomToCluster = { point ->
-                val zoom = (cameraState.position.zoom + 2).coerceAtMost(20.0)
-                centerCameraTo(point, zoom)
-            }
+            zoomToCluster = { point -> requestZoomTo.value = point }
         )
 
         UnclusteredLayer(
             outageSource = outageSource,
-            centerCameraTo = { centerCameraTo(it, null) },
+            centerCameraTo = { requestCenterTo.value = it },
             onOutageClicked = { id ->
-                id ?: return@UnclusteredLayer
-                onOutageClicked(id)
+                // Use current millis to handle reselection that would not trigger recomposition since the id is always the same
+                requestClickId.value = Pair(id, Clock.System.now().toEpochMilliseconds())
             }
         )
 
     }
+
+    SideEffect(requestClickId.value) {
+        val id = requestClickId.value ?: return@SideEffect
+        onOutageClicked(id.first, state.cameraPosition)
+    }
+
+    fun centerCameraTo(point: Point, zoom: Double?) {
+        val position = state.cameraPosition.copy(
+            target = point.coordinates,
+            zoom = zoom ?: state.cameraPosition.zoom,
+        )
+        center.value = position
+    }
+
+    SideEffect(state, requestZoomTo.value) {
+        val point = requestZoomTo.value ?: return@SideEffect
+        val zoom = (state.cameraPosition.zoom + 2).coerceAtMost(20.0)
+        centerCameraTo(point, zoom)
+    }
+
+    SideEffect( requestCenterTo.value) {
+        val point = requestCenterTo.value ?: return@SideEffect
+        centerCameraTo(point, null)
+    }
+
+
+    LaunchedEffect(center.value) {
+        val position = center.value ?: return@LaunchedEffect
+        state.animateCameraPosition(position)
+    }
+
+    LaunchedEffect(mapLoaded.value) {
+        val position = mapState ?: return@LaunchedEffect
+        state.animateCameraPosition(position.toCameraPosition())
+    }
+
+    LaunchedEffect(state) {
+        state.events.collect { if (it is MapEvent.Idle) mapLoaded.value = true }
+    }
+
+    MaplibreMap(
+        modifier = Modifier.fillMaxSize(),
+        state = state,
+        interactions = MapInteractions {
+            callbacks {
+                click {
+                    onEvent { _ ->
+                        clearOutageSelection()
+                        ClickResult.Pass
+                    }
+                }
+            }
+        },
+    )
 }
 
 @Composable
 private fun RasterMapLayer(mapConfig: MapConfig.Raster) {
-    val tiles = rememberRasterSource(
+    val tiles = rememberRasterTileSource(
         tiles = mapConfig.tiles,
         tileSize = mapConfig.tileSize,
         options = TileSetOptions(
@@ -218,7 +246,7 @@ private fun ClusteredLayer(
 private fun UnclusteredLayer(
     outageSource: GeoJsonSource,
     centerCameraTo: (Point) -> Unit,
-    onOutageClicked: (Int?) -> Unit
+    onOutageClicked: (Int) -> Unit
 ) {
     SymbolLayer(
         id = "unclustered-outages",
