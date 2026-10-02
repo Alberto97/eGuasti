@@ -5,12 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
-import androidx.navigation.NavType
+import androidx.navigation.NavController
+import androidx.navigation.toRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import androidx.savedstate.read
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import kotlinx.coroutines.flow.update
 import net.albertopedron.eguasti.tools.DeviceConfigurationChanges
 import net.albertopedron.eguasti.ui.alerts.AlertsScreen
@@ -30,85 +31,68 @@ fun EGuastiApp() {
 
 object Destinations {
     const val MAP_TARGET_KEY = "mapTarget"
-    private const val MAP_PATH = "map"
-    private const val MAP_LAT_ARG = "lat"
-    private const val MAP_LNG_ARG = "lng"
-    const val MAP_ROUTE = "$MAP_PATH?$MAP_LAT_ARG={$MAP_LAT_ARG}&$MAP_LNG_ARG={$MAP_LNG_ARG}"
-    const val SEARCH_ROUTE = "search"
-    const val ALERTS_ROUTE = "alerts"
-    const val SETTINGS_ROUTE = "settings"
 
-    const val MAP_LAT_KEY = MAP_LAT_ARG
-    const val MAP_LNG_KEY = MAP_LNG_ARG
+    @Serializable
+    data class Map(val latitude: Double? = null, val longitude: Double? = null)
 
-    fun mapRoute(): String = MAP_PATH
-    fun mapRoute(latitude: Double, longitude: Double): String =
-        "$MAP_PATH?$MAP_LAT_ARG=$latitude&$MAP_LNG_ARG=$longitude"
+    @Serializable
+    data object Search
+
+    @Serializable
+    data object Alerts
+
+    @Serializable
+    data object Settings
+}
+
+private fun NavController.returnToMap(latitude: Double, longitude: Double) {
+    previousBackStackEntry?.savedStateHandle?.set(
+        Destinations.MAP_TARGET_KEY,
+        Json.encodeToString(Destinations.Map(latitude, longitude)),
+    )
+    popBackStack()
 }
 
 @Composable
 private fun NavGraph() {
     val navController = rememberNavController()
 
-    NavHost(navController, startDestination = Destinations.mapRoute()) {
-        composable(
-            route = Destinations.MAP_ROUTE,
-            arguments = listOf(
-                navArgument(Destinations.MAP_LAT_KEY) {
-                    type = NavType.StringType
-                    nullable = true
-                    defaultValue = null
-                },
-                navArgument(Destinations.MAP_LNG_KEY) {
-                    type = NavType.StringType
-                    nullable = true
-                    defaultValue = null
-                },
-            ),
-        ) { backStackEntry ->
+    NavHost(navController, startDestination = Destinations.Map()) {
+        composable<Destinations.Map> { backStackEntry ->
+            val destination = backStackEntry.toRoute<Destinations.Map>()
             val mapTarget by backStackEntry.savedStateHandle
                 .getStateFlow<String?>(Destinations.MAP_TARGET_KEY, null).collectAsState()
-            val coordinates = mapTarget?.split(",")
-            val lat = coordinates?.getOrNull(0)?.toDoubleOrNull() ?: backStackEntry.arguments
-                ?.read { getStringOrNull(Destinations.MAP_LAT_KEY) }
-                ?.toDoubleOrNull()
-            val lng = coordinates?.getOrNull(1)?.toDoubleOrNull() ?: backStackEntry.arguments
-                ?.read { getStringOrNull(Destinations.MAP_LNG_KEY) }
-                ?.toDoubleOrNull()
+            val target = mapTarget?.let { Json.decodeFromString<Destinations.Map>(it) } ?: destination
             MapScreen(
-                targetLatitude = lat,
-                targetLongitude = lng,
+                targetLatitude = target.latitude,
+                targetLongitude = target.longitude,
                 onTargetHandled = { backStackEntry.savedStateHandle.set<String?>(Destinations.MAP_TARGET_KEY, null) },
-                navigateToSettings = { navController.navigate(Destinations.SETTINGS_ROUTE) },
-                navigateToSearch = { navController.navigate(Destinations.SEARCH_ROUTE) },
-                navigateToAlerts = { navController.navigate(Destinations.ALERTS_ROUTE) },
+                navigateToSettings = { navController.navigate(Destinations.Settings) },
+                navigateToSearch = { navController.navigate(Destinations.Search) },
+                navigateToAlerts = { navController.navigate(Destinations.Alerts) },
             )
         }
-        composable(Destinations.SEARCH_ROUTE) {
+        composable<Destinations.Search> {
             SearchScreen(
                 onNavigateToMap = {
                     navController.popBackStack()
                 },
                 onNavigateToMapAt = { latitude, longitude ->
-                    navController.previousBackStackEntry?.savedStateHandle
-                        ?.set(Destinations.MAP_TARGET_KEY, "$latitude,$longitude")
-                    navController.popBackStack()
+                    navController.returnToMap(latitude, longitude)
                 },
             )
         }
-        composable(Destinations.ALERTS_ROUTE) {
+        composable<Destinations.Alerts> {
             AlertsScreen(
                 onNavigateToMap = {
                     navController.popBackStack()
                 },
                 onNavigateToMapAt = { latitude, longitude ->
-                    navController.previousBackStackEntry?.savedStateHandle
-                        ?.set(Destinations.MAP_TARGET_KEY, "$latitude,$longitude")
-                    navController.popBackStack()
+                    navController.returnToMap(latitude, longitude)
                 },
             )
         }
-        composable(Destinations.SETTINGS_ROUTE) {
+        composable<Destinations.Settings> {
             SettingsScreen(navigateBack = { navController.popBackStack() })
         }
     }
