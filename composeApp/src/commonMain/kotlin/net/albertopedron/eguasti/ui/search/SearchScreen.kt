@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,29 +30,30 @@ import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.material3.IconButton
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
+import eguasti.composeapp.generated.resources.navigate_back
+import eguasti.composeapp.generated.resources.search_clear
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import eguasti.composeapp.generated.resources.Res
-import eguasti.composeapp.generated.resources.app_name
 import eguasti.composeapp.generated.resources.search_hint
 import eguasti.composeapp.generated.resources.search_title
-import eguasti.composeapp.generated.resources.zilla_slab_bold
 import net.albertopedron.eguasti.data.model.GeocodingSuggestion
-import net.albertopedron.eguasti.ui.components.AppBottomBar
-import net.albertopedron.eguasti.ui.components.BottomBarTab
 import net.albertopedron.eguasti.ui.theme.EGuastiTheme
-import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -61,7 +61,6 @@ fun SearchScreen(
     viewModel: SearchViewModel = viewModel { SearchViewModel() },
     onNavigateToMap: () -> Unit = {},
     onNavigateToMapAt: (latitude: Double, longitude: Double) -> Unit = { _, _ -> },
-    onNavigateToAlerts: () -> Unit = {},
 ) {
     val query by viewModel.query.collectAsState()
     val suggestions by viewModel.suggestions.collectAsState()
@@ -78,7 +77,6 @@ fun SearchScreen(
         suggestions = suggestions,
         onSuggestionClick = viewModel::onSuggestionClick,
         onNavigateToMap = onNavigateToMap,
-        onNavigateToAlerts = onNavigateToAlerts,
     )
 }
 
@@ -89,24 +87,11 @@ private fun SearchScreen(
     suggestions: List<GeocodingSuggestion>,
     onSuggestionClick: (GeocodingSuggestion) -> Unit,
     onNavigateToMap: () -> Unit,
-    onNavigateToAlerts: () -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-        topBar = { SearchTopBar() },
-        bottomBar = {
-            AppBottomBar(
-                selected = BottomBarTab.Search,
-                onTabSelected = { tab ->
-                    when (tab) {
-                        BottomBarTab.Map -> onNavigateToMap()
-                        BottomBarTab.Search -> Unit
-                        BottomBarTab.Alerts -> onNavigateToAlerts()
-                    }
-                },
-            )
-        },
+        topBar = { SearchTopBar(onNavigateToMap) },
     ) { innerPadding ->
         SearchContent(
             query = query,
@@ -120,24 +105,12 @@ private fun SearchScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SearchTopBar() {
+private fun SearchTopBar(navigateBack: () -> Unit) {
     TopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
-        ),
-        title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Filled.Bolt,
-                    contentDescription = null,
-                    modifier = Modifier.size(28.dp),
-                )
-                Spacer(modifier = Modifier.size(4.dp))
-                Text(
-                    text = stringResource(Res.string.app_name),
-                    fontFamily = FontFamily(Font(Res.font.zilla_slab_bold)),
-                )
+        title = { Text(stringResource(Res.string.search_title)) },
+        navigationIcon = {
+            IconButton(onClick = navigateBack) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(Res.string.navigate_back))
             }
         },
     )
@@ -152,28 +125,29 @@ private fun SearchContent(
     onSuggestionClick: (GeocodingSuggestion) -> Unit,
     contentPadding: PaddingValues,
 ) {
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(Unit) { focusRequester.requestFocus() }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(contentPadding)
+            .imePadding()
             .padding(horizontal = 16.dp),
     ) {
-        Text(
-            text = stringResource(Res.string.search_title),
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(top = 24.dp, start = 24.dp),
-        )
-
         SearchBar(
             inputField = {
                 SearchBarDefaults.InputField(
                     query = query,
                     onQueryChange = onQueryChange,
-                    onSearch = {},
+                    onSearch = { suggestions.firstOrNull()?.let(onSuggestionClick) },
                     expanded = false,
                     onExpandedChange = {},
+                    modifier = Modifier.focusRequester(focusRequester),
+                    trailingIcon = {
+                        if (query.isNotEmpty()) IconButton(onClick = { onQueryChange("") }) {
+                            Icon(Icons.Default.Close, stringResource(Res.string.search_clear))
+                        }
+                    },
                     placeholder = { Text(stringResource(Res.string.search_hint)) },
                 )
             },
@@ -281,7 +255,6 @@ private fun SearchScreenPreview() {
             ),
             onSuggestionClick = {},
             onNavigateToMap = {},
-            onNavigateToAlerts = {},
         )
     }
 }

@@ -2,6 +2,8 @@ package net.albertopedron.eguasti
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -27,6 +29,7 @@ fun EGuastiApp() {
 }
 
 object Destinations {
+    const val MAP_TARGET_KEY = "mapTarget"
     private const val MAP_PATH = "map"
     private const val MAP_LAT_ARG = "lat"
     private const val MAP_LNG_ARG = "lng"
@@ -63,15 +66,19 @@ private fun NavGraph() {
                 },
             ),
         ) { backStackEntry ->
-            val lat = backStackEntry.arguments
+            val mapTarget by backStackEntry.savedStateHandle
+                .getStateFlow<String?>(Destinations.MAP_TARGET_KEY, null).collectAsState()
+            val coordinates = mapTarget?.split(",")
+            val lat = coordinates?.getOrNull(0)?.toDoubleOrNull() ?: backStackEntry.arguments
                 ?.read { getStringOrNull(Destinations.MAP_LAT_KEY) }
                 ?.toDoubleOrNull()
-            val lng = backStackEntry.arguments
+            val lng = coordinates?.getOrNull(1)?.toDoubleOrNull() ?: backStackEntry.arguments
                 ?.read { getStringOrNull(Destinations.MAP_LNG_KEY) }
                 ?.toDoubleOrNull()
             MapScreen(
                 targetLatitude = lat,
                 targetLongitude = lng,
+                onTargetHandled = { backStackEntry.savedStateHandle.set<String?>(Destinations.MAP_TARGET_KEY, null) },
                 navigateToSettings = { navController.navigate(Destinations.SETTINGS_ROUTE) },
                 navigateToSearch = { navController.navigate(Destinations.SEARCH_ROUTE) },
                 navigateToAlerts = { navController.navigate(Destinations.ALERTS_ROUTE) },
@@ -80,35 +87,24 @@ private fun NavGraph() {
         composable(Destinations.SEARCH_ROUTE) {
             SearchScreen(
                 onNavigateToMap = {
-                    navController.navigate(Destinations.mapRoute()) {
-                        popUpTo(Destinations.MAP_ROUTE) { inclusive = true }
-                    }
+                    navController.popBackStack()
                 },
                 onNavigateToMapAt = { latitude, longitude ->
-                    navController.navigate(Destinations.mapRoute(latitude, longitude)) {
-                        popUpTo(Destinations.MAP_ROUTE) { inclusive = true }
-                    }
-                },
-                onNavigateToAlerts = {
-                    navController.navigate(Destinations.ALERTS_ROUTE) {
-                        popUpTo(Destinations.MAP_ROUTE)
-                        launchSingleTop = true
-                    }
+                    navController.previousBackStackEntry?.savedStateHandle
+                        ?.set(Destinations.MAP_TARGET_KEY, "$latitude,$longitude")
+                    navController.popBackStack()
                 },
             )
         }
         composable(Destinations.ALERTS_ROUTE) {
             AlertsScreen(
                 onNavigateToMap = {
-                    navController.navigate(Destinations.mapRoute()) {
-                        popUpTo(Destinations.MAP_ROUTE) { inclusive = true }
-                    }
+                    navController.popBackStack()
                 },
-                onNavigateToSearch = {
-                    navController.navigate(Destinations.SEARCH_ROUTE) {
-                        popUpTo(Destinations.MAP_ROUTE)
-                        launchSingleTop = true
-                    }
+                onNavigateToMapAt = { latitude, longitude ->
+                    navController.previousBackStackEntry?.savedStateHandle
+                        ?.set(Destinations.MAP_TARGET_KEY, "$latitude,$longitude")
+                    navController.popBackStack()
                 },
             )
         }

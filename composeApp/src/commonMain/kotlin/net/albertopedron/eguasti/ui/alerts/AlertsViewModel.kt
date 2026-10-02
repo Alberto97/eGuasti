@@ -49,5 +49,7 @@ class AlertsViewModel(
         place = place,
         expectedRestore = expectedRestore,
         cause = cause,
+        latitude = latitude,
+        longitude = longitude,
     )
 }

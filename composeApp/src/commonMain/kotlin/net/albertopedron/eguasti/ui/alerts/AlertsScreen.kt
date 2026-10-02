@@ -1,6 +1,19 @@
 package net.albertopedron.eguasti.ui.alerts
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Map
+import eguasti.composeapp.generated.resources.navigate_back
+import eguasti.composeapp.generated.resources.more_options
+import eguasti.composeapp.generated.resources.alerts_empty
+import eguasti.composeapp.generated.resources.alerts_show_map
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,12 +29,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Engineering
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -30,20 +41,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -56,14 +66,9 @@ import eguasti.composeapp.generated.resources.alerts_filter_all
 import eguasti.composeapp.generated.resources.alerts_filter_failures
 import eguasti.composeapp.generated.resources.alerts_filter_maintenances
 import eguasti.composeapp.generated.resources.alerts_title
-import eguasti.composeapp.generated.resources.app_name
 import eguasti.composeapp.generated.resources.outage_expected_restore
-import eguasti.composeapp.generated.resources.zilla_slab_bold
 import net.albertopedron.eguasti.data.model.Cause
-import net.albertopedron.eguasti.ui.components.AppBottomBar
-import net.albertopedron.eguasti.ui.components.BottomBarTab
 import net.albertopedron.eguasti.ui.theme.EGuastiTheme
-import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.stringResource
 
 data class Alert(
@@ -71,6 +76,8 @@ data class Alert(
     val place: String,
     val expectedRestore: String,
     val cause: Cause,
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
 )
 
 enum class AlertFilter { All, Failures, Maintenances }
@@ -79,7 +86,7 @@ enum class AlertFilter { All, Failures, Maintenances }
 fun AlertsScreen(
     viewModel: AlertsViewModel = viewModel { AlertsViewModel() },
     onNavigateToMap: () -> Unit = {},
-    onNavigateToSearch: () -> Unit = {},
+    onNavigateToMapAt: (Double, Double) -> Unit = { _, _ -> },
 ) {
     val alerts by viewModel.alerts.collectAsState()
 
@@ -87,7 +94,7 @@ fun AlertsScreen(
         alerts = alerts,
         onDismiss = viewModel::dismiss,
         onNavigateToMap = onNavigateToMap,
-        onNavigateToSearch = onNavigateToSearch,
+        onNavigateToMapAt = onNavigateToMapAt,
     )
 }
 
@@ -96,7 +103,7 @@ private fun AlertsScreen(
     alerts: List<Alert>,
     onDismiss: (Alert) -> Unit,
     onNavigateToMap: () -> Unit,
-    onNavigateToSearch: () -> Unit,
+    onNavigateToMapAt: (Double, Double) -> Unit,
 ) {
     var filter by rememberSaveable { mutableStateOf(AlertFilter.All) }
 
@@ -111,19 +118,7 @@ private fun AlertsScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-        topBar = { AlertsTopBar() },
-        bottomBar = {
-            AppBottomBar(
-                selected = BottomBarTab.Alerts,
-                onTabSelected = { tab ->
-                    when (tab) {
-                        BottomBarTab.Map -> onNavigateToMap()
-                        BottomBarTab.Search -> onNavigateToSearch()
-                        BottomBarTab.Alerts -> Unit
-                    }
-                },
-            )
-        },
+        topBar = { AlertsTopBar(onNavigateToMap) },
     ) { innerPadding ->
         AlertsContent(
             filter = filter,
@@ -131,30 +126,19 @@ private fun AlertsScreen(
             alerts = filteredAlerts,
             onDismiss = onDismiss,
             contentPadding = innerPadding,
+            onShowOnMap = { onNavigateToMapAt(it.latitude, it.longitude) },
         )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AlertsTopBar() {
+private fun AlertsTopBar(navigateBack: () -> Unit) {
     TopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
-        ),
-        title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Filled.Bolt,
-                    contentDescription = null,
-                    modifier = Modifier.size(28.dp),
-                )
-                Spacer(modifier = Modifier.size(4.dp))
-                Text(
-                    text = stringResource(Res.string.app_name),
-                    fontFamily = FontFamily(Font(Res.font.zilla_slab_bold)),
-                )
+        title = { Text(stringResource(Res.string.alerts_title)) },
+        navigationIcon = {
+            IconButton(onClick = navigateBack) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(Res.string.navigate_back))
             }
         },
     )
@@ -167,20 +151,14 @@ private fun AlertsContent(
     alerts: List<Alert>,
     onDismiss: (Alert) -> Unit,
     contentPadding: PaddingValues,
+    onShowOnMap: (Alert) -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(contentPadding),
     ) {
-        Text(
-            text = stringResource(Res.string.alerts_title),
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
-        )
-
+        Spacer(Modifier.size(16.dp))
         FilterChipsRow(
             selected = filter,
             onFilterChange = onFilterChange,
@@ -191,23 +169,38 @@ private fun AlertsContent(
 
         Spacer(modifier = Modifier.size(20.dp))
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            contentPadding = PaddingValues(
-                start = 16.dp,
-                end = 16.dp,
-                top = 4.dp,
-                bottom = 16.dp,
-            ),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            items(items = alerts, key = { it.id }) { alert ->
-                AlertCard(
-                    alert = alert,
-                    onDismiss = { onDismiss(alert) },
+        if (alerts.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxWidth().weight(1f),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    stringResource(Res.string.alerts_empty),
+                    modifier = Modifier.padding(24.dp),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
                 )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentPadding = PaddingValues(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 4.dp,
+                    bottom = 16.dp,
+                ),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                items(items = alerts, key = { it.id }) { alert ->
+                    AlertCard(
+                        alert = alert,
+                        onDismiss = { onDismiss(alert) },
+                        onShowOnMap = { onShowOnMap(alert) },
+                    )
+                }
             }
         }
     }
@@ -273,7 +266,9 @@ private fun AlertsFilterChip(
 private fun AlertCard(
     alert: Alert,
     onDismiss: () -> Unit,
+    onShowOnMap: () -> Unit,
 ) {
+    var menuExpanded by remember { mutableStateOf(false) }
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
@@ -295,15 +290,16 @@ private fun AlertCard(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                FilledTonalIconButton(
-                    onClick = onDismiss,
-                    modifier = Modifier.size(36.dp),
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Close,
-                        contentDescription = stringResource(Res.string.alerts_dismiss),
-                        modifier = Modifier.size(18.dp),
-                    )
+                Box {
+                    IconButton(onClick = { menuExpanded = true }) {
+                        Icon(Icons.Default.MoreVert, stringResource(Res.string.more_options))
+                    }
+                    DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(Res.string.alerts_dismiss)) },
+                            onClick = { menuExpanded = false; onDismiss() },
+                        )
+                    }
                 }
             }
 
@@ -332,6 +328,14 @@ private fun AlertCard(
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurface,
             )
+            HorizontalDivider(modifier = Modifier.padding(top = 16.dp))
+            Spacer(modifier = Modifier.size(8.dp))
+            TextButton(onClick = onShowOnMap, modifier = Modifier.fillMaxWidth()) {
+                Icon(Icons.Default.Map, contentDescription = null)
+                Spacer(Modifier.size(8.dp))
+                Text(stringResource(Res.string.alerts_show_map))
+            }
+
         }
     }
 }
@@ -422,7 +426,7 @@ private fun AlertsScreenPreview() {
             alerts = sampleAlerts,
             onDismiss = {},
             onNavigateToMap = {},
-            onNavigateToSearch = {},
+            onNavigateToMapAt = { _, _ -> },
         )
     }
 }

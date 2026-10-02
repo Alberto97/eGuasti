@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Common -->
     <string name="ok">Ok</string>
     <string name="cancel">Annulla</string>
     <string name="map_error_no_internet">Sei offline. Alcune informazioni potrebbero non essere aggiornate.</string>
+    <string name="navigate_back">Torna alla mappa</string>
+    <string name="more_options">Altre opzioni</string>
 
     <!-- Search -->
     <string name="search_title">Cerca</string>
-    <string name="search_hint">Cerca per via o CAP…</string>
+    <string name="search_hint">Cerca un indirizzo</string>
     <string name="search_recent_title">Ricerche recenti</string>
+    <string name="search_clear">Cancella ricerca</string>
 
     <!-- Bottom navigation -->
     <string name="nav_map">Mappa</string>
@@ -15,13 +19,15 @@
     <string name="nav_alerts">Avvisi</string>
 
     <!-- Alerts -->
-    <string name="alerts_title">Avvisi</string>
-    <string name="alerts_filter_all">Tutti</string>
+    <string name="alerts_title">Interruzioni seguite</string>
+    <string name="alerts_filter_all">Tutte</string>
     <string name="alerts_filter_failures">Guasti</string>
     <string name="alerts_filter_maintenances">Manutenzioni</string>
     <string name="alerts_chip_failure">GUASTO</string>
     <string name="alerts_chip_maintenance">MANUTENZIONE</string>
-    <string name="alerts_dismiss">Rimuovi avviso</string>
+    <string name="alerts_dismiss">Smetti di seguire</string>
+    <string name="alerts_show_map">Mostra sulla mappa</string>
+    <string name="alerts_empty">Nessun guasto in questa lista. Per seguirne uno, apri il suo dettaglio sulla mappa e attiva gli aggiornamenti.</string>
 
     <!-- Outage -->
     <string name="outage_maintenance">Lavori programmati</string>
