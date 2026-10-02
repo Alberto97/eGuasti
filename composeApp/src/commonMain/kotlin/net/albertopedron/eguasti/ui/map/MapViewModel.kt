@@ -84,6 +84,12 @@ class MapViewModel(
         _mapState.emit(state)
     }
 
+    fun centerOn(latitude: Double, longitude: Double, zoom: Double) {
+        viewModelScope.launch {
+            _mapState.emit(AppMapState(zoomLevel = zoom, latitude = latitude, longitude = longitude))
+        }
+    }
+
     fun saveMapPosition(state: AppMapState) {
         viewModelScope.launch {
             mapStateRepository.writeState(state)
