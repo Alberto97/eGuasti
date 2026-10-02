@@ -35,7 +35,7 @@ import org.jetbrains.compose.resources.getString
 class MapViewModel(
     private val mapStateRepository: MapStateRepository = MapStateRepository(),
     private val outageRepository: OutageRepository = OutageRepository(),
-    private val outageTracker: OutageTracker = OutageTracker(),
+    private val outageTracker: OutageTracker = OutageTracker,
     private val workScheduler: WorkScheduler = WorkScheduler(),
     private val notificationHelper: NotificationHelper = NotificationHelper(),
     private val updateDatabaseUseCase: UpdateDatabaseUseCase = UpdateDatabaseUseCase(),

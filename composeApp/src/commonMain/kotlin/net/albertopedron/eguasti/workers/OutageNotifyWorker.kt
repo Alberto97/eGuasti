@@ -16,7 +16,7 @@ import org.jetbrains.compose.resources.getString
 
 class OutageNotifyTask {
     private val repository = OutageRepository()
-    private val tracker = OutageTracker()
+    private val tracker = OutageTracker
     private val scheduler = WorkScheduler()
     private val notificationHelper = NotificationHelper()
 

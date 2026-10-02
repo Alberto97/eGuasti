@@ -15,7 +15,7 @@ import net.albertopedron.eguasti.data.model.Outage
 import net.albertopedron.eguasti.tools.WorkScheduler
 
 class AlertsViewModel(
-    private val outageTracker: OutageTracker = OutageTracker(),
+    private val outageTracker: OutageTracker = OutageTracker,
     private val outageRepository: OutageRepository = OutageRepository(),
     private val workScheduler: WorkScheduler = WorkScheduler(),
 ) : ViewModel() {
