@@ -15,10 +15,8 @@ data class TrackedOutage(
     val lastUpdate: String
 )
 
-class OutageTracker() {
-    companion object {
-        private const val FILE_NAME = "tracked_outages.json"
-    }
+object OutageTracker {
+    private const val FILE_NAME = "tracked_outages.json"
 
     private val localFile = Path(Files.root, FILE_NAME)
     private val json = Json { prettyPrint = true }

@@ -91,7 +91,7 @@ fun MapScreen(
     val outages by viewModel.outages.collectAsState(emptyList())
     val selectedOutage by viewModel.selectedOutage.collectAsState()
     val tracking by viewModel.tracking.collectAsState()
-    val followedCount = remember(tracking) { OutageTracker().getTracked().size }
+    val followedCount = remember(tracking) { OutageTracker.getTracked().size }
     val mapState by viewModel.mapState.collectAsState(null)
     val trackOutagesEnabled by viewModel.trackOutagesEnabled.collectAsState()
     val snackbarMessage by viewModel.snackbarMessage.collectAsState()
