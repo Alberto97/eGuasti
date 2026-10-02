@@ -22,8 +22,7 @@ import net.albertopedron.eguasti.ui.map.maplibre.MapLibreExtensions.toMapState
 import net.albertopedron.eguasti.ui.theme.Blue
 import org.jetbrains.compose.resources.painterResource
 import org.maplibre.compose.camera.CameraPosition
-import org.maplibre.compose.camera.CameraState
-import org.maplibre.compose.camera.rememberCameraState
+import org.maplibre.compose.camera.CameraUpdate
 import org.maplibre.compose.expressions.dsl.asNumber
 import org.maplibre.compose.expressions.dsl.asString
 import org.maplibre.compose.expressions.dsl.case
@@ -33,17 +32,20 @@ import org.maplibre.compose.expressions.dsl.image
 import org.maplibre.compose.expressions.dsl.not
 import org.maplibre.compose.expressions.dsl.step
 import org.maplibre.compose.expressions.dsl.switch
+import org.maplibre.compose.interaction.ClickResult
+import org.maplibre.compose.interaction.MapInteractions
 import org.maplibre.compose.layers.CircleLayer
 import org.maplibre.compose.layers.RasterLayer
 import org.maplibre.compose.layers.SymbolLayer
+import org.maplibre.compose.map.LocalMapState
 import org.maplibre.compose.map.MaplibreMap
+import org.maplibre.compose.map.rememberMapState
 import org.maplibre.compose.sources.GeoJsonOptions
 import org.maplibre.compose.sources.GeoJsonSource
 import org.maplibre.compose.sources.TileSetOptions
 import org.maplibre.compose.sources.rememberGeoJsonSource
-import org.maplibre.compose.sources.rememberRasterSource
+import org.maplibre.compose.sources.rememberRasterTileSource
 import org.maplibre.compose.style.BaseStyle
-import org.maplibre.compose.util.ClickResult
 import org.maplibre.spatialk.geojson.Point
 import org.maplibre.spatialk.geojson.Position
 
@@ -61,71 +63,20 @@ fun MapLibreMap(
     onOutageClicked: (Int) -> Unit,
     clearOutageSelection: () -> Unit,
 ) {
-    val cameraState = rememberCameraState(firstPosition = defaultPosition)
-    val mapLoaded = remember { mutableStateOf(false) }
-    val center = remember { mutableStateOf<CameraPosition?>(null) }
-
-    LaunchedEffect(center.value) {
-        val position = center.value ?: return@LaunchedEffect
-        cameraState.animateTo(position)
-    }
-
-    LaunchedEffect(mapLoaded.value) {
-        val position = mapState ?: return@LaunchedEffect
-        cameraState.animateTo(position.toCameraPosition())
-    }
-
-    MapLibreMap(
-        mapConfig = mapConfig,
-        outages = outages,
-        cameraState = cameraState,
-        onOutageClicked = {
-            onOutageClicked(it)
-            saveMapPosition(cameraState.position.toMapState())
-        },
-        clearOutageSelection = {
-            clearOutageSelection()
-        },
-        centerCameraTo = { point, zoom ->
-            val position = cameraState.position.copy(
-                target = point.coordinates,
-                zoom = zoom ?: cameraState.position.zoom,
-            )
-            center.value = position
-        },
-        onMapLoadFinished = {
-            mapLoaded.value = true
-        }
-    )
-}
-
-@Composable
-private fun MapLibreMap(
-    mapConfig: MapConfig,
-    outages: List<Outage>,
-    cameraState: CameraState,
-    onOutageClicked: (Int) -> Unit,
-    clearOutageSelection: () -> Unit,
-    centerCameraTo: (point: Point, zoom: Double?) -> Unit,
-    onMapLoadFinished: () -> Unit = {},
-) {
-    // For some reason symbol layers (eg. cluster layers) are not rendered if a valid base
-    // style is not specified when using raster tiles
+    val center = remember { mutableStateOf<CameraUpdate?>(null) }
+    // Symbol layers need a base style with glyphs when raster tiles are used.
     val baseStyle = when (mapConfig) {
-        is MapConfig.Raster -> BaseStyle.Demo // Does not work with BaseStyle.Empty
+        is MapConfig.Raster -> BaseStyle.Demo
         is MapConfig.Vector -> BaseStyle.Uri(mapConfig.uri)
     }
-
-    MaplibreMap(
-        modifier = Modifier.fillMaxSize(),
+    val state = rememberMapState(
         baseStyle = baseStyle,
-        cameraState = cameraState,
-        onMapClick = { _, _ ->
-            clearOutageSelection()
-            ClickResult.Pass
-        },
-        onMapLoadFinished = onMapLoadFinished
+        initialCameraPosition = mapState?.toCameraPosition() ?: defaultPosition,
     ) {
+        val state = checkNotNull(LocalMapState.current)
+        val centerCameraTo: (Point, Double?) -> Unit = { point, zoom ->
+            center.value = CameraUpdate(target = point.coordinates, zoom = zoom)
+        }
         if (mapConfig is MapConfig.Raster) {
             RasterMapLayer(mapConfig)
         }
@@ -141,7 +92,7 @@ private fun MapLibreMap(
         ClusteredLayer(
             outageSource = outageSource,
             zoomToCluster = { point ->
-                val zoom = (cameraState.position.zoom + 2).coerceAtMost(20.0)
+                val zoom = (state.cameraPosition.zoom + 2).coerceAtMost(20.0)
                 centerCameraTo(point, zoom)
             }
         )
@@ -152,15 +103,41 @@ private fun MapLibreMap(
             onOutageClicked = { id ->
                 id ?: return@UnclusteredLayer
                 onOutageClicked(id)
+                saveMapPosition(state.cameraPosition.toMapState())
             }
         )
 
     }
+
+    LaunchedEffect(state, mapState) {
+        val position = mapState?.toCameraPosition() ?: return@LaunchedEffect
+        state.animateCamera(CameraUpdate(target = position.target, zoom = position.zoom))
+    }
+
+    LaunchedEffect(state, center.value) {
+        val update = center.value ?: return@LaunchedEffect
+        state.animateCamera(update)
+    }
+
+    MaplibreMap(
+        modifier = Modifier.fillMaxSize(),
+        state = state,
+        interactions = MapInteractions {
+            callbacks {
+                click {
+                    onUnhandled {
+                        clearOutageSelection()
+                        ClickResult.Pass
+                    }
+                }
+            }
+        },
+    )
 }
 
 @Composable
 private fun RasterMapLayer(mapConfig: MapConfig.Raster) {
-    val tiles = rememberRasterSource(
+    val tiles = rememberRasterTileSource(
         tiles = mapConfig.tiles,
         tileSize = mapConfig.tileSize,
         options = TileSetOptions(
