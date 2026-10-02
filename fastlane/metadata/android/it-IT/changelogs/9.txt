@@ -1,0 +1,5 @@
+• Scheda dei guasti rinnovata, con informazioni più chiare e leggibili.
+• Aggiunta la provincia nei dettagli delle interruzioni.
+• Nuovi indicatori visivi per distinguere guasti e manutenzioni programmate.
+• Aggiornato il supporto ad Android 17.
+• Aggiornamenti dei componenti interni dell’app.

@@ -1,0 +1,5 @@
+• Redesigned outage details with clearer, easier-to-read information.
+• Added province information to outage details.
+• New visual indicators to distinguish faults from scheduled maintenance.
+• Updated support for Android 17.
+• Updated internal app components.
