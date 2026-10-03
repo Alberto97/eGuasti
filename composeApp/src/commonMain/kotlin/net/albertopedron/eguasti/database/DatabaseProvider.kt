@@ -8,5 +8,6 @@ object DatabaseProvider {
     val instance: OutageDatabase = DbBuilder.getBuilder()
         .setDriver(DbBuilder.getDriver())
         .setQueryCoroutineContext(Dispatchers.IO)
+        .fallbackToDestructiveMigration(dropAllTables = true)
         .build()
 }
