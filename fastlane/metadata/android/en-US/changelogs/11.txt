@@ -1,0 +1,5 @@
+• The new search feature makes it possible to find a street or address and view outages in the surrounding area on the map.
+• New “Followed outages” screen, with quick access from the map.
+• More map space thanks to the new top bar.
+• Fixed an issue that prevented the app from starting after an update.
+• Optimized app size and performance.
