@@ -16,6 +16,18 @@
 default_platform(:android)
 
 platform :android do
+  desc "Publish a release to Google Play open testing"
+  lane :open_testing do
+    gradle(task: ":androidApp:clean :androidApp:bundleRelease")
+    upload_to_play_store(
+      aab: "androidApp/build/outputs/bundle/release/androidApp-release.aab",
+      track: "beta",
+      release_status: "completed",
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
   desc "Deploy a new production version to the Google Play"
   lane :deploy do
     gradle(task: ":androidApp:clean :androidApp:bundleRelease")

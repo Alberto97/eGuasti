@@ -1,0 +1,4 @@
+• La nuova funzione di ricerca permette di trovare una via o un indirizzo e visualizzare sulla mappa le interruzioni presenti nella zona.
+• Nuova schermata “Interruzioni seguite”, con accesso rapido dalla mappa.
+• Più spazio alla mappa grazie alla nuova barra superiore.
+• Ottimizzate dimensioni e prestazioni dell’app.
