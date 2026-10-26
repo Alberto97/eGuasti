@@ -19,7 +19,7 @@ maplibre-compose = "0.19.0"
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.13.0" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version = "1.2.1" }
-androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version = "2.11.2" }
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version = "2.12.0" }
 
 androidx-lifecycle-viewmodelCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "jb-androidx-lifecycle" }
 androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "jb-androidx-lifecycle" }
