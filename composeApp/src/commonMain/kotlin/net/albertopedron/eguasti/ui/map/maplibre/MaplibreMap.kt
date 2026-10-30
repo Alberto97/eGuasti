@@ -47,9 +47,7 @@ import org.maplibre.compose.layers.SymbolLayer
 import org.maplibre.compose.map.LocalMapState
 import org.maplibre.compose.map.MaplibreMap
 import org.maplibre.compose.map.rememberMapState
-import org.maplibre.compose.sources.GeoJsonOptions
 import org.maplibre.compose.sources.GeoJsonSource
-import org.maplibre.compose.sources.TileSetOptions
 import org.maplibre.compose.sources.rememberGeoJsonSource
 import org.maplibre.compose.sources.rememberRasterTileSource
 import org.maplibre.compose.style.BaseStyle
@@ -57,7 +55,7 @@ import org.maplibre.spatialk.geojson.Point
 import org.maplibre.spatialk.geojson.Position
 
 val defaultPosition = CameraPosition(
-    target = Position(12.4964, 41.9028),
+    center = Position(12.4964, 41.9028),
     zoom = 5.0
 )
 
@@ -102,7 +100,7 @@ fun MapLibreMap(
     ) {
         val state = checkNotNull(LocalMapState.current)
         val centerCameraTo: (Point, Double?) -> Unit = { point, zoom ->
-            center.value = CameraUpdate(target = point.coordinates, zoom = zoom)
+            center.value = CameraUpdate(center = point.coordinates, zoom = zoom)
         }
         if (mapConfig is MapConfig.Raster) {
             RasterMapLayer(mapConfig)
@@ -110,11 +108,10 @@ fun MapLibreMap(
 
         val outageSource = rememberGeoJsonSource(
             data = outages.toGeoJson(),
-            options = GeoJsonOptions(
-                minZoom = 3,
-                cluster = true,
-            ),
-        )
+        ) {
+            minZoom = 3
+            cluster = true
+        }
 
         ClusteredLayer(
             outageSource = outageSource,
@@ -138,7 +135,7 @@ fun MapLibreMap(
 
     LaunchedEffect(state, mapState) {
         val position = mapState?.toCameraPosition() ?: return@LaunchedEffect
-        state.animateCamera(CameraUpdate(target = position.target, zoom = position.zoom))
+        state.animateCamera(CameraUpdate(center = position.center, zoom = position.zoom))
     }
 
     LaunchedEffect(state, center.value) {
@@ -168,12 +165,11 @@ private fun RasterMapLayer(mapConfig: MapConfig.Raster) {
     val tiles = rememberRasterTileSource(
         tiles = mapConfig.tiles,
         tileSize = mapConfig.tileSize,
-        options = TileSetOptions(
-            minZoom = mapConfig.minZoom,
-            maxZoom = mapConfig.maxZoom,
-            attributionHtml = mapConfig.attributionHtml
-        )
-    )
+    ) {
+        minZoom = mapConfig.minZoom
+        maxZoom = mapConfig.maxZoom
+        attributionHtml = mapConfig.attributionHtml
+    }
 
     RasterLayer(id = "raster-maps", source = tiles)
 }
