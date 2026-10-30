@@ -31,14 +31,14 @@ object MapLibreExtensions {
     fun CameraPosition.toMapState(): AppMapState {
         return AppMapState(
             zoomLevel = zoom,
-            longitude = target.longitude,
-            latitude = target.latitude
+            longitude = center.longitude,
+            latitude = center.latitude
         )
     }
 
     fun AppMapState.toCameraPosition(): CameraPosition {
         return CameraPosition(
-            target = Position(longitude, latitude),
+            center = Position(longitude, latitude),
             zoom = zoomLevel
         )
     }
